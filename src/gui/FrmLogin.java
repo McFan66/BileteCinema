@@ -5,6 +5,8 @@
  */
 package gui;
 
+import java.awt.HeadlessException;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import models.Casier;
 import services.CasierService;
@@ -43,6 +45,11 @@ public class FrmLogin extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Autentificare Operator");
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
         lblCodOperator.setText("Cod Operator:");
 
@@ -93,19 +100,31 @@ public class FrmLogin extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+        if (loginAction())return;
+    }//GEN-LAST:event_btnLoginActionPerformed
+
+    private boolean loginAction() throws HeadlessException {
         String codOperator = txtCodOperator.getText().trim();
         String parola = new String(txtParola.getPassword());
         Casier casierAutentificat;
-        if (isValidForm() && (casierAutentificat=casierService.login(codOperator, parola))!=null){
+        if (isValidForm() && (casierAutentificat=casierService.login(codOperator, parola))!=null) {
             //JOptionPane.showMessageDialog(this, "esti autentificat");
-            FrmMeniuPrincipal frmMeniuPrincipal = new FrmMeniuPrincipal(this, true);
+            FrmMeniuPrincipal frmMeniuPrincipal = new FrmMeniuPrincipal();
             frmMeniuPrincipal.setLocationRelativeTo(this);
             dispose();
             frmMeniuPrincipal.setVisible(true);
-            return;
+            return true;
         }
         JOptionPane.showMessageDialog(this, "Nume de utilizator sau parola incorecta");
-    }//GEN-LAST:event_btnLoginActionPerformed
+        return false;
+    }
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        // TODO add your handling code here
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+            if (loginAction())return;
+        }
+    }//GEN-LAST:event_formKeyPressed
 
     /**
      * @param args the command line arguments
