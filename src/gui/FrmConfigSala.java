@@ -5,6 +5,12 @@
  */
 package gui;
 
+import ccomponents.CustomLabel;
+import java.awt.Color;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+
 /**
  *
  * @author Stefan
@@ -28,87 +34,34 @@ public class FrmConfigSala extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        customLabel1 = new ccomponents.CustomLabel();
+        panelAfisare = new javax.swing.JPanel();
+        txtLinii = new javax.swing.JTextField();
+        txtColoane = new javax.swing.JTextField();
+        lblLinii = new javax.swing.JLabel();
+        lblColoane = new javax.swing.JLabel();
+        btnGenerare = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel1.setLayout(new java.awt.GridLayout(4, 4));
+        panelAfisare.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        panelAfisare.setLayout(new java.awt.GridLayout(4, 4));
 
-        jLabel1.setBackground(new java.awt.Color(255, 255, 51));
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(204, 0, 0));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("R1");
-        jLabel1.setOpaque(true);
-        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel1MouseClicked(evt);
+        txtColoane.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtColoaneActionPerformed(evt);
             }
         });
-        jPanel1.add(jLabel1);
 
-        jLabel2.setText("jLabel2");
-        jPanel1.add(jLabel2);
+        lblLinii.setText("Linii");
 
-        jLabel3.setText("jLabel3");
-        jPanel1.add(jLabel3);
+        lblColoane.setText("Coloane");
 
-        jLabel4.setText("jLabel4");
-        jPanel1.add(jLabel4);
-
-        jLabel5.setBackground(new java.awt.Color(255, 255, 0));
-        jLabel5.setText("R2");
-        jPanel1.add(jLabel5);
-
-        jLabel6.setText("jLabel6");
-        jPanel1.add(jLabel6);
-
-        jLabel7.setText("jLabel7");
-        jPanel1.add(jLabel7);
-
-        jLabel8.setText("jLabel8");
-        jPanel1.add(jLabel8);
-
-        jLabel9.setBackground(new java.awt.Color(255, 255, 0));
-        jLabel9.setText("R3");
-        jPanel1.add(jLabel9);
-
-        jLabel10.setText("jLabel10");
-        jPanel1.add(jLabel10);
-
-        jLabel11.setText("jLabel11");
-        jPanel1.add(jLabel11);
-
-        jLabel12.setText("jLabel12");
-        jPanel1.add(jLabel12);
-
-        jLabel13.setBackground(new java.awt.Color(255, 255, 0));
-        jLabel13.setText("R4");
-        jPanel1.add(jLabel13);
-
-        jLabel14.setText("jLabel14");
-        jPanel1.add(jLabel14);
-
-        jLabel15.setText("jLabel15");
-        jPanel1.add(jLabel15);
-        jPanel1.add(customLabel1);
+        btnGenerare.setText("Generare");
+        btnGenerare.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerareActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -116,24 +69,72 @@ public class FrmConfigSala extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panelAfisare, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblColoane)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtColoane))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblLinii)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtLinii))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnGenerare)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(77, 77, 77)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtLinii, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblLinii))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblColoane)
+                    .addComponent(txtColoane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(3, 3, 3)
+                .addComponent(btnGenerare)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelAfisare, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
                 .addGap(24, 24, 24))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+    private void txtColoaneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtColoaneActionPerformed
         // TODO add your handling code here:
-        System.out.println("Am apasat");
-    }//GEN-LAST:event_jLabel1MouseClicked
+    }//GEN-LAST:event_txtColoaneActionPerformed
+
+    private void btnGenerareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerareActionPerformed
+        int linie=Integer.parseInt(txtLinii.getText());
+        int coloana=Integer.parseInt(txtColoane.getText())+1;
+        panelAfisare.setLayout(new GridLayout(linie, coloana));
+        CustomLabel[][] matrice=new CustomLabel[linie][coloana];
+        for (int i=0;i<linie;i++)
+        {
+            for (int j=0;j<coloana;j++)
+            {
+                matrice[i][j]=new CustomLabel(i, j);
+                if (j==0)
+                {
+                    matrice[i][j].setText("R"+String.valueOf(i+1));
+                    matrice[i][j].setBackground(Color.yellow);
+                }
+                else
+                {
+                    matrice[i][j].setText(String.valueOf(j));
+                }
+                panelAfisare.add(matrice[i][j]);
+            }
+        }
+        panelAfisare.revalidate();
+        panelAfisare.repaint();
+        
+    }//GEN-LAST:event_btnGenerareActionPerformed
 
     /**
      * @param args the command line arguments
@@ -178,22 +179,11 @@ public class FrmConfigSala extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private ccomponents.CustomLabel customLabel1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JButton btnGenerare;
+    private javax.swing.JLabel lblColoane;
+    private javax.swing.JLabel lblLinii;
+    private javax.swing.JPanel panelAfisare;
+    private javax.swing.JTextField txtColoane;
+    private javax.swing.JTextField txtLinii;
     // End of variables declaration//GEN-END:variables
 }

@@ -66,12 +66,14 @@ public class CustomLabel extends JLabel implements MouseListener {
 
     @Override
     public void mousePressed(java.awt.event.MouseEvent e) {
-        if (e.getButton() == MouseEvent.BUTTON1) {
-            setBackground(Color.GREEN);
-        } else if (e.getButton() == MouseEvent.BUTTON3) {
-            setBackground(Color.RED);
-            setText("X");
-
+        if (coloana!=0){
+          if (e.getButton() == MouseEvent.BUTTON1) {
+              setBackground(Color.GREEN);
+         } else if (e.getButton() == MouseEvent.BUTTON3) {
+                setBackground(Color.RED);
+                setText("X");
+                
+            }
         }
     }
 
