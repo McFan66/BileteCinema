@@ -7,9 +7,13 @@ package gui;
 
 import ccomponents.CustomLabel;
 import java.awt.Color;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
+import javax.swing.JRootPane;
+import models.MatriceSerializabila;
+import models.Vanzare;
 
 /**
  *
@@ -17,12 +21,16 @@ import java.awt.event.MouseEvent;
  */
 public class FrmConfigSala extends javax.swing.JDialog {
 
+    private MatriceSerializabila matriceSerializabila;
+
     /**
      * Creates new form FrmConfigSala
      */
     public FrmConfigSala(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+
+        //setBounds(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds());
     }
 
     /**
@@ -35,22 +43,18 @@ public class FrmConfigSala extends javax.swing.JDialog {
     private void initComponents() {
 
         panelAfisare = new javax.swing.JPanel();
-        txtLinii = new javax.swing.JTextField();
-        txtColoane = new javax.swing.JTextField();
         lblLinii = new javax.swing.JLabel();
         lblColoane = new javax.swing.JLabel();
         btnGenerare = new javax.swing.JButton();
+        btnSalvare = new javax.swing.JButton();
+        spnLinii = new javax.swing.JSpinner();
+        spnColoane = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Configurare Sala Cinema");
 
         panelAfisare.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         panelAfisare.setLayout(new java.awt.GridLayout(4, 4));
-
-        txtColoane.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtColoaneActionPerformed(evt);
-            }
-        });
 
         lblLinii.setText("Linii");
 
@@ -63,6 +67,18 @@ public class FrmConfigSala extends javax.swing.JDialog {
             }
         });
 
+        btnSalvare.setText("Salvare");
+        btnSalvare.setEnabled(false);
+        btnSalvare.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvareActionPerformed(evt);
+            }
+        });
+
+        spnLinii.setModel(new javax.swing.SpinnerNumberModel(3, 3, 20, 1));
+
+        spnColoane.setModel(new javax.swing.SpinnerNumberModel(3, 3, 20, 1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -72,16 +88,18 @@ public class FrmConfigSala extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelAfisare, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblColoane)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtColoane))
-                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
                         .addComponent(lblLinii)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtLinii))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnGenerare)))
+                        .addComponent(spnLinii, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(37, 37, 37)
+                        .addComponent(lblColoane)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(spnColoane, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnGenerare)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSalvare)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -89,43 +107,51 @@ public class FrmConfigSala extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtLinii, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblLinii))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblLinii)
+                    .addComponent(spnLinii, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblColoane)
-                    .addComponent(txtColoane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(3, 3, 3)
-                .addComponent(btnGenerare)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelAfisare, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-                .addGap(24, 24, 24))
+                    .addComponent(spnColoane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGenerare)
+                    .addComponent(btnSalvare))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(panelAfisare, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtColoaneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtColoaneActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtColoaneActionPerformed
-
     private void btnGenerareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerareActionPerformed
-        int linie=Integer.parseInt(txtLinii.getText());
-        int coloana=Integer.parseInt(txtColoane.getText())+1;
-        panelAfisare.setLayout(new GridLayout(linie, coloana));
-        CustomLabel[][] matrice=new CustomLabel[linie][coloana];
-        for (int i=0;i<linie;i++)
-        {
-            for (int j=0;j<coloana;j++)
-            {
-                matrice[i][j]=new CustomLabel(i, j);
-                if (j==0)
-                {
-                    matrice[i][j].setText("R"+String.valueOf(i+1));
+        int linii = Integer.parseInt(spnLinii.getValue().toString());
+        int coloane = Integer.parseInt(spnColoane.getValue().toString()) + 1;
+        panelAfisare.removeAll();
+        panelAfisare.setLayout(new GridLayout(linii, coloane));
+        btnSalvare.setEnabled(true);
+        CustomLabel[][] matrice = new CustomLabel[linii][coloane];
+        matriceSerializabila = new MatriceSerializabila(linii, coloane - 1);
+        for (int i = 0; i < linii; i++) {
+            for (int j = 0; j < coloane; j++) {
+                matrice[i][j] = new CustomLabel(i, j) {
+                    @Override
+                    public void onLabelClicked(int linie, int coloana) {
+                        if (!matrice[linie][coloana].isVanzare()) {
+                            matriceSerializabila.enableDisable(linie, coloana - 1);
+                            matriceSerializabila.afisareMatrice();
+                            int c = 1;
+                            for (int i = 1; i < coloane; i++) {
+                                if (matrice[linie][i].isAvailable()) {
+                                    matrice[linie][i].setText(String.valueOf(c));
+                                    c++;
+                                }
+                            }
+                        }
+                    }
+                };
+                // matrice[i][j].setVanzare(true);
+                if (j == 0) {
+                    matrice[i][j].setText("R" + String.valueOf(i + 1));
                     matrice[i][j].setBackground(Color.yellow);
-                }
-                else
-                {
+                } else {
                     matrice[i][j].setText(String.valueOf(j));
                 }
                 panelAfisare.add(matrice[i][j]);
@@ -133,8 +159,12 @@ public class FrmConfigSala extends javax.swing.JDialog {
         }
         panelAfisare.revalidate();
         panelAfisare.repaint();
-        
+
     }//GEN-LAST:event_btnGenerareActionPerformed
+
+    private void btnSalvareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvareActionPerformed
+
+    }//GEN-LAST:event_btnSalvareActionPerformed
 
     /**
      * @param args the command line arguments
@@ -180,10 +210,11 @@ public class FrmConfigSala extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerare;
+    private javax.swing.JButton btnSalvare;
     private javax.swing.JLabel lblColoane;
     private javax.swing.JLabel lblLinii;
     private javax.swing.JPanel panelAfisare;
-    private javax.swing.JTextField txtColoane;
-    private javax.swing.JTextField txtLinii;
+    private javax.swing.JSpinner spnColoane;
+    private javax.swing.JSpinner spnLinii;
     // End of variables declaration//GEN-END:variables
 }
