@@ -17,10 +17,13 @@ import javax.swing.SwingConstants;
  *
  * @author Stefan
  */
-public class CustomLabel extends JLabel implements MouseListener {
+public abstract class CustomLabel extends JLabel implements MouseListener {
 
     private int linie;
     private int coloana;
+    private boolean available = true;
+    private boolean vanzare;
+    private Color defaultColor;
 
     public CustomLabel() {
         setOpaque(true);
@@ -37,10 +40,12 @@ public class CustomLabel extends JLabel implements MouseListener {
     public CustomLabel(int linie, int coloana) {
         this.linie = linie;
         this.coloana = coloana;
+        addMouseListener(this);
         setOpaque(true);
         setFont(new Font("Tahoma", Font.BOLD, 12));
+        setHorizontalAlignment(SwingConstants.CENTER);
         setText("0");
-
+        this.defaultColor=getBackground();
     }
 
     public int getLinie() {
@@ -50,6 +55,24 @@ public class CustomLabel extends JLabel implements MouseListener {
     public void setLinie(int linie) {
         this.linie = linie;
     }
+
+    public boolean isVanzare() {
+        return vanzare;
+    }
+
+    public void setVanzare(boolean vanzare) {
+        this.vanzare = vanzare;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+
 
     public int getColoana() {
         return coloana;
@@ -66,14 +89,40 @@ public class CustomLabel extends JLabel implements MouseListener {
 
     @Override
     public void mousePressed(java.awt.event.MouseEvent e) {
-        if (coloana!=0){
-          if (e.getButton() == MouseEvent.BUTTON1) {
-              setBackground(Color.GREEN);
-         } else if (e.getButton() == MouseEvent.BUTTON3) {
-                setBackground(Color.RED);
-                setText("X");
+        if (coloana != 0) {
+            
+            if (vanzare) {
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    setBackground(Color.GREEN);
+                    setAvailable(!available);
+                }
+                if (available){
+                    setBackground(defaultColor);
+                }
+            }else{
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    setBackground(Color.red);
+                    setText("X");
+                    setAvailable(!available);
+                }
+                if (available){
+                    setBackground(defaultColor);
+                }
                 
             }
+            onLabelClicked(linie, coloana);
+           /* if (e.getButton() == MouseEvent.BUTTON1) {
+                setBackground(Color.GREEN);
+            } else if (e.getButton() == MouseEvent.BUTTON3) {
+                setNotAvailable(!notAvailable);
+                if (notAvailable) {
+                    setBackground(Color.RED);
+                    setText("X");
+                } else {
+                    setBackground(Color.green);
+                }
+
+            }*/
         }
     }
 
@@ -92,4 +141,5 @@ public class CustomLabel extends JLabel implements MouseListener {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public abstract void onLabelClicked(int linie, int coloana);
 }
