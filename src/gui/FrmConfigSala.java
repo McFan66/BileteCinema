@@ -11,9 +11,20 @@ import java.awt.GraphicsEnvironment;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JRootPane;
+import models.Casier;
 import models.MatriceSerializabila;
 import models.Vanzare;
+import repositories.CasierFileRepository;
 
 /**
  *
@@ -22,6 +33,7 @@ import models.Vanzare;
 public class FrmConfigSala extends javax.swing.JDialog {
 
     private MatriceSerializabila matriceSerializabila;
+    private File fisierConfigurareSala = new File("configSala.ser");
 
     /**
      * Creates new form FrmConfigSala
@@ -29,7 +41,50 @@ public class FrmConfigSala extends javax.swing.JDialog {
     public FrmConfigSala(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-
+        if (fisierConfigurareSala.exists()) {
+            init();
+            matriceSerializabila.afisareMatrice();
+            CustomLabel[][] matrice = new CustomLabel[matriceSerializabila.getLinii()][matriceSerializabila.getColoane()+1];
+            spnLinii.setValue(matriceSerializabila.getLinii());
+            spnColoane.setValue(matriceSerializabila.getColoane());
+            panelAfisare.setLayout(new GridLayout(matriceSerializabila.getLinii(), matriceSerializabila.getColoane()));
+            int configSala[][]=matriceSerializabila.getConfigurare();
+            for (int i=0;i<matriceSerializabila.getLinii();i++){
+                for (int j=0;j<matriceSerializabila.getColoane()+1;j++){
+                     matrice[i][j] = new CustomLabel(i, j) {
+                    @Override
+                    public void onLabelClicked(int linie, int coloana) {
+                        if (!matrice[linie][coloana].isVanzare()) {
+                            matriceSerializabila.enableDisable(linie, coloana - 1);
+                            matriceSerializabila.afisareMatrice();
+                            int c = 1;
+                            for (int i = 1; i < matriceSerializabila.getColoane(); i++) {
+                                if (matrice[linie][i].isAvailable()) {
+                                    matrice[linie][i].setText(String.valueOf(c));
+                                    c++;
+                                }
+                            }
+                        }
+                    }
+                };
+                    if (j>0){
+                        if (configSala[i][j-1]!=0){
+                            matrice[i][j].setBackground(Color.red);
+                            matrice[i][j].setText("X");
+                        }else
+                            matrice[i][j].setBackground(Color.green);
+                            matrice[i][j].setText(String.valueOf(j-1));
+                    }
+                    if (j==0){
+                        matrice[i][j].setText("R"+String.valueOf(j));
+                        matrice[i][j].setBackground(Color.yellow);
+                    }
+                    panelAfisare.add(matrice[i][j]);
+                }
+            }
+            panelAfisare.revalidate();
+            panelAfisare.repaint();
+        }
         //setBounds(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds());
     }
 
@@ -163,7 +218,7 @@ public class FrmConfigSala extends javax.swing.JDialog {
     }//GEN-LAST:event_btnGenerareActionPerformed
 
     private void btnSalvareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvareActionPerformed
-
+        save();
     }//GEN-LAST:event_btnSalvareActionPerformed
 
     /**
@@ -206,6 +261,31 @@ public class FrmConfigSala extends javax.swing.JDialog {
                 dialog.setVisible(true);
             }
         });
+    }
+
+    private void save() {
+        ObjectOutputStream oos = null;
+        try {
+            FileOutputStream fout = null;
+            fout = new FileOutputStream(fisierConfigurareSala);
+            oos = new ObjectOutputStream(fout);
+            oos.writeObject(matriceSerializabila);
+            fout.close();
+        } catch (IOException ex) {
+            Logger.getLogger(CasierFileRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void init() {
+        try {
+            FileInputStream fileInputStream = new FileInputStream(fisierConfigurareSala);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            matriceSerializabila = (MatriceSerializabila) objectInputStream.readObject();
+        } catch (IOException ex) {
+            //  Logger.getLogger(SpectacoleFileRepository.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            //Logger.getLogger(SpectacoleFileRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
