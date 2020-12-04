@@ -42,43 +42,52 @@ public class FrmConfigSala extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         if (fisierConfigurareSala.exists()) {
+            btnSalvare.setEnabled(true);
             init();
-            matriceSerializabila.afisareMatrice();
-            CustomLabel[][] matrice = new CustomLabel[matriceSerializabila.getLinii()][matriceSerializabila.getColoane()+1];
+            int coloane =matriceSerializabila.getColoane()+1;
+            CustomLabel[][] matrice = new CustomLabel[matriceSerializabila.getLinii()][coloane];
             spnLinii.setValue(matriceSerializabila.getLinii());
             spnColoane.setValue(matriceSerializabila.getColoane());
-            panelAfisare.setLayout(new GridLayout(matriceSerializabila.getLinii(), matriceSerializabila.getColoane()));
-            int configSala[][]=matriceSerializabila.getConfigurare();
-            for (int i=0;i<matriceSerializabila.getLinii();i++){
-                for (int j=0;j<matriceSerializabila.getColoane()+1;j++){
-                     matrice[i][j] = new CustomLabel(i, j) {
-                    @Override
-                    public void onLabelClicked(int linie, int coloana) {
-                        if (!matrice[linie][coloana].isVanzare()) {
-                            matriceSerializabila.enableDisable(linie, coloana - 1);
-                            matriceSerializabila.afisareMatrice();
-                            int c = 1;
-                            for (int i = 1; i < matriceSerializabila.getColoane(); i++) {
-                                if (matrice[linie][i].isAvailable()) {
-                                    matrice[linie][i].setText(String.valueOf(c));
-                                    c++;
+            panelAfisare.setLayout(new GridLayout(matriceSerializabila.getLinii(), coloane));
+            for (int i = 0; i < matriceSerializabila.getLinii(); i++) {
+                for (int j = 0; j < coloane; j++) {
+                    matrice[i][j] = new CustomLabel(i, j) {
+                        @Override
+                        public void onLabelClicked(int linie, int coloana) {
+                            if (!matrice[linie][coloana].isVanzare()) {
+                                matriceSerializabila.enableDisable(linie, coloana - 1);
+                                //matriceSerializabila.afisareMatrice();
+                                int c = 1;
+                                for (int i = 1; i < coloane; i++) {
+                                    if (matrice[linie][i].isAvailable()) {
+                                        matrice[linie][i].setText(String.valueOf(c));
+                                        c++;
+                                    }
                                 }
                             }
                         }
-                    }
-                };
-                    if (j>0){
-                        if (configSala[i][j-1]!=0){
+                    };
+                    if (j == 0) {
+                        matrice[i][j].setText("R" + String.valueOf(i + 1));
+                        matrice[i][j].setBackground(Color.yellow);
+                    } else {
+                        if (matriceSerializabila.getValuetAtLineAndColumn(i, j) == -1) {
                             matrice[i][j].setBackground(Color.red);
                             matrice[i][j].setText("X");
-                        }else
-                            matrice[i][j].setBackground(Color.green);
-                            matrice[i][j].setText(String.valueOf(j-1));
+                            matrice[i][j].setAvailable(false);
+                        } else if (matriceSerializabila.getValuetAtLineAndColumn(i, j) == 0) {
+                            matrice[i][j].setAvailable(true);
+                           // matrice[i][j].setBackground(Color.green);
+                            matrice[i][j].setText(String.valueOf(j));
+                        }
                     }
-                    if (j==0){
-                        matrice[i][j].setText("R"+String.valueOf(j));
-                        matrice[i][j].setBackground(Color.yellow);
-                    }
+
+//                    if (j == 0) {
+//                        matrice[i][j].setText("R" + String.valueOf(i + 1));
+//                        matrice[i][j].setBackground(Color.yellow);
+//                    } else {
+//                        matrice[i][j].setText(String.valueOf(j));
+//                    }
                     panelAfisare.add(matrice[i][j]);
                 }
             }
@@ -191,7 +200,7 @@ public class FrmConfigSala extends javax.swing.JDialog {
                     public void onLabelClicked(int linie, int coloana) {
                         if (!matrice[linie][coloana].isVanzare()) {
                             matriceSerializabila.enableDisable(linie, coloana - 1);
-                            matriceSerializabila.afisareMatrice();
+                            // matriceSerializabila.afisareMatrice();
                             int c = 1;
                             for (int i = 1; i < coloane; i++) {
                                 if (matrice[linie][i].isAvailable()) {

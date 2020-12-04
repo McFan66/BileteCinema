@@ -5,6 +5,8 @@
  */
 package models;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.Serializable;
 
 /**
@@ -40,6 +42,9 @@ public class MatriceSerializabila implements Serializable {
         return linii;
     }
 
+    public int getValuetAtLineAndColumn(int i,int j){
+        return configurare[i][j-1];
+    }
     public void setLinii(int linii) {
         this.linii = linii;
     }
@@ -68,4 +73,5 @@ public class MatriceSerializabila implements Serializable {
             System.out.println();
         }
     }
+    
 }

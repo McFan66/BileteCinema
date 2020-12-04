@@ -7,7 +7,10 @@ package gui;
 
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.UnsupportedLookAndFeelException;
 import models.Casier;
 import services.CasierService;
 import services.CasierServiceImpl;
@@ -26,7 +29,15 @@ public class FrmLogin extends javax.swing.JDialog {
     public FrmLogin(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-    }
+       //       try {
+        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//            if ("Windows".equals(info.getName())) {
+//                javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                break;
+//            }
+System.out.println(info.getClassName());
+        }
+    }  
 
     /**
      * This method is called from within the constructor to initialize the form.

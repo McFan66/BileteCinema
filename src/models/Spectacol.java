@@ -99,4 +99,16 @@ public class Spectacol implements Serializable {
         System.out.println(s1.equals(s2));
     }
 
+//    @Override
+//    public String toString() {
+//        return this.titlu;
+//    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+    
 }

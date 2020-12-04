@@ -5,6 +5,10 @@
  */
 package gui;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.UnsupportedLookAndFeelException;
+
 /**
  *
  * @author Stefan
@@ -17,6 +21,7 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame {
     public FrmMeniuPrincipal() {
        //super(parent);
         initComponents();
+   
     }
 
     /**
@@ -39,6 +44,7 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Meniu Principal");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -66,8 +72,18 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         btnVanzare.setText("Vanzare");
+        btnVanzare.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVanzareActionPerformed(evt);
+            }
+        });
 
         btnSala.setText("Sala");
+        btnSala.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalaActionPerformed(evt);
+            }
+        });
 
         btnRaport.setText("Raport");
 
@@ -130,6 +146,18 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnVanzareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVanzareActionPerformed
+        FrmVanzare frmVanzare = new FrmVanzare(this, true);
+        frmVanzare.setLocationRelativeTo(this);
+        frmVanzare.setVisible(true);
+    }//GEN-LAST:event_btnVanzareActionPerformed
+
+    private void btnSalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalaActionPerformed
+        FrmConfigSala frmConfigSala = new FrmConfigSala(this, true);
+        frmConfigSala.setLocationRelativeTo(this);
+        frmConfigSala.setVisible(true);
+    }//GEN-LAST:event_btnSalaActionPerformed
 
     
     
