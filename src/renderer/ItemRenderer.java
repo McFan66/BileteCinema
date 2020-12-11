@@ -6,38 +6,25 @@
 package renderer;
 
 import java.awt.Component;
+import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.plaf.basic.BasicComboBoxRenderer;
+import javax.swing.ListCellRenderer;
 import models.Spectacol;
 
 /**
  *
  * @author Stefan
  */
-public class ItemRenderer extends BasicComboBoxRenderer {
+public class ItemRenderer extends JLabel implements ListCellRenderer<Object> {
 
     @Override
-    public Component getListCellRendererComponent(JList list, Object value,
-            int index, boolean isSelected, boolean cellHasFocus) {
-        super.getListCellRendererComponent(list, value, index, isSelected,
-                cellHasFocus);
-
-        Spectacol item = (Spectacol) value;
-      //  setOpaque(true);
-//    if (index == -1) {
-//      setText(item.getText());
-//      setIcon(null);
-//    } else {
-//      setText(item.getText());
-//      setIcon(item.getIcon());
-//    }
-
-        if (index != -1) {
-            setText(item.getTitlu());
-        }
-        else{
-            setText("--Selectati spectacolul--");
+    public Component getListCellRendererComponent(JList<? extends Object> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+        if(value instanceof Spectacol){
+           Spectacol s=(Spectacol)value;
+            setText(s.getTitlu());
         }
         return this;
     }
+
+
 }

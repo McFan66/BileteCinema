@@ -107,14 +107,16 @@ public class SpectacoleFileRepository implements SpectacoleRepository {
         } 
     }
     
-    public static void main(String[] args) {
-        SpectacoleRepository spectacoleFileRepository = new SpectacoleFileRepository();
-        Spectacol s1 = new Spectacol("Film", "Vizita", new Date(), "viziteaza");
-//        s1.setId(1);
-       Spectacol s2 = new Spectacol("Film", "Cursa", new Date(), "intrecere");
-//        s2.setId(2);
-        spectacoleFileRepository.adaugaSpectacol(s1);
-       spectacoleFileRepository.adaugaSpectacol(s2);
-        System.out.println(spectacoleFileRepository.getAll().get(0).getTitlu());
+
+
+    @Override
+    public boolean salveazaSpectacol(Spectacol spectacol) {
+        int index=listaSpectacole.indexOf(spectacol);
+        if (index == -1){
+            listaSpectacole.add(spectacol);
+        }else
+            listaSpectacole.set(index, spectacol);
+        save();
+        return true;
     }
 }

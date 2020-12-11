@@ -5,7 +5,11 @@
  */
 package gui;
 
+import java.awt.event.ItemEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -22,6 +26,10 @@ public class FrmVanzare extends javax.swing.JDialog {
     private SpectacoleRepository spectacoleFileRepository = new SpectacoleFileRepository();
     private List<Spectacol> listaSpectacole;
     private DefaultComboBoxModel<Spectacol> comboBoxModel = new DefaultComboBoxModel<>();
+    private Spectacol spectacolSelectat;
+    private Date dataSelectata;
+    private String oraSelectata;
+    
     
     /**
      * Creates new form FrmVanzare1
@@ -34,6 +42,13 @@ public class FrmVanzare extends javax.swing.JDialog {
             comboBoxModel.addElement(s);
         }
         cmbSpectacole.setModel(comboBoxModel);
+        chooserDataFilme.getDateEditor().addPropertyChangeListener("date",new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                System.out.println(chooserDataFilme.getDate());
+                dataSelectata=chooserDataFilme.getDate();
+            }
+        });
     }
 
     /**
@@ -62,8 +77,20 @@ public class FrmVanzare extends javax.swing.JDialog {
         setTitle("Vanzare");
 
         cmbSpectacole.setRenderer(itemRenderer1);
+        cmbSpectacole.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbSpectacoleItemStateChanged(evt);
+            }
+        });
 
-        cmbOre.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        chooserDataFilme.setDateFormatString("dd.MM.yyyy");
+
+        cmbOre.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--Selectati Ora--", "15:00", "17:00" }));
+        cmbOre.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbOreItemStateChanged(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -102,45 +129,68 @@ public class FrmVanzare extends javax.swing.JDialog {
                     .addComponent(cmbSpectacole, 0, 368, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(chooserDataFilme, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(chooserDataFilme, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cmbOre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnVinde, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(124, 124, 124)
+                        .addComponent(lblTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnVinde, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnAnuleaza, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(btnAnuleaza, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(cmbSpectacole, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                    .addComponent(chooserDataFilme, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cmbOre))
+                .addGap(4, 4, 4)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cmbOre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(chooserDataFilme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbSpectacole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblTotal)
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnVinde, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                            .addComponent(btnAnuleaza, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(btnAnuleaza, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void cmbSpectacoleItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbSpectacoleItemStateChanged
+        // TODO add your handling code here:
+        if (evt.getStateChange()==ItemEvent.SELECTED){
+            System.out.println(cmbSpectacole.getSelectedItem());
+            this.spectacolSelectat=(Spectacol) cmbSpectacole.getSelectedItem();
+        }
+    }//GEN-LAST:event_cmbSpectacoleItemStateChanged
+
+    private void cmbOreItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbOreItemStateChanged
+        // TODO add your handling code here:
+        
+        if (evt.getStateChange()==ItemEvent.SELECTED){
+            System.out.println(cmbOre.getSelectedItem());
+            this.oraSelectata=(String) cmbOre.getSelectedItem();
+        }
+    }//GEN-LAST:event_cmbOreItemStateChanged
+
+    private void generareSala(){
+        if(spectacolSelectat!=null && dataSelectata!=null && oraSelectata!=null){
+            
+        }
+    }
     /**
      * @param args the command line arguments
      */

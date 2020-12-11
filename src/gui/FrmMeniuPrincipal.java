@@ -42,6 +42,10 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame {
         btnSala = new javax.swing.JButton();
         btnRaport = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Meniu Principal");
@@ -118,6 +122,23 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jMenu1.setText("Administrare");
+
+        jMenuItem1.setText("Administrare Spectacole");
+        jMenu1.add(jMenuItem1);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Exit");
+        jMenu2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu2ActionPerformed(evt);
+            }
+        });
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -140,7 +161,7 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -159,6 +180,11 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame {
         frmConfigSala.setVisible(true);
     }//GEN-LAST:event_btnSalaActionPerformed
 
+    private void jMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu2ActionPerformed
+        // TODO add your handling code here:
+        System.exit(1);
+    }//GEN-LAST:event_jMenu2ActionPerformed
+
     
     
     
@@ -169,6 +195,10 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnVanzare;
     private javax.swing.JButton jButton4;
     private javax.swing.JList<String> jList1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

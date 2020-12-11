@@ -14,6 +14,8 @@ import java.util.Date;
  */
 public class Spectacol implements Serializable {
 
+    private static final long serialVersionUID = 7321852490118346537L;
+
     private int id;
     private String tipul;
     private String titlu;
@@ -98,6 +100,13 @@ public class Spectacol implements Serializable {
         s2.setId(1);
         System.out.println(s1.equals(s2));
     }
+
+    @Override
+    public String toString() {
+        return "Spectacol{" + "id=" + id + ", tipul=" + tipul + ", titlu=" + titlu + ", dataOra=" + dataOra + ", descriere=" + descriere + '}';
+    }
+    
+    
 
 //    @Override
 //    public String toString() {

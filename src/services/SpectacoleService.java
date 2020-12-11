@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package repositories;
+package services;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import models.Spectacol;
 
@@ -12,11 +14,11 @@ import models.Spectacol;
  *
  * @author Stefan
  */
-public interface SpectacoleRepository {
-    public void adaugaSpectacol (Spectacol spectacol);
-    public void editareSpectacol (Spectacol spectacol);
-    public void stergeSpectacol (Spectacol spectacol);
-    public List<Spectacol> getAll();
-    public List<Spectacol> cautareSpectacol(String titlu);
+public interface SpectacoleService {
+    
+    public int getLastID();
     public boolean salveazaSpectacol(Spectacol spectacol);
+    public void remove(Spectacol spectacol);
+    public List<Spectacol> getAll();
+    public List<Spectacol> getSpectacoleBetweenDates(Date dataInceput, Date dataFinal);
 }
