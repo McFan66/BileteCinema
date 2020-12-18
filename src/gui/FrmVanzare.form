@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
-  <NonVisualComponents>
-    <Component class="renderer.ItemRenderer" name="itemRenderer1">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="itemRenderer1"/>
-      </Properties>
-    </Component>
-  </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
     <Property name="title" type="java.lang.String" value="Vanzare"/>
@@ -34,12 +27,12 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                  <Component id="jPanel1" max="32767" attributes="0"/>
+                  <Component id="panelAfisare" max="32767" attributes="0"/>
                   <Component id="cmbSpectacole" pref="368" max="32767" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane1" max="32767" attributes="0"/>
+                  <Component id="scrlLista" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Component id="chooserDataFilme" min="-2" pref="141" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -51,7 +44,7 @@
                       <Component id="lblTotal" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
-                      <Component id="btnVinde" max="32767" attributes="0"/>
+                      <Component id="btnVindere" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnAnuleaza" min="-2" pref="122" max="-2" attributes="0"/>
                   </Group>
@@ -66,22 +59,22 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="cmbSpectacole" alignment="0" pref="30" max="32767" attributes="0"/>
-                  <Component id="chooserDataFilme" alignment="0" max="32767" attributes="0"/>
                   <Component id="cmbOre" alignment="0" max="32767" attributes="0"/>
+                  <Component id="chooserDataFilme" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
+                      <Component id="scrlLista" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="lblTotal" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btnVinde" pref="122" max="32767" attributes="0"/>
+                          <Component id="btnVindere" pref="122" max="32767" attributes="0"/>
                           <Component id="btnAnuleaza" max="32767" attributes="0"/>
                       </Group>
                   </Group>
-                  <Component id="jPanel1" max="32767" attributes="0"/>
+                  <Component id="panelAfisare" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -90,11 +83,6 @@
   </Layout>
   <SubComponents>
     <Component class="javax.swing.JComboBox" name="cmbSpectacole">
-      <Properties>
-        <Property name="renderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.ComponentChooserEditor">
-          <ComponentRef name="itemRenderer1"/>
-        </Property>
-      </Properties>
       <Events>
         <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cmbSpectacoleItemStateChanged"/>
       </Events>
@@ -102,11 +90,6 @@
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JComboBox&lt;Spectacol&gt;()"/>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Spectacol&gt;"/>
       </AuxValues>
-    </Component>
-    <Component class="com.toedter.calendar.JDateChooser" name="chooserDataFilme">
-      <Properties>
-        <Property name="dateFormatString" type="java.lang.String" value="dd.MM.yyyy"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JComboBox" name="cmbOre">
       <Properties>
@@ -125,7 +108,7 @@
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
     </Component>
-    <Container class="javax.swing.JPanel" name="jPanel1">
+    <Container class="javax.swing.JPanel" name="panelAfisare">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
@@ -147,7 +130,7 @@
         </DimensionLayout>
       </Layout>
     </Container>
-    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+    <Container class="javax.swing.JScrollPane" name="scrlLista">
       <AuxValues>
         <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
       </AuxValues>
@@ -164,7 +147,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="btnVinde">
+    <Component class="javax.swing.JButton" name="btnVindere">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="13" style="1"/>
@@ -188,6 +171,8 @@
         <Property name="horizontalAlignment" type="int" value="4"/>
         <Property name="text" type="java.lang.String" value="Total: x"/>
       </Properties>
+    </Component>
+    <Component class="com.toedter.calendar.JDateChooser" name="chooserDataFilme">
     </Component>
   </SubComponents>
 </Form>

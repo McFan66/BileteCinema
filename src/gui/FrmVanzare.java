@@ -5,14 +5,22 @@
  */
 package gui;
 
+import ccomponents.CustomLabel;
+import java.awt.Color;
+import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import models.MatriceSerializabila;
 import models.Spectacol;
 import repositories.SpectacoleFileRepository;
 import repositories.SpectacoleRepository;
@@ -29,6 +37,8 @@ public class FrmVanzare extends javax.swing.JDialog {
     private Spectacol spectacolSelectat;
     private Date dataSelectata;
     private String oraSelectata;
+    private File fisierConfigurareSala = new File("configSala.ser");
+    private MatriceSerializabila matriceSerializabila;
     
     
     /**
@@ -47,6 +57,7 @@ public class FrmVanzare extends javax.swing.JDialog {
             public void propertyChange(PropertyChangeEvent evt) {
                 System.out.println(chooserDataFilme.getDate());
                 dataSelectata=chooserDataFilme.getDate();
+                generareSala();
             }
         });
     }
@@ -60,30 +71,24 @@ public class FrmVanzare extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        itemRenderer1 = new renderer.ItemRenderer();
         cmbSpectacole = new javax.swing.JComboBox<Spectacol>();
-        chooserDataFilme = new com.toedter.calendar.JDateChooser();
         cmbOre = new javax.swing.JComboBox<>();
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        panelAfisare = new javax.swing.JPanel();
+        scrlLista = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
-        btnVinde = new javax.swing.JButton();
+        btnVindere = new javax.swing.JButton();
         btnAnuleaza = new javax.swing.JButton();
         lblTotal = new javax.swing.JLabel();
-
-        itemRenderer1.setText("itemRenderer1");
+        chooserDataFilme = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Vanzare");
 
-        cmbSpectacole.setRenderer(itemRenderer1);
         cmbSpectacole.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cmbSpectacoleItemStateChanged(evt);
             }
         });
-
-        chooserDataFilme.setDateFormatString("dd.MM.yyyy");
 
         cmbOre.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--Selectati Ora--", "15:00", "17:00" }));
         cmbOre.addItemListener(new java.awt.event.ItemListener() {
@@ -92,25 +97,25 @@ public class FrmVanzare extends javax.swing.JDialog {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        panelAfisare.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout panelAfisareLayout = new javax.swing.GroupLayout(panelAfisare);
+        panelAfisare.setLayout(panelAfisareLayout);
+        panelAfisareLayout.setHorizontalGroup(
+            panelAfisareLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        panelAfisareLayout.setVerticalGroup(
+            panelAfisareLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
         jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane1.setViewportView(jList1);
+        scrlLista.setViewportView(jList1);
 
-        btnVinde.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        btnVinde.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/shopcart.png"))); // NOI18N
-        btnVinde.setText("Vinde");
+        btnVindere.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        btnVindere.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/shopcart.png"))); // NOI18N
+        btnVindere.setText("Vinde");
 
         btnAnuleaza.setText("Anuleaza");
 
@@ -125,11 +130,11 @@ public class FrmVanzare extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelAfisare, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cmbSpectacole, 0, 368, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(scrlLista)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(chooserDataFilme, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -139,7 +144,7 @@ public class FrmVanzare extends javax.swing.JDialog {
                         .addGap(124, 124, 124)
                         .addComponent(lblTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnVinde, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnVindere, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnAnuleaza, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -150,19 +155,19 @@ public class FrmVanzare extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(cmbSpectacole, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-                    .addComponent(chooserDataFilme, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cmbOre))
+                    .addComponent(cmbOre)
+                    .addComponent(chooserDataFilme, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(4, 4, 4)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(scrlLista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblTotal)
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnVinde, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                            .addComponent(btnVindere, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
                             .addComponent(btnAnuleaza, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(panelAfisare, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -174,6 +179,7 @@ public class FrmVanzare extends javax.swing.JDialog {
         if (evt.getStateChange()==ItemEvent.SELECTED){
             System.out.println(cmbSpectacole.getSelectedItem());
             this.spectacolSelectat=(Spectacol) cmbSpectacole.getSelectedItem();
+            generareSala();
         }
     }//GEN-LAST:event_cmbSpectacoleItemStateChanged
 
@@ -183,14 +189,68 @@ public class FrmVanzare extends javax.swing.JDialog {
         if (evt.getStateChange()==ItemEvent.SELECTED){
             System.out.println(cmbOre.getSelectedItem());
             this.oraSelectata=(String) cmbOre.getSelectedItem();
+            generareSala();
         }
     }//GEN-LAST:event_cmbOreItemStateChanged
 
     private void generareSala(){
         if(spectacolSelectat!=null && dataSelectata!=null && oraSelectata!=null){
+            if (fisierConfigurareSala.exists()) {
+            //panelAfisare.removeAll();
+            init();
+            int coloane =matriceSerializabila.getColoane()+1;
+            CustomLabel[][] matrice = new CustomLabel[matriceSerializabila.getLinii()][coloane];
+            panelAfisare.setLayout(new GridLayout(matriceSerializabila.getLinii(), coloane));
+            for (int i = 0; i < matriceSerializabila.getLinii(); i++) {
+                for (int j = 0; j < coloane; j++) {
+                    matrice[i][j] = new CustomLabel(i, j) {
+                        @Override
+                        public void onLabelClicked(int linie, int coloana) {
+                            if (matrice[linie][coloana].isVanzare()) {
+                                matriceSerializabila.enableDisable(linie, coloana - 1);
+                                //matriceSerializabila.afisareMatrice();
+                                int c = 1;
+                                for (int i = 1; i < coloane; i++) {
+                                    if (matrice[linie][i].isAvailable()) {
+                                        matrice[linie][i].setText(String.valueOf(c));
+                                        c++;
+                                    }
+                                }
+                            }
+                        }
+                    };
+                    if (j == 0) {
+                        matrice[i][j].setText("R" + String.valueOf(i + 1));
+                        matrice[i][j].setBackground(Color.yellow);
+                    } else {
+                        if (matriceSerializabila.getValuetAtLineAndColumn(i, j) == -1) {
+                            matrice[i][j].setBackground(Color.red);
+                            matrice[i][j].setText("X");
+                            matrice[i][j].setAvailable(false);
+                        } else if (matriceSerializabila.getValuetAtLineAndColumn(i, j) == 0) {
+                            matrice[i][j].setAvailable(true);
+                           // matrice[i][j].setBackground(Color.green);
+                            matrice[i][j].setText(String.valueOf(j));
+                        }
+                    }
+
+//                    if (j == 0) {
+//                        matrice[i][j].setText("R" + String.valueOf(i + 1));
+//                        matrice[i][j].setBackground(Color.yellow);
+//                    } else {
+//                        matrice[i][j].setText(String.valueOf(j));
+//                    }
+                    panelAfisare.add(matrice[i][j]);
+                }
+            }
+            panelAfisare.revalidate();
+            panelAfisare.repaint();
+        }
             
         }
     }
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -234,16 +294,28 @@ public class FrmVanzare extends javax.swing.JDialog {
         });
     }
 
+    
+    private void init() {
+        try {
+            FileInputStream fileInputStream = new FileInputStream(fisierConfigurareSala);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            matriceSerializabila = (MatriceSerializabila) objectInputStream.readObject();
+        } catch (IOException ex) {
+            //  Logger.getLogger(SpectacoleFileRepository.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            //Logger.getLogger(SpectacoleFileRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnuleaza;
-    private javax.swing.JButton btnVinde;
+    private javax.swing.JButton btnVindere;
     private com.toedter.calendar.JDateChooser chooserDataFilme;
     private javax.swing.JComboBox<String> cmbOre;
     private javax.swing.JComboBox<Spectacol> cmbSpectacole;
-    private renderer.ItemRenderer itemRenderer1;
     private javax.swing.JList<String> jList1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblTotal;
+    private javax.swing.JPanel panelAfisare;
+    private javax.swing.JScrollPane scrlLista;
     // End of variables declaration//GEN-END:variables
 }
