@@ -39,6 +39,7 @@ public class FrmVanzare extends javax.swing.JDialog {
     private String oraSelectata;
     private File fisierConfigurareSala = new File("configSala.ser");
     private MatriceSerializabila matriceSerializabila;
+    private String Stergema;
     
     
     /**
