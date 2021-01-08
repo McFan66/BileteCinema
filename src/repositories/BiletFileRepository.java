@@ -105,17 +105,6 @@ public class BiletFileRepository implements BiletRepository {
         return rezultate;
     }
 
-    @Override
-    public List<Bilet> cautareBiletDupaPret(int pretMinim, int pretMaxim) {
-        List<Bilet> rezultate = new ArrayList<>();
-        for (Bilet b:listaBilete){
-            if (b.getPret()>=pretMinim && b.getPret()<=pretMaxim){
-                rezultate.add(b);
-            }
-        }
-        return rezultate;
-    }
-
     
     
     private void save(){
