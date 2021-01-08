@@ -12,25 +12,24 @@ import java.io.Serializable;
  * @author Stefan
  */
 public class Bilet implements Serializable {
+
     private int id;
     private int numarBilet;
     private Spectacol spectacol;
-    private int pret;
     private int loc;
     private int rand;
 
-    public Bilet(int numarBilet, Spectacol spectacol, int pret, int loc, int rand) {
+    public Bilet(int numarBilet, Spectacol spectacol, int loc, int rand) {
         this.numarBilet = numarBilet;
         this.spectacol = spectacol;
-        this.pret = pret;
         this.loc = loc;
         this.rand = rand;
     }
 
     public Bilet() {
     }
-    
-    public Bilet (int id){
+
+    public Bilet(int id) {
         this.id = id;
     }
 
@@ -40,10 +39,6 @@ public class Bilet implements Serializable {
 
     public int getNumarBilet() {
         return numarBilet;
-    }
-
-    public int getPret() {
-        return pret;
     }
 
     public int getRand() {
@@ -62,10 +57,6 @@ public class Bilet implements Serializable {
         this.numarBilet = numarBilet;
     }
 
-    public void setPret(int pret) {
-        this.pret = pret;
-    }
-
     public void setRand(int rand) {
         this.rand = rand;
     }
@@ -73,12 +64,16 @@ public class Bilet implements Serializable {
     public void setSpectacol(Spectacol spectacol) {
         this.spectacol = spectacol;
     }
-    
+
     public String getNumeSpectacol() {
-    return spectacol.getTitlu();
+        return spectacol.getTitlu();
     }
-    
-        @Override
+
+    public String getDetalii() {
+        return String.format("%s|%s (rand=%s,loc=%s)", numarBilet, spectacol.getTitlu(), loc, rand);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -94,6 +89,11 @@ public class Bilet implements Serializable {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Bilet{" + "id=" + id + ", numarBilet=" + numarBilet + ", spectacol=" + spectacol + ", loc=" + loc + ", rand=" + rand + '}';
     }
 
 }

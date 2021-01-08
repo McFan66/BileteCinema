@@ -92,8 +92,11 @@ public abstract class CustomLabel extends JLabel implements MouseListener {
         if (coloana != 0) {
             
             if (vanzare) {
-                if (e.getButton() == MouseEvent.BUTTON1) {
+                if (available && e.getButton() == MouseEvent.BUTTON1) {
                     setBackground(Color.GREEN);
+                    setAvailable(!available);
+                }
+                if (!available && e.getButton()==MouseEvent.BUTTON3 && !this.getText().equals("X")){
                     setAvailable(!available);
                 }
                 if (available){

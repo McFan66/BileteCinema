@@ -42,6 +42,7 @@ public class FrmConfigSala extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         if (fisierConfigurareSala.exists()) {
+            int counter;
             btnSalvare.setEnabled(true);
             init();
             int coloane =matriceSerializabila.getColoane()+1;
@@ -50,6 +51,7 @@ public class FrmConfigSala extends javax.swing.JDialog {
             spnColoane.setValue(matriceSerializabila.getColoane());
             panelAfisare.setLayout(new GridLayout(matriceSerializabila.getLinii(), coloane));
             for (int i = 0; i < matriceSerializabila.getLinii(); i++) {
+                counter =0;
                 for (int j = 0; j < coloane; j++) {
                     matrice[i][j] = new CustomLabel(i, j) {
                         @Override
@@ -75,10 +77,12 @@ public class FrmConfigSala extends javax.swing.JDialog {
                             matrice[i][j].setBackground(Color.red);
                             matrice[i][j].setText("X");
                             matrice[i][j].setAvailable(false);
+                            counter++;
                         } else if (matriceSerializabila.getValuetAtLineAndColumn(i, j) == 0) {
                             matrice[i][j].setAvailable(true);
                            // matrice[i][j].setBackground(Color.green);
-                            matrice[i][j].setText(String.valueOf(j));
+                            matrice[i][j].setText(String.valueOf(j-counter));
+                            
                         }
                     }
 
