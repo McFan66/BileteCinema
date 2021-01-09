@@ -70,7 +70,7 @@ public class Bilet implements Serializable {
     }
 
     public String getDetalii() {
-        return String.format("%s|%s (rand=%s,loc=%s)", numarBilet, spectacol.getTitlu(), loc, rand);
+        return String.format("Bilet: Randul %s, Locul %s", loc+1, rand);
     }
 
     @Override

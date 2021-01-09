@@ -21,12 +21,22 @@ public class Spectacol implements Serializable {
     private String titlu;
     private Date dataOra;
     private String descriere;
+    private int pret;
 
-    public Spectacol(String tipul, String titlu, Date dataOra, String descriere) {
+    public int getPret() {
+        return pret;
+    }
+
+    public void setPret(int pret) {
+        this.pret = pret;
+    }
+
+    public Spectacol(String tipul, String titlu, Date dataOra, String descriere, int pret) {
         this.tipul = tipul;
         this.titlu = titlu;
         this.dataOra = dataOra;
         this.descriere = descriere;
+        this.pret = pret;
     }
 
     public Spectacol() {

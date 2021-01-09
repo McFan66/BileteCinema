@@ -197,7 +197,7 @@
           <Font name="Tahoma" size="16" style="1"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="4"/>
-        <Property name="text" type="java.lang.String" value="Total: x"/>
+        <Property name="text" type="java.lang.String" value="Total:0 RON"/>
       </Properties>
     </Component>
   </SubComponents>

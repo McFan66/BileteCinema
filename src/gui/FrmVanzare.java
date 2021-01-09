@@ -46,9 +46,10 @@ public class FrmVanzare extends javax.swing.JDialog {
     private String Stergema2;
     private Spectacol test = new Spectacol();
     private ArrayList<Bilet> listaBilete = new ArrayList<>();
-    private DefaultListModel listModel=new DefaultListModel();
+    private DefaultListModel listModel = new DefaultListModel();
     private Date azi = Calendar.getInstance().getTime();
     private Calendar c = Calendar.getInstance();
+    private int total;
 
     public FrmVanzare() {
     }
@@ -74,7 +75,7 @@ public class FrmVanzare extends javax.swing.JDialog {
                 dataSelectata = chooserDataFilme.getDate();
                 generareSala();
             }
-        }); 
+        });
         chooserDataFilme.setMinSelectableDate(azi);
         c.setTime(azi);
         c.add(Calendar.DATE, 7);
@@ -151,7 +152,7 @@ public class FrmVanzare extends javax.swing.JDialog {
 
         lblTotal.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         lblTotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblTotal.setText("Total: x");
+        lblTotal.setText("Total:0 RON");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -260,15 +261,51 @@ public class FrmVanzare extends javax.swing.JDialog {
 //                                        c++;
 //                                    }
 //                                }
+                                    int numar = 0;
 
-                                    final Bilet b = new Bilet((int) (Math.random() * 1000), spectacolSelectat, linie, coloana);
-                                    listaBilete.add(b);
-                                    listModel.clear();
-                                    for(Bilet bilet:listaBilete){
-                                        listModel.addElement(bilet);
+                                    for (int i = 0; i < coloana; i++) {
+                                        if (matrice[linie][i].getBackground() == Color.RED) {
+                                            numar++;
+                                        }
                                     }
+                                    final Bilet b = new Bilet((int) (Math.random() * 1000), spectacolSelectat, linie, coloana - numar);
+
+                                    //  if (matrice[linie][coloana].getBackground() != Color.red) {
+                                    System.out.println(String.format("linie %d coloana %d availble=%s righClick=%s", linie, coloana, matrice[linie][coloana].isAvailable(), matrice[linie][coloana].isRightClickPressed()));
+                                    if (matrice[linie][coloana].isAvailable() && !matrice[linie][coloana].isRightClickPressed()) {
+                                        listModel.clear();//golire model lista
+                                        total = 0;
+                                        listaBilete.add(b);
+                                        for (Bilet bilet : listaBilete) {
+                                            total = total + spectacolSelectat.getPret();
+                                            listModel.addElement(bilet);
+                                        }
+                                    } else if (matrice[linie][coloana].isRightClickPressed()) {
+                                        listModel.clear();//golire model lista
+                                        total = 0;
+                                        
+                                        
+                                        for (int i=0;i<listaBilete.size();i++){
+                                           // System.out.println(listaBilete.get(i).getLoc() + " " + listaBilete.get(i).getRand());
+                                           // System.out.println(linie + " " + coloana);
+                                            if (listaBilete.get(i).getLoc()==linie && listaBilete.get(i).getRand()==coloana-1){
+                                                listaBilete.remove(i);
+                                            }
+                                        }
+                                        for (Bilet bilet : listaBilete) {
+                                            total = total + spectacolSelectat.getPret();
+                                            listModel.addElement(bilet);
+                                        }
+                                        //listaBilete.remove(b);
+                                        //listModel.removeElement(b);
+                                        
+                                        //total = total - spectacolSelectat.getPret();
+                                    }
+
                                     jList1.setModel(listModel);
                                 }
+                                // }
+                                lblTotal.setText("Total:" + total + " RON");
                             }
                         };
                         matrice[i][j].setVanzare(true);
