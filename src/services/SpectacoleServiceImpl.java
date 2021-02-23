@@ -55,12 +55,9 @@ public class SpectacoleServiceImpl implements SpectacoleService{
     
         public static void main(String[] args) {
         SpectacoleService  spectacoleService=new SpectacoleServiceImpl();
-            Spectacol s1 = new Spectacol("Film", "Vizita", new Date(), "viziteaza", 20);
-//        s1.setId(1);
-       Spectacol s2 = new Spectacol("Film", "Cursa", new Date(), "intrecere", 30);
+            Spectacol s1 = new Spectacol("Film", "Idk man", new Date(), "film actiune", 50);   
 //        s2.setId(2);
-        spectacoleService.salveazaSpectacol(s1);
-       spectacoleService.salveazaSpectacol(s2);
+        spectacoleService.remove(s1);
        
     }
     

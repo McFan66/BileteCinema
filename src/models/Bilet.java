@@ -6,6 +6,7 @@
 package models;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -18,6 +19,23 @@ public class Bilet implements Serializable {
     private Spectacol spectacol;
     private int loc;
     private int rand;
+    private Date dataVanzare;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Date getDataVanzare() {
+        return dataVanzare;
+    }
+
+    public void setDataVanzare(Date dataVanzare) {
+        this.dataVanzare = dataVanzare;
+    }
 
     public Bilet(int numarBilet, Spectacol spectacol, int loc, int rand) {
         this.numarBilet = numarBilet;

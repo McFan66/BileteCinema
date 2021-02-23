@@ -15,7 +15,7 @@ import models.Spectacol;
  * @author Stefan
  */
 public interface BiletRepository {
-    public void adaugaBilet (Bilet bilet);
+    public boolean adaugaBilet (Bilet bilet);
     public void editareBilet (Bilet bilet);
     public void stergereBilet (Bilet bilet);
     public List<Bilet> getAll ();

@@ -7,16 +7,32 @@ package gui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.RadialGradientPaint;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Stroke;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import models.Bilet;
+import repositories.SpectacoleFileRepository;
 
 /**
  *
@@ -24,10 +40,12 @@ import javax.swing.SwingUtilities;
  */
 public class TicketForm extends javax.swing.JPanel {
 
-    /**
-     * Creates new form TicketForm
-     */
-    public TicketForm() {
+    private Bilet bilet;
+    private SimpleDateFormat sdfData=new SimpleDateFormat("dd.MM.yyyy");
+    private SimpleDateFormat sdfOra = new SimpleDateFormat("HH:mm");
+
+    public TicketForm(Bilet b) {
+        this.bilet=b;
         initComponents();
     }
 
@@ -35,48 +53,159 @@ public class TicketForm extends javax.swing.JPanel {
     protected void paintComponent(Graphics gr) {
         super.paintComponent(gr);
         Graphics2D g = (Graphics2D) gr;
-        
+
         // Dreptunghi stanga rosu
         g.setColor(new Color(157, 0, 102));
-        g.fillRect(0, 0, 75, getHeight());
+        //g.fillRect(0, 0, 75, getHeight());
+        double diameter = 50d;
+        double xValueInset = diameter * 0.05d;
+        double yValueInset = diameter * 2d / 3d;
+        int inaltime=7;
+        GeneralPath margine = new GeneralPath(GeneralPath.WIND_EVEN_ODD, 26);
+        margine.moveTo(0, 0);
+        margine.lineTo(75, 0);
+        margine.lineTo(75, getHeight());
+        margine.lineTo(0, getHeight());
+        //margine.lineTo(0, getHeight() / 2 + 25);
+        //margine.curveTo(0, getHeight()/2+25, 40, getHeight()/2, 0, getHeight()/2-25);
+        //margine.curveTo(yValueInset, getHeight() / 2 + diameter / 2 - xValueInset, yValueInset, getHeight() / 2 - diameter / 2 + xValueInset, 0, getHeight() / 2 - 25);
+        //   margine.curveTo(50 * 0.05, 25*4/3, 40, getHeight()/2-20, 0, getHeight()/2-25);
+        margine.lineTo(0, getHeight()/2+98);
+        margine.curveTo(inaltime, getHeight()/2+96, inaltime, getHeight()/2+90, 0, getHeight()/2+88);
+        margine.lineTo(0, getHeight()/2+83);
+        margine.curveTo(inaltime, getHeight()/2+81, inaltime, getHeight()/2+75, 0, getHeight()/2+73);
+        margine.lineTo(0, getHeight()/2+68);
+        margine.curveTo(inaltime, getHeight()/2+66, inaltime, getHeight()/2+60, 0, getHeight()/2+58);
+        margine.lineTo(0, getHeight()/2+53);
+        margine.curveTo(inaltime, getHeight()/2+51, inaltime, getHeight()/2+45, 0, getHeight()/2+43);
+        margine.lineTo(0, getHeight()/2+38);
+        margine.curveTo(inaltime, getHeight()/2+36, inaltime, getHeight()/2+30, 0, getHeight()/2+28);
+        margine.lineTo(0, getHeight()/2+25);
+        margine.curveTo(32, getHeight()/2+23, 32, getHeight()/2-23, 0, getHeight()/2-25);
+        margine.lineTo(0, getHeight()/2-28);
+        margine.curveTo(inaltime, getHeight()/2-30, inaltime, getHeight()/2-36, 0, getHeight()/2-38);
+        margine.lineTo(0, getHeight()/2-43);
+        margine.curveTo(inaltime, getHeight()/2-45, inaltime, getHeight()/2-51, 0, getHeight()/2-53);
+        margine.lineTo(0, getHeight()/2-58);
+        margine.curveTo(inaltime, getHeight()/2-60, inaltime, getHeight()/2-66, 0, getHeight()/2-68);
+        margine.lineTo(0, getHeight()/2-73);
+        margine.curveTo(inaltime, getHeight()/2-75, inaltime, getHeight()/2-81, 0, getHeight()/2-83);
+        margine.lineTo(0, getHeight()/2-88);
+        margine.curveTo(inaltime, getHeight()/2-90, inaltime, getHeight()/2-96, 0, getHeight()/2-98);
+        margine.lineTo(0, 0);
+        margine.closePath();
+        g.draw(margine);
+        g.fill(margine);
 
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-        
+
         //Fundal
         g.setColor(new Color(234, 213, 188));
         g.fillRect(75, 0, getWidth() - 75, getHeight());
-        
+
         //Chenar
         g.setColor(new Color(157, 0, 102));
-        float thickness = 1.5f;
+        float thickness = 1.8f;
         Stroke oldStroke = g.getStroke();
         g.setStroke(new BasicStroke(thickness));
         g.drawRect(85, 10, getWidth() - 95, getHeight() - 20);
         g.setStroke(oldStroke);
-        
-        
-       // g.setColor(Color.BLACK);
+
+        // g.setColor(Color.BLACK);
         //g.draw(createDefaultStar(50, 200, 200));
-        
-
-
+        //Stele
         g.setPaint(Color.white);
-        g.fill(createStar(35, 33, 5, 11, 5, 90));
-        g.fill(createStar(35, 66, 5, 11, 5, 90));
-        g.fill(createStar(35, 99, 5, 11, 5, 90));
-        g.fill(createStar(35, 132, 5, 11, 5, 90));
-        g.fill(createStar(35, 165, 5, 11, 5, 90));
+        g.fill(createStar(40, getHeight()/6, 5, 11, 5, 90));
+        g.fill(createStar(40, getHeight()/6*2, 5, 11, 5, 90));
+        g.fill(createStar(40, getHeight()/6*3, 5, 11, 5, 90));
+        g.fill(createStar(40, getHeight()/6*4, 5, 11, 5, 90));
+        g.fill(createStar(40, getHeight()/6*5, 5, 11, 5, 90));
+
+       // g.setColor(new Color(255, 0, 0, 100));
+        //g.fillArc(-30, 71, 50, 50, 90, -180);
+
+        //chenare
+        thickness = 1.5f;
+        g.setColor(new Color(157, 0, 102));
+        g.setStroke(new BasicStroke(thickness));
+        g.drawRect(85, getHeight() - 60, 75, 50);
+        g.drawRect(160, getHeight() - 60, 75, 50);
+        g.drawRect(235, getHeight() - 60, 75, 50);
+        g.drawRect(310, 10, getWidth() - 95 - 75 - 75 - 75, getHeight() - 20);
+        g.drawRect(310, 10, 0, getHeight()-20-50);
+        g.drawRect(85, getHeight() - 60, 225, 0);
+        g.setStroke(oldStroke);
+
+        //text
+        g.setColor(new Color(66, 66, 66));
+        g.setFont(new Font("Arial", Font.BOLD, 13));
+        g.drawString("RAND", 90, getHeight()-60+20);
+        g.drawString("LOC", 90, getHeight()-60+38);
+        g.drawString("PRET", 180, getHeight()-60+20);
+        g.drawString(String.valueOf(bilet.getRand()), 132, getHeight()-60+20);
+        g.drawString(String.valueOf(bilet.getLoc()), 123, getHeight()-60+38);
+        g.drawString(String.valueOf(bilet.getSpectacol().getPret()) + " RON", 175, getHeight()-60+38);
+        g.drawString(sdfData.format(bilet.getSpectacol().getDataOra()), 240, getHeight()-60+20);
+        g.drawString(sdfOra.format(bilet.getSpectacol().getDataOra()), 255, getHeight()-60+38);
+
+        g.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
+        g.drawString("BILET INTRARE", 117, 85);
+
+        
+        Font tnm=new Font("Times New Roman", Font.PLAIN, 24);
+        g.setFont(tnm);
+        FontMetrics lungime = g.getFontMetrics(tnm);
+        Rectangle2D caseta = lungime.getStringBounds(bilet.getNumeSpectacol(), g);
+        
+        int x = (int) (85+(getWidth()-62-85-15-caseta.getWidth())/2);
+        System.out.println(getWidth());
+        g.drawString(bilet.getNumeSpectacol(), x, 110);
+
+        Font font = new Font("Lucida Console", Font.BOLD, 25);
+
+        AffineTransform affineTransform = new AffineTransform();
+        affineTransform.rotate(Math.toRadians(-90), 0, 0);
+        Font rotatedFont = font.deriveFont(affineTransform);
+        g.setFont(rotatedFont);
+        g.drawString(String.format("%010d", bilet.getNumarBilet()), getWidth()-10-23, getHeight()-20);
+        
+        
+//        InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream("PottaOne-Regular.");
+//        Font font = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(48f);
+        
+        try {
+            InputStream test2 = new BufferedInputStream(new FileInputStream("src/resources/PottaOne-Regular.ttf"));
+            Font test = Font.createFont(Font.TRUETYPE_FONT, test2);
+            test = test.deriveFont(Font.PLAIN,28);
+            g.setFont(test);
+            g.drawString("Cinema", 97, 50);
+            g.drawString("Max", 240, 50);
+            } catch (FontFormatException ex) {
+            Logger.getLogger(TicketForm.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(TicketForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            BufferedImage logo = ImageIO.read(new File("src/resources/logobilet.png"));
+        
+            g.drawImage(logo, 203, 18, 35, 45, null);
+            } catch (IOException ex) {
+            Logger.getLogger(TicketForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+            
 //        g.setPaint(new RadialGradientPaint(
 //                new Point(400, 200), 60, new float[]{0, 1},
 //                new Color[]{Color.RED, Color.YELLOW}));
-       // g.fill(createStar(400, 200, 20, 60, 8, 0));
-
+// g.fill(createStar(400, 200, 20, 60, 8, 0));
 //        g.setPaint(new RadialGradientPaint(
 //                new Point(200, 400), 50, new float[]{0, 0.3f, 1},
 //                new Color[]{Color.RED, Color.YELLOW, Color.ORANGE}));
 //        g.fill(createStar(200, 400, 40, 50, 20, 0));
-
+        
+        
     }
 
     private static Shape createDefaultStar(double radius, double centerX,
@@ -122,6 +251,8 @@ public class TicketForm extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        setPreferredSize(new java.awt.Dimension(400, 240));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -140,15 +271,21 @@ public static void main(String[] args) {
                 createAndShowGUI();
             }
         });
+        
+        
     }
 
     private static void createAndShowGUI() {
         JFrame f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.getContentPane().add(new TicketForm());
+        SpectacoleFileRepository spectacoleFileRepository = new SpectacoleFileRepository();
+        Bilet bilet = new Bilet(237, spectacoleFileRepository.getAll().get(1), 5, 7);
+        f.getContentPane().add(new TicketForm(bilet));
         f.setSize(400, 240);
         f.setLocationRelativeTo(null);
         f.setVisible(true);
+        f.setResizable(false);
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -64,6 +64,7 @@ System.out.println(info.getClassName());
 
         lblCodOperator.setText("Cod Operator:");
 
+        lblParola.setFont(new java.awt.Font("Lucida Console", 1, 13)); // NOI18N
         lblParola.setText("Parola:");
 
         btnLogin.setText("Login");

@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import models.Bilet;
 import models.Spectacol;
+import utils.DateUtils;
 
 /**
  *
@@ -40,16 +41,22 @@ public class BiletFileRepository implements BiletRepository {
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
             listaBilete=(ArrayList<Bilet>) objectInputStream.readObject();
         } catch (IOException ex) {
-            Logger.getLogger(SpectacoleFileRepository.class.getName()).log(Level.SEVERE, null, ex);
+           // Logger.getLogger(SpectacoleFileRepository.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(SpectacoleFileRepository.class.getName()).log(Level.SEVERE, null, ex);
+           // Logger.getLogger(SpectacoleFileRepository.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     @Override
-    public void adaugaBilet(Bilet bilet) {
-        listaBilete.add(bilet);
+    public boolean adaugaBilet(Bilet bilet) {
+        int index = listaBilete.indexOf(bilet);
+        if (index == -1){
+            listaBilete.add(bilet);
+        }else{
+            listaBilete.set(index, bilet);
+        }
         save();
+        return true;
     }
 
     @Override
@@ -95,10 +102,12 @@ public class BiletFileRepository implements BiletRepository {
     }
 
     @Override
-    public List<Bilet> cautareBiletDupaData(Date dataStart, Date dataSfarsit) {
+    public List<Bilet> cautareBiletDupaData(Date dataInceput, Date dataSfarsit) {
+        dataInceput=DateUtils.getDateWithSpecialHourMinuteSecond(dataInceput);
+        dataSfarsit=DateUtils.getDateWithSpecialHourMinuteSecond(dataSfarsit, 23, 59, 59);
         List<Bilet> rezultate = new ArrayList<>();
         for (Bilet b:listaBilete){
-            if (b.getSpectacol().getDataOra().after(dataStart) && b.getSpectacol().getDataOra().before(dataSfarsit)){
+            if (b.getDataVanzare().after(dataInceput) && b.getDataVanzare().before(dataSfarsit)){
                 rezultate.add(b);
             }
         }

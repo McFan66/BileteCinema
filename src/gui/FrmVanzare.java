@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import models.Bilet;
@@ -147,6 +146,11 @@ public class FrmVanzare extends javax.swing.JDialog {
         btnVinde.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btnVinde.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/shopcart.png"))); // NOI18N
         btnVinde.setText("Vinde");
+        btnVinde.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVindeActionPerformed(evt);
+            }
+        });
 
         btnAnuleaza.setText("Anuleaza");
 
@@ -236,6 +240,12 @@ public class FrmVanzare extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_cmbOreItemStateChanged
 
+    private void btnVindeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVindeActionPerformed
+            FrmListaBilete frmListaBilete = new FrmListaBilete(this, true, listaBilete);
+            System.out.println(listaBilete.size()+" atatea bilete");
+            frmListaBilete.setVisible(true);
+    }//GEN-LAST:event_btnVindeActionPerformed
+
     private void generareSala() {
         if (spectacolSelectat != null && dataSelectata != null && oraSelectata != null) {
             if (fisierConfigurareSala.exists()) {
@@ -288,7 +298,7 @@ public class FrmVanzare extends javax.swing.JDialog {
                                         for (int i=0;i<listaBilete.size();i++){
                                            // System.out.println(listaBilete.get(i).getLoc() + " " + listaBilete.get(i).getRand());
                                            // System.out.println(linie + " " + coloana);
-                                            if (listaBilete.get(i).getLoc()==linie && listaBilete.get(i).getRand()==coloana-1){
+                                            if (listaBilete.get(i).getLoc()==linie && listaBilete.get(i).getRand()==coloana-numar){
                                                 listaBilete.remove(i);
                                             }
                                         }
@@ -323,6 +333,7 @@ public class FrmVanzare extends javax.swing.JDialog {
                                 // matrice[i][j].setBackground(Color.green);
                                 matrice[i][j].setText(String.valueOf(j - counter));
                             }
+                            
                         }
 
 //                    if (j == 0) {
