@@ -59,5 +59,17 @@ public class DateUtils {
         cal2.set(Calendar.MILLISECOND, 0);
         return cal1.getTime().compareTo(cal2.getTime())==0;
     }
+    
+    public static Date resetYearMonthDayMinuteSecond(Date date1){
+        Calendar c = Calendar.getInstance();
+        c.setTime(date1);
+        c.set(Calendar.YEAR, 0);
+        c.set(Calendar.MONTH, 0);
+        c.set(Calendar.DATE, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        return c.getTime();
+    }
 
 }

@@ -26,12 +26,13 @@ import models.MatriceSerializabila;
 import models.Spectacol;
 import repositories.SpectacoleFileRepository;
 import repositories.SpectacoleRepository;
+import services.BiletServiceImpl;
 
 /**
  *
  * @author Stefan
  */
-public class FrmVanzare extends javax.swing.JDialog {
+public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.OnBileteVandute {
 
     private SpectacoleRepository spectacoleFileRepository = new SpectacoleFileRepository();
     private List<Spectacol> listaSpectacole;
@@ -49,6 +50,7 @@ public class FrmVanzare extends javax.swing.JDialog {
     private Date azi = Calendar.getInstance().getTime();
     private Calendar c = Calendar.getInstance();
     private int total;
+    private BiletServiceImpl biletServiceImpl = BiletServiceImpl.getInstance();
 
     public FrmVanzare() {
     }
@@ -241,9 +243,9 @@ public class FrmVanzare extends javax.swing.JDialog {
     }//GEN-LAST:event_cmbOreItemStateChanged
 
     private void btnVindeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVindeActionPerformed
-            FrmListaBilete frmListaBilete = new FrmListaBilete(this, true, listaBilete);
-            System.out.println(listaBilete.size()+" atatea bilete");
-            frmListaBilete.setVisible(true);
+        FrmListaBilete frmListaBilete = new FrmListaBilete(this, true, listaBilete);
+        System.out.println(listaBilete.size() + " atatea bilete");
+        frmListaBilete.setVisible(true);
     }//GEN-LAST:event_btnVindeActionPerformed
 
     private void generareSala() {
@@ -278,8 +280,16 @@ public class FrmVanzare extends javax.swing.JDialog {
                                             numar++;
                                         }
                                     }
-                                    final Bilet b = new Bilet((int) (Math.random() * 1000), spectacolSelectat, linie, coloana - numar);
-
+                                    final Bilet b = new Bilet((int) (Math.random() * 1000), spectacolSelectat, coloana-numar, linie);
+                                    b.setLocReal(coloana);
+                                    Calendar c = Calendar.getInstance();
+                                    c.setTime(dataSelectata);
+                                    String[] oraMinut = cmbOre.getSelectedItem().toString().split(":");
+                                    c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(oraMinut[0]));
+                                    c.set(Calendar.MINUTE, Integer.parseInt(oraMinut[1]));
+                                    c.set(Calendar.SECOND, 0);
+                                    c.set(Calendar.MILLISECOND, 0);
+                                    b.setDataOra(c.getTime());
                                     //  if (matrice[linie][coloana].getBackground() != Color.red) {
                                     System.out.println(String.format("linie %d coloana %d availble=%s righClick=%s", linie, coloana, matrice[linie][coloana].isAvailable(), matrice[linie][coloana].isRightClickPressed()));
                                     if (matrice[linie][coloana].isAvailable() && !matrice[linie][coloana].isRightClickPressed()) {
@@ -293,12 +303,11 @@ public class FrmVanzare extends javax.swing.JDialog {
                                     } else if (matrice[linie][coloana].isRightClickPressed()) {
                                         listModel.clear();//golire model lista
                                         total = 0;
-                                        
-                                        
-                                        for (int i=0;i<listaBilete.size();i++){
-                                           // System.out.println(listaBilete.get(i).getLoc() + " " + listaBilete.get(i).getRand());
-                                           // System.out.println(linie + " " + coloana);
-                                            if (listaBilete.get(i).getLoc()==linie && listaBilete.get(i).getRand()==coloana-numar){
+
+                                        for (int i = 0; i < listaBilete.size(); i++) {
+                                            // System.out.println(listaBilete.get(i).getLoc() + " " + listaBilete.get(i).getRand());
+                                            // System.out.println(linie + " " + coloana);
+                                            if (listaBilete.get(i).getLoc() == linie && listaBilete.get(i).getRand() == coloana - numar) {
                                                 listaBilete.remove(i);
                                             }
                                         }
@@ -308,7 +317,7 @@ public class FrmVanzare extends javax.swing.JDialog {
                                         }
                                         //listaBilete.remove(b);
                                         //listModel.removeElement(b);
-                                        
+
                                         //total = total - spectacolSelectat.getPret();
                                     }
 
@@ -333,8 +342,9 @@ public class FrmVanzare extends javax.swing.JDialog {
                                 // matrice[i][j].setBackground(Color.green);
                                 matrice[i][j].setText(String.valueOf(j - counter));
                             }
-                            
+
                         }
+                       
 
 //                    if (j == 0) {
 //                        matrice[i][j].setText("R" + String.valueOf(i + 1));
@@ -345,6 +355,20 @@ public class FrmVanzare extends javax.swing.JDialog {
                         panelAfisare.add(matrice[i][j]);
                     }
                 }
+                 Calendar cal = Calendar.getInstance();
+                        cal.setTime(dataSelectata);
+                        String[] oraMinut = cmbOre.getSelectedItem().toString().split(":");
+                        cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(oraMinut[0]));
+                        cal.set(Calendar.MINUTE, Integer.parseInt(oraMinut[1]));
+                        cal.set(Calendar.SECOND, 0);
+                        cal.set(Calendar.MILLISECOND, 0);
+                        List<Bilet> listaBileteCumparate = new ArrayList<Bilet>();
+                        listaBileteCumparate = biletServiceImpl.getBileteBySpectacolDataAndOra((Spectacol) cmbSpectacole.getSelectedItem(),cal.getTime());
+                        System.out.println(listaBileteCumparate);
+                        for (Bilet b : listaBileteCumparate) {
+                            matrice[b.getRand()][b.getLocReal()].setBackground(Color.blue);
+                            matrice[b.getRand()][b.getLocReal()].setAvailable(false);
+                        }
                 panelAfisare.revalidate();
                 panelAfisare.repaint();
             }
@@ -406,6 +430,8 @@ public class FrmVanzare extends javax.swing.JDialog {
             //Logger.getLogger(SpectacoleFileRepository.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnuleaza;
@@ -420,4 +446,9 @@ public class FrmVanzare extends javax.swing.JDialog {
     private javax.swing.JLabel lblTotal;
     private javax.swing.JPanel panelAfisare;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void saveBilete() {
+        
+    }
 }

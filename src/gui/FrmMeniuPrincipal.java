@@ -5,11 +5,14 @@
  */
 package gui;
 
+import models.Bilet;
+import services.BiletServiceImpl;
+
 /**
  *
  * @author Stefan
  */
-public class FrmMeniuPrincipal extends javax.swing.JFrame {
+public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FObserver {
 
     /**
      * Creates new form FrmMeniuPrincipal
@@ -17,7 +20,7 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame {
     public FrmMeniuPrincipal() {
        //super(parent);
         initComponents();
-   
+        BiletServiceImpl.getInstance().addObserver(this);
     }
 
     /**
@@ -236,4 +239,9 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void update(Bilet bilet) {
+        System.out.println("Meniul principal actualizam observerul"+bilet.getDetalii());
+    }
 }

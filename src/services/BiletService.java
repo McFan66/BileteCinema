@@ -22,6 +22,7 @@ public interface BiletService {
     public void remove(Bilet bilet);
     public List<Bilet> getBileteByData(Date dataInceput, Date dataFinal);
     public List<Bilet> getBileteBySpectacolAndData(Spectacol spectacol, Date dataInceput, Date dataFinal);
-    public List<Bilet> getBileteBySpectaolDataAndOra(Spectacol spectacol, Date data, Date ora);
+    public List<Bilet> getBileteBySpectaolDataAndOra(Spectacol spectacol, Date data, Date oraInceput, Date oraFinal);
+    public List<Bilet> getBileteBySpectacolDataAndOra(Spectacol spectacol, Date dataOra);
     
 }
