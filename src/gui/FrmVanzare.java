@@ -447,7 +447,7 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
         generareSala();
         listModel.clear();
         listaBilete.removeAll(listaBilete);
-        lblTotal.setText("Total:0 lei");
+        lblTotal.setText("Total:0 RON");
         total=0;
         
         
