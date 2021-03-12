@@ -302,12 +302,13 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
                                         }
                                     } else if (matrice[linie][coloana].isRightClickPressed()) {
                                         listModel.clear();//golire model lista
+           
                                         total = 0;
 
                                         for (int i = 0; i < listaBilete.size(); i++) {
                                             // System.out.println(listaBilete.get(i).getLoc() + " " + listaBilete.get(i).getRand());
                                             // System.out.println(linie + " " + coloana);
-                                            if (listaBilete.get(i).getLoc() == linie && listaBilete.get(i).getRand() == coloana - numar) {
+                                            if (listaBilete.get(i).getRand()== linie && listaBilete.get(i).getLocReal()== coloana) {
                                                 listaBilete.remove(i);
                                             }
                                         }
