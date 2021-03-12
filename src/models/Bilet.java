@@ -17,9 +17,19 @@ public class Bilet implements Serializable {
     private int id;
     private int numarBilet;
     private Spectacol spectacol;
+    private Date dataOra;
     private int loc;
     private int rand;
     private Date dataVanzare;
+    private int locReal;
+
+    public int getLocReal() {
+        return locReal;
+    }
+
+    public void setLocReal(int locReal) {
+        this.locReal = locReal;
+    }
 
     public int getId() {
         return id;
@@ -88,7 +98,7 @@ public class Bilet implements Serializable {
     }
 
     public String getDetalii() {
-        return String.format("Bilet: Randul %s, Locul %s", loc+1, rand);
+        return String.format("Bilet: Randul %s, Locul %s", rand+1, loc);
     }
 
     @Override
@@ -107,6 +117,14 @@ public class Bilet implements Serializable {
             return false;
         }
         return true;
+    }
+
+    public Date getDataOra() {
+        return dataOra;
+    }
+
+    public void setDataOra(Date dataOra) {
+        this.dataOra = dataOra;
     }
 
     @Override

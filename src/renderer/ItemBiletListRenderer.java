@@ -145,7 +145,7 @@ public class ItemBiletListRenderer extends JPanel implements ListCellRenderer<Bi
         g.drawString("RAND", 90, getHeight() - 60 + 20);
         g.drawString("LOC", 90, getHeight() - 60 + 38);
         g.drawString("PRET", 180, getHeight() - 60 + 20);
-        g.drawString(String.valueOf(bilet.getRand()), 132, getHeight() - 60 + 20);
+        g.drawString(String.valueOf(bilet.getRand()+1), 132, getHeight() - 60 + 20);
         g.drawString(String.valueOf(bilet.getLoc()), 123, getHeight() - 60 + 38);
         g.drawString(String.valueOf(bilet.getSpectacol().getPret()) + " RON", 175, getHeight() - 60 + 38);
         g.drawString(sdfData.format(bilet.getSpectacol().getDataOra()), 240, getHeight() - 60 + 20);
