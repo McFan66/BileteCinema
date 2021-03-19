@@ -21,4 +21,5 @@ public interface SpectacoleService {
     public void remove(Spectacol spectacol);
     public List<Spectacol> getAll();
     public List<Spectacol> getSpectacoleBetweenDates(Date dataInceput, Date dataFinal);
+    public List<Spectacol> getSpectacoleWithDurataAfterDate(Date data);
 }

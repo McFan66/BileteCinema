@@ -6,13 +6,16 @@
 package models;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import observer.ObserverData;
 
 /**
  *
  * @author Stefan
  */
-public class Spectacol implements Serializable {
+public class Spectacol implements Serializable, ObserverData {
 
     private static final long serialVersionUID = 7321852490118346537L;
 
@@ -22,6 +25,15 @@ public class Spectacol implements Serializable {
     private Date dataOra;
     private String descriere;
     private int pret;
+    private int durata;
+
+    public int getDurata() {
+        return durata;
+    }
+
+    public void setDurata(int durata) {
+        this.durata = durata;
+    }
 
     public int getPret() {
         return pret;
@@ -31,12 +43,13 @@ public class Spectacol implements Serializable {
         this.pret = pret;
     }
 
-    public Spectacol(String tipul, String titlu, Date dataOra, String descriere, int pret) {
+    public Spectacol(String tipul, String titlu, Date dataOra, String descriere, int pret, int durata) {
         this.tipul = tipul;
         this.titlu = titlu;
         this.dataOra = dataOra;
         this.descriere = descriere;
         this.pret = pret;
+        this.durata = durata;
     }
 
     public Spectacol() {
@@ -114,6 +127,11 @@ public class Spectacol implements Serializable {
     @Override
     public String toString() {
         return "Spectacol{" + "id=" + id + ", tipul=" + tipul + ", titlu=" + titlu + ", dataOra=" + dataOra + ", descriere=" + descriere + '}';
+    }
+    
+    public String getDetalii() {
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        return String.format("%s %s %s %s", tipul, titlu, formatter.format(dataOra), pret);
     }
     
     

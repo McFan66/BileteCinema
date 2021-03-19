@@ -24,6 +24,7 @@ public class FrmListaBilete extends javax.swing.JDialog {
     private List<Bilet> listaBilete;
     private DefaultListModel<Bilet> modelListaBilete=new DefaultListModel<>();
     private BiletService biletService = BiletServiceImpl.getInstance();
+    private OnBileteVandute onBileteVandute;
     
     public FrmListaBilete(JDialog parent, boolean modal, List<Bilet> listaBilete) {
         super(parent, modal);
@@ -199,11 +200,16 @@ public class FrmListaBilete extends javax.swing.JDialog {
         }
         this.setVisible(false);
         JOptionPane.showMessageDialog(this, "Biletele au fost vandute cu succes", "Confirmare vanzare", JOptionPane.INFORMATION_MESSAGE);
+        onBileteVandute.saveBilete();
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     public interface OnBileteVandute {
         void saveBilete ();
+    }
+    
+    public void setOnBileteVandute(OnBileteVandute onBileteVandute){
+        this.onBileteVandute=onBileteVandute;
     }
     
 

@@ -23,7 +23,7 @@ import services.SpectacoleServiceImpl;
  * @author Stefan
  */
 public class FrmAddSpectacol extends javax.swing.JDialog {
-
+    
     private SpectacoleService spectacoleService = new SpectacoleServiceImpl();
     private Spectacol spectacolSelectat;
     private OnSpectacolSaved onSpectacolSaved;
@@ -31,26 +31,31 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
     /**
      * Creates new form FrmAddSpectacol
      */
-    
-    
     public FrmAddSpectacol(javax.swing.JDialog parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        JSpinner.DateEditor de = new JSpinner.DateEditor(jSpinner1, "HH:mm");
+        de.getTextField().setEditable(false);
+        jSpinner1.setEditor(de);
+        setTitle("Adauga spectacol");
     }
     
     public FrmAddSpectacol(JDialog parent, boolean modal, Spectacol spectacol) {
         super(parent, modal);
         initComponents();
-        this.spectacolSelectat=spectacol;
+        this.spectacolSelectat = spectacol;
         txtNumeSpectacol.setText(spectacolSelectat.getTitlu());
         txtDescriere.setText(spectacolSelectat.getDescriere());
         cmbTipSpectacol.setSelectedItem(spectacolSelectat.getTipul());
         jDateChooser1.setDate(spectacolSelectat.getDataOra());
         jSpinner1.setValue(spectacolSelectat.getDataOra());
         spnPret.setValue(spectacolSelectat.getPret());
+        spnDurata.setValue(spectacolSelectat.getDurata());
         JSpinner.DateEditor de = new JSpinner.DateEditor(jSpinner1, "HH:mm");
         de.getTextField().setEditable(false);
         jSpinner1.setEditor(de);
+        setTitle("Editeaza spectacol");
+        
     }
 
     /**
@@ -76,6 +81,8 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
         lblDescriereSpectacol = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtDescriere = new javax.swing.JTextArea();
+        spnDurata = new javax.swing.JSpinner();
+        lblDurata = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -110,6 +117,10 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
         txtDescriere.setRows(5);
         jScrollPane1.setViewportView(txtDescriere);
 
+        spnDurata.setModel(new javax.swing.SpinnerNumberModel(1, 1, 30, 1));
+
+        lblDurata.setText("Durata:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -117,7 +128,7 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
+                        .addGap(20, 20, 20)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblNumeSpectacol, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lblDescriereSpectacol, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -128,12 +139,19 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+                                    .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
                                     .addComponent(spnPret))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addComponent(lblOra))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(lblDurata)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblOra)
-                                .addGap(18, 18, 18)
-                                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jSpinner1)
+                                    .addComponent(spnDurata)))
                             .addComponent(txtNumeSpectacol)
                             .addComponent(jScrollPane1)
                             .addComponent(cmbTipSpectacol, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -146,7 +164,7 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(lblNumeSpectacol)
                     .addComponent(txtNumeSpectacol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -154,21 +172,21 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblDescriereSpectacol)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbTipSpectacol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblTipulSpectacol))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(lblTipulSpectacol)
+                    .addComponent(cmbTipSpectacol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblOra))
-                        .addComponent(lblData, javax.swing.GroupLayout.Alignment.TRAILING))
-                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(lblData)
+                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblOra)
+                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(spnDurata, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblDurata)
                     .addComponent(spnPret, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblPret))
                 .addGap(8, 8, 8)
@@ -185,6 +203,7 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
         String descriereSpectacol = txtDescriere.getText();
         Date data = jDateChooser1.getDate();
         Date ora = (Date) jSpinner1.getValue();
+        int durata = (int) spnDurata.getValue();
         Calendar c = Calendar.getInstance();
         Calendar c1 = Calendar.getInstance();
         c1.setTime(ora);
@@ -195,22 +214,23 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
         int pret = (int) spnPret.getValue();
         if (isFormValid()) {
             if (spectacolSelectat == null) {
-                spectacolSelectat = new Spectacol(tipSpectacol, numeSpectacol, dataSiOra, descriereSpectacol, pret);
+                spectacolSelectat = new Spectacol(tipSpectacol, numeSpectacol, dataSiOra, descriereSpectacol, pret, durata);
             } else {
                 spectacolSelectat.setDescriere(descriereSpectacol);
                 spectacolSelectat.setTipul(tipSpectacol);
                 spectacolSelectat.setTitlu(numeSpectacol);
                 spectacolSelectat.setDataOra(dataSiOra);
                 spectacolSelectat.setPret(pret);
+                spectacolSelectat.setDurata(durata);
             }
             onSpectacolSaved.saveSpectacol(spectacolSelectat);
             spectacoleService.salveazaSpectacol(spectacolSelectat);
             JOptionPane.showMessageDialog(this, "Spectacolul a fost salvat cu succes!");
-            dispose(); 
+            dispose();
         }
 
     }//GEN-LAST:event_btnSalvareActionPerformed
-
+    
     private boolean isFormValid() {
         if (txtNumeSpectacol.getText().trim().length() < 3) {
             JOptionPane.showMessageDialog(this, "Numele spectacolului trebuie sa contina minim 3 caractere!");
@@ -229,18 +249,16 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
         }
         return true;
     }
-
     
-    public interface OnSpectacolSaved
-    {
+    public interface OnSpectacolSaved {
+        
         void saveSpectacol(Spectacol s);
     }
-
+    
     public void setOnSpectacolSaved(OnSpectacolSaved onSpectacolSaved) {
         this.onSpectacolSaved = onSpectacolSaved;
     }
-    
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSalvare;
@@ -250,10 +268,12 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JLabel lblData;
     private javax.swing.JLabel lblDescriereSpectacol;
+    private javax.swing.JLabel lblDurata;
     private javax.swing.JLabel lblNumeSpectacol;
     private javax.swing.JLabel lblOra;
     private javax.swing.JLabel lblPret;
     private javax.swing.JLabel lblTipulSpectacol;
+    private javax.swing.JSpinner spnDurata;
     private javax.swing.JSpinner spnPret;
     private javax.swing.JTextArea txtDescriere;
     private javax.swing.JTextField txtNumeSpectacol;

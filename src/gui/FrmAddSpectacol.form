@@ -26,7 +26,7 @@
           <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="lblNumeSpectacol" alignment="1" min="-2" max="-2" attributes="0"/>
                           <Component id="lblDescriereSpectacol" alignment="1" min="-2" max="-2" attributes="0"/>
@@ -38,13 +38,24 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jDateChooser1" pref="123" max="32767" attributes="0"/>
+                                  <Component id="jDateChooser1" pref="174" max="32767" attributes="0"/>
                                   <Component id="spnPret" max="32767" attributes="0"/>
                               </Group>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                                      <Component id="lblOra" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="lblDurata" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="lblOra" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jSpinner1" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="jSpinner1" max="32767" attributes="0"/>
+                                  <Component id="spnDurata" max="32767" attributes="0"/>
+                              </Group>
                           </Group>
                           <Component id="txtNumeSpectacol" max="32767" attributes="0"/>
                           <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
@@ -64,9 +75,9 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lblNumeSpectacol" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtNumeSpectacol" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="2" attributes="0">
+                  <Component id="lblNumeSpectacol" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtNumeSpectacol" alignment="2" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -74,28 +85,26 @@
                       <Component id="lblDescriereSpectacol" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="jScrollPane1" pref="106" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="107" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="cmbTipSpectacol" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblTipulSpectacol" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="2" attributes="0">
+                  <Component id="lblTipulSpectacol" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Component id="cmbTipSpectacol" alignment="2" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jSpinner1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblOra" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Component id="lblData" alignment="1" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="jDateChooser1" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="2" attributes="0">
+                  <Component id="lblData" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Component id="jDateChooser1" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblOra" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Component id="jSpinner1" alignment="2" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="spnPret" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblPret" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="2" attributes="0">
+                  <Component id="spnDurata" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblDurata" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Component id="spnPret" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblPret" alignment="2" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
               <Component id="btnSalvare" min="-2" max="-2" attributes="0"/>
@@ -193,5 +202,17 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JSpinner" name="spnDurata">
+      <Properties>
+        <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+          <SpinnerModel initial="1" maximum="30" minimum="1" numberType="java.lang.Integer" stepSize="1" type="number"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblDurata">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Durata:"/>
+      </Properties>
+    </Component>
   </SubComponents>
 </Form>

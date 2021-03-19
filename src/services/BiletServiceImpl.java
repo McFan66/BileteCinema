@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -12,6 +13,7 @@ import java.util.List;
 import models.Bilet;
 import models.Spectacol;
 import observer.FObserver;
+import observer.ObserverData;
 import observer.Subject;
 import repositories.BiletFileRepository;
 import repositories.BiletRepository;
@@ -115,12 +117,6 @@ public class BiletServiceImpl implements BiletService, Subject {
         observers.add(observer);
     }
 
-    @Override
-    public void notifyObservers(Bilet bilet) {
-        for (FObserver observer : observers) {
-            observer.update(bilet);
-        }
-    }
 
     @Override
     public void removeObserver(FObserver observer) {
@@ -139,4 +135,12 @@ public class BiletServiceImpl implements BiletService, Subject {
         return listaFinala;
     }
 
+    @Override
+    public void notifyObservers(ObserverData observerData) {
+        for (FObserver observer : observers) {
+            observer.update(observerData);
+        }
+    }
+
 }
+

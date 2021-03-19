@@ -1,4 +1,3 @@
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -6,14 +5,10 @@
  */
 package observer;
 
-import models.Bilet;
-
 /**
  *
  * @author Stefan
  */
-public interface Subject {
-    void addObserver(FObserver observer);
-    void notifyObservers(ObserverData observerData);
-    void removeObserver(FObserver observer);
+public interface ObserverData {
+    
 }

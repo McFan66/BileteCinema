@@ -5,12 +5,10 @@
  */
 package observer;
 
-import models.Bilet;
-
 /**
  *
  * @author Stefan
  */
 public interface FObserver {
-    void update(Bilet bilet);
+    void update(ObserverData observerData);
 }

@@ -7,12 +7,13 @@ package models;
 
 import java.io.Serializable;
 import java.util.Date;
+import observer.ObserverData;
 
 /**
  *
  * @author Stefan
  */
-public class Bilet implements Serializable {
+public class Bilet implements Serializable, ObserverData {
 
     private int id;
     private int numarBilet;

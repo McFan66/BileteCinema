@@ -5,8 +5,27 @@
  */
 package gui;
 
+import comparators.ComparatorBilet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import javax.swing.DefaultListModel;
+import javax.swing.table.DefaultTableModel;
 import models.Bilet;
+import models.Spectacol;
+import observer.ObserverData;
+import repositories.BiletFileRepository;
+import repositories.BiletRepository;
+import services.BiletService;
 import services.BiletServiceImpl;
+import services.SpectacoleService;
+import services.SpectacoleServiceImpl;
+import utils.DateUtils;
 
 /**
  *
@@ -14,13 +33,51 @@ import services.BiletServiceImpl;
  */
 public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FObserver {
 
+    private List<Bilet> listaBilete = new ArrayList<Bilet>();
+    private BiletServiceImpl biletService = BiletServiceImpl.getInstance();
+    private BiletRepository biletRepository = new BiletFileRepository();
+    private DefaultTableModel defaultTableModel;
+    private String[] columnNames = new String[]{"Numele Spectacolului", "Data si Ora", "Pretul", "Randul si locul"};
+    private String[][] data;
+    private DefaultListModel listModel = new DefaultListModel();
+    private SpectacoleService spectacoleService = new SpectacoleServiceImpl();
+    private List<Spectacol> listaSpectacole = new ArrayList<Spectacol>();
+
     /**
      * Creates new form FrmMeniuPrincipal
      */
     public FrmMeniuPrincipal() {
-       //super(parent);
+        //super(parent);
+
+        Calendar c1 = Calendar.getInstance();
+        Date dataInceput = new Date();
+        Date dataFinal = new Date();
+        dataInceput = DateUtils.getDateWithSpecialHourMinuteSecond(c1.getTime(), 0, 0, 0);
+        dataFinal = DateUtils.getDateWithSpecialHourMinuteSecond(c1.getTime(), 23, 59, 59);
+        listaBilete = biletService.getBileteByData(dataInceput, dataFinal);
+        Collections.sort(listaBilete, new ComparatorBilet());
+        data = new String[listaBilete.size()][4];
+        int x = 0;
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        for (Bilet b : listaBilete) {
+            data[x][0] = b.getNumeSpectacol();
+            data[x][1] = formatter.format(b.getDataVanzare());
+            data[x][2] = String.valueOf(b.getSpectacol().getPret());
+            data[x][3] = String.format("Rand: %d Loc: %d", b.getRand() + 1, b.getLoc());
+            x++;
+        }
+
+        defaultTableModel = new DefaultTableModel(data, columnNames);
+        listaSpectacole = spectacoleService.getSpectacoleWithDurataAfterDate(c1.getTime());
+        for (Spectacol s : listaSpectacole) {
+            listModel.addElement(s);
+        }
+
         initComponents();
         BiletServiceImpl.getInstance().addObserver(this);
+        tblBilete.setModel(defaultTableModel);
+        jList1.setModel(listModel);
+        setTitle("Meniu principal");
     }
 
     /**
@@ -32,8 +89,9 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        itemSpectacolRenderer2 = new renderer.ItemSpectacolRenderer();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblBilete = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
         jPanel1 = new javax.swing.JPanel();
@@ -47,10 +105,12 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
+        itemSpectacolRenderer2.setText("itemSpectacolRenderer2");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Meniu Principal");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblBilete.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -61,9 +121,9 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
                 "Numele Spectacolului", "Data si Ora", "Pretul", "Randul si Locul"
             }
         ));
-        jScrollPane2.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(120);
+        jScrollPane2.setViewportView(tblBilete);
+        if (tblBilete.getColumnModel().getColumnCount() > 0) {
+            tblBilete.getColumnModel().getColumn(0).setPreferredWidth(120);
         }
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
@@ -71,6 +131,7 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
+        jList1.setCellRenderer(itemSpectacolRenderer2);
         jScrollPane3.setViewportView(jList1);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -210,7 +271,7 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
-        
+
     }//GEN-LAST:event_jMenu1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -219,14 +280,12 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
         frmAdministrareCasieri.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
-    
-    
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRaport;
     private javax.swing.JButton btnSala;
     private javax.swing.JButton btnVanzare;
+    private renderer.ItemSpectacolRenderer itemSpectacolRenderer2;
     private javax.swing.JButton jButton4;
     private javax.swing.JList<String> jList1;
     private javax.swing.JMenu jMenu1;
@@ -237,11 +296,44 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblBilete;
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void update(Bilet bilet) {
-        System.out.println("Meniul principal actualizam observerul"+bilet.getDetalii());
+    public void update(ObserverData observerData) {
+        if (observerData instanceof Bilet) {
+            Bilet bilet = (Bilet) observerData;
+            System.out.println("Meniul principal actualizam observerul" + bilet.getDetalii());
+            Calendar c1 = Calendar.getInstance();
+            Date dataInceput = new Date();
+            Date dataFinal = new Date();
+            dataInceput = DateUtils.getDateWithSpecialHourMinuteSecond(c1.getTime(), 0, 0, 0);
+            dataFinal = DateUtils.getDateWithSpecialHourMinuteSecond(c1.getTime(), 23, 59, 59);
+            listaBilete = biletService.getBileteByData(dataInceput, dataFinal);
+            Collections.sort(listaBilete, new ComparatorBilet());
+            data = new String[listaBilete.size()][4];
+            int x = 0;
+            DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH.mm");
+            for (Bilet b : listaBilete) {
+                data[x][0] = b.getNumeSpectacol();
+                data[x][1] = formatter.format(b.getDataVanzare());
+                data[x][2] = String.valueOf(b.getSpectacol().getPret());
+                data[x][3] = String.format("Rand: %d Loc: %d", b.getRand() + 1, b.getLoc());
+                x++;
+            }
+            defaultTableModel = new DefaultTableModel(data, columnNames);
+            tblBilete.setModel(defaultTableModel);
+            setTitle("Meniu principal");
+        }else
+        if (observerData instanceof Spectacol){
+            Calendar c1 = Calendar.getInstance();
+            defaultTableModel = new DefaultTableModel(data, columnNames);
+            listaSpectacole = spectacoleService.getSpectacoleWithDurataAfterDate(c1.getTime());
+            for (Spectacol s : listaSpectacole) {
+            listModel.addElement(s);
+            }
+            jList1.setModel(listModel);
+            setTitle("Meniu principal");
+        }
     }
 }

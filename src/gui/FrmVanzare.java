@@ -15,6 +15,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -64,9 +66,16 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
         listaSpectacole = spectacoleFileRepository.getAll();
 
         test.setTitlu("--Selecteaza un spectacol--");
+        test.setDataOra(azi);
+        test.setDurata(-1);
         comboBoxModel.addElement(test);
         for (Spectacol s : listaSpectacole) {
-            comboBoxModel.addElement(s);
+            Calendar c = Calendar.getInstance();
+            c.setTime(s.getDataOra());
+            c.add(Calendar.DAY_OF_MONTH, s.getDurata());
+            if (c.getTime().after(azi)){
+                comboBoxModel.addElement(s);
+            }
         }
         cmbSpectacole.setModel(comboBoxModel);
         chooserDataFilme.getDateEditor().addPropertyChangeListener("date", new PropertyChangeListener() {
@@ -79,7 +88,7 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
         });
         chooserDataFilme.setMinSelectableDate(azi);
         c.setTime(azi);
-        c.add(Calendar.DATE, 7);
+        c.add(Calendar.DATE, -1);
         Date finalData = c.getTime();
         chooserDataFilme.setMaxSelectableDate(finalData);
     }
@@ -121,7 +130,7 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
 
         chooserDataFilme.setDateFormatString("dd.MM.yyyy");
 
-        cmbOre.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--Selectati Ora--", "15:00", "17:00" }));
+        cmbOre.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--Selectati Ora--" }));
         cmbOre.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cmbOreItemStateChanged(evt);
@@ -223,6 +232,17 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
                 panelAfisare.validate();
                 panelAfisare.updateUI();
             }
+            this.spectacolSelectat = (Spectacol) comboBoxModel.getSelectedItem();
+            DateFormat formatter = new SimpleDateFormat("HH:mm");
+            cmbOre.addItem(formatter.format(spectacolSelectat.getDataOra()));
+            Calendar c = Calendar.getInstance();
+            if (spectacolSelectat.getDataOra().before(azi))
+                chooserDataFilme.setMinSelectableDate(azi);
+            else
+                chooserDataFilme.setMinSelectableDate(spectacolSelectat.getDataOra());
+            c.setTime(spectacolSelectat.getDataOra());
+            c.add(Calendar.DAY_OF_MONTH, spectacolSelectat.getDurata());
+            chooserDataFilme.setMaxSelectableDate(c.getTime());
         }
     }//GEN-LAST:event_cmbSpectacoleItemStateChanged
 
@@ -232,7 +252,7 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             System.out.println(cmbOre.getSelectedItem());
             this.oraSelectata = (String) cmbOre.getSelectedItem();
-            if (cmbOre.getSelectedItem() != "--Selectati Ora--") {
+            if ((String) cmbOre.getSelectedItem() != "--Selectati Ora--") {
                 generareSala();
             } else {
                 panelAfisare.removeAll();
@@ -244,6 +264,7 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
 
     private void btnVindeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVindeActionPerformed
         FrmListaBilete frmListaBilete = new FrmListaBilete(this, true, listaBilete);
+        frmListaBilete.setOnBileteVandute(this);
         System.out.println(listaBilete.size() + " atatea bilete");
         frmListaBilete.setVisible(true);
     }//GEN-LAST:event_btnVindeActionPerformed
@@ -265,14 +286,6 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
                             public void onLabelClicked(int linie, int coloana) {
                                 if (matrice[linie][coloana].isVanzare()) {
                                     matriceSerializabila.enableDisable(linie, coloana - 1);
-                                    //matriceSerializabila.afisareMatrice();
-//                                int c = 1;
-//                                for (int i = 1; i < coloane; i++) {
-//                                    if (matrice[linie][i].isAvailable()) {
-//                                        matrice[linie][i].setText(String.valueOf(c));
-//                                        c++;
-//                                    }
-//                                }
                                     int numar = 0;
 
                                     for (int i = 0; i < coloana; i++) {
@@ -282,6 +295,7 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
                                     }
                                     final Bilet b = new Bilet((int) (Math.random() * 1000), spectacolSelectat, coloana-numar, linie);
                                     b.setLocReal(coloana);
+//                                    System.out.println(b.getLocReal()+" "+b.getRand());
                                     Calendar c = Calendar.getInstance();
                                     c.setTime(dataSelectata);
                                     String[] oraMinut = cmbOre.getSelectedItem().toString().split(":");
@@ -291,7 +305,7 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
                                     c.set(Calendar.MILLISECOND, 0);
                                     b.setDataOra(c.getTime());
                                     //  if (matrice[linie][coloana].getBackground() != Color.red) {
-                                    System.out.println(String.format("linie %d coloana %d availble=%s righClick=%s", linie, coloana, matrice[linie][coloana].isAvailable(), matrice[linie][coloana].isRightClickPressed()));
+                                    //System.out.println(String.format("linie %d coloana %d availble=%s righClick=%s", linie, coloana, matrice[linie][coloana].isAvailable(), matrice[linie][coloana].isRightClickPressed()));
                                     if (matrice[linie][coloana].isAvailable() && !matrice[linie][coloana].isRightClickPressed()) {
                                         listModel.clear();//golire model lista
                                         total = 0;
@@ -308,7 +322,7 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
                                         for (int i = 0; i < listaBilete.size(); i++) {
                                             // System.out.println(listaBilete.get(i).getLoc() + " " + listaBilete.get(i).getRand());
                                             // System.out.println(linie + " " + coloana);
-                                            if (listaBilete.get(i).getRand()== linie && listaBilete.get(i).getLocReal()== coloana) {
+                                            if (listaBilete.get(i).getRand() == linie && listaBilete.get(i).getLocReal()== coloana) {
                                                 listaBilete.remove(i);
                                             }
                                         }
@@ -368,6 +382,7 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
                         System.out.println(listaBileteCumparate);
                         for (Bilet b : listaBileteCumparate) {
                             matrice[b.getRand()][b.getLocReal()].setBackground(Color.blue);
+                            matrice[b.getRand()][b.getLocReal()].setVanzare(false);
                             matrice[b.getRand()][b.getLocReal()].setAvailable(false);
                         }
                 panelAfisare.revalidate();
@@ -450,6 +465,12 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
 
     @Override
     public void saveBilete() {
+        generareSala();
+        listModel.clear();
+        listaBilete.removeAll(listaBilete);
+        lblTotal.setText("Total:0 RON");
+        total=0;
+        
         
     }
 }
