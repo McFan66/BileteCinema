@@ -28,6 +28,19 @@ public class SpectacoleServiceImpl implements SpectacoleService, Subject{
     private SpectacoleRepository spectacoleRepository = new SpectacoleFileRepository();
     private List<FObserver> observeri = new ArrayList<>();
     
+    private static SpectacoleServiceImpl singleInstance;
+    
+    private SpectacoleServiceImpl(){
+        
+    }
+    
+    public static SpectacoleServiceImpl getInstance(){
+        if (singleInstance == null) {
+            singleInstance = new SpectacoleServiceImpl();
+        }
+        return singleInstance;
+    }
+    
     @Override
     public int getLastID() {
         return id;
@@ -40,6 +53,7 @@ public class SpectacoleServiceImpl implements SpectacoleService, Subject{
         }
         if(spectacoleRepository.salveazaSpectacol(spectacol)){
             IdUtils.addProperty("object.spectacol", id);
+            notifyObservers(spectacol);
             return true;
         }
         return false;
@@ -48,6 +62,7 @@ public class SpectacoleServiceImpl implements SpectacoleService, Subject{
     @Override
     public void remove(Spectacol spectacol) {
         spectacoleRepository.stergeSpectacol(spectacol);
+         notifyObservers(spectacol);
     }
 
     @Override

@@ -47,7 +47,7 @@ public class ItemBiletListRenderer extends JPanel implements ListCellRenderer<Bi
     private SimpleDateFormat sdfOra = new SimpleDateFormat("HH:mm");
 
     public ItemBiletListRenderer() {
-        initComponents();
+        initComponents(); 
     }
     
     

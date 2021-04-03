@@ -5,15 +5,16 @@
  */
 package gui;
 
-import java.text.SimpleDateFormat;
+import java.awt.Image;
+import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
-import javax.swing.text.DateFormatter;
-import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import models.Spectacol;
 import services.SpectacoleService;
 import services.SpectacoleServiceImpl;
@@ -24,9 +25,11 @@ import services.SpectacoleServiceImpl;
  */
 public class FrmAddSpectacol extends javax.swing.JDialog {
     
-    private SpectacoleService spectacoleService = new SpectacoleServiceImpl();
+    private SpectacoleService spectacoleService = SpectacoleServiceImpl.getInstance();
     private Spectacol spectacolSelectat;
     private OnSpectacolSaved onSpectacolSaved;
+    private FileNameExtensionFilter filter=new FileNameExtensionFilter("gege", "jpg", "jpeg", "png");
+    private String imagePath;
 
     /**
      * Creates new form FrmAddSpectacol
@@ -38,6 +41,14 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
         de.getTextField().setEditable(false);
         jSpinner1.setEditor(de);
         setTitle("Adauga spectacol");
+        File currentDir=new File(".");
+        File pictures=new File(currentDir, "pictures");
+        if(!pictures.exists()){
+            pictures.mkdir();
+        }
+        imagePath=pictures.getAbsolutePath().substring(0,pictures.getAbsolutePath().length()-10)+"pictures"+(char)(92)+"noImageSelected.png";
+        
+        System.out.println(imagePath);
     }
     
     public FrmAddSpectacol(JDialog parent, boolean modal, Spectacol spectacol) {
@@ -51,6 +62,10 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
         jSpinner1.setValue(spectacolSelectat.getDataOra());
         spnPret.setValue(spectacolSelectat.getPret());
         spnDurata.setValue(spectacolSelectat.getDurata());
+        ImageIcon icon=new ImageIcon(spectacolSelectat.getImagePath());
+        Image image = icon.getImage();
+        Image imagineNoua = image.getScaledInstance(lblImage.getWidth(), lblImage.getHeight(), java.awt.Image.SCALE_SMOOTH);
+        lblImage.setIcon(new ImageIcon(imagineNoua));
         JSpinner.DateEditor de = new JSpinner.DateEditor(jSpinner1, "HH:mm");
         de.getTextField().setEditable(false);
         jSpinner1.setEditor(de);
@@ -67,6 +82,7 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        fileChooser = new javax.swing.JFileChooser();
         lblNumeSpectacol = new javax.swing.JLabel();
         txtNumeSpectacol = new javax.swing.JTextField();
         lblTipulSpectacol = new javax.swing.JLabel();
@@ -83,6 +99,7 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
         txtDescriere = new javax.swing.JTextArea();
         spnDurata = new javax.swing.JSpinner();
         lblDurata = new javax.swing.JLabel();
+        lblImage = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -121,6 +138,13 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
 
         lblDurata.setText("Durata:");
 
+        lblImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblImage.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                lblImageMousePressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -152,9 +176,13 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jSpinner1)
                                     .addComponent(spnDurata)))
-                            .addComponent(txtNumeSpectacol)
-                            .addComponent(jScrollPane1)
-                            .addComponent(cmbTipSpectacol, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(cmbTipSpectacol, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtNumeSpectacol)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnSalvare, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -164,15 +192,16 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(lblNumeSpectacol)
-                    .addComponent(txtNumeSpectacol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblDescriereSpectacol)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(lblNumeSpectacol)
+                            .addComponent(txtNumeSpectacol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblDescriereSpectacol)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(lblTipulSpectacol)
@@ -215,6 +244,16 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
         if (isFormValid()) {
             if (spectacolSelectat == null) {
                 spectacolSelectat = new Spectacol(tipSpectacol, numeSpectacol, dataSiOra, descriereSpectacol, pret, durata);
+                File src = new File(imagePath); 
+                File currentDir=new File(".");
+                File pictures=new File(currentDir, "pictures");
+                if(!pictures.exists()){
+                    pictures.mkdir();
+                }
+                String ext=imagePath.substring(imagePath.lastIndexOf("."));
+                File dst = new File(pictures,String.format("%s%s", String.valueOf(((int)(Math.random()*10000))),ext)); 
+                src.renameTo(dst); 
+                spectacolSelectat.setImagePath(dst.getPath());
             } else {
                 spectacolSelectat.setDescriere(descriereSpectacol);
                 spectacolSelectat.setTipul(tipSpectacol);
@@ -222,6 +261,7 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
                 spectacolSelectat.setDataOra(dataSiOra);
                 spectacolSelectat.setPret(pret);
                 spectacolSelectat.setDurata(durata);
+                spectacolSelectat.setImagePath(imagePath);
             }
             onSpectacolSaved.saveSpectacol(spectacolSelectat);
             spectacoleService.salveazaSpectacol(spectacolSelectat);
@@ -230,6 +270,18 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
         }
 
     }//GEN-LAST:event_btnSalvareActionPerformed
+
+    private void lblImageMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMousePressed
+        fileChooser.setFileFilter(filter);
+        int returnVal = fileChooser.showOpenDialog(spnPret);
+        if (returnVal == JFileChooser.APPROVE_OPTION){
+            ImageIcon icon=new ImageIcon(fileChooser.getSelectedFile().getAbsolutePath());
+            Image image = icon.getImage();
+            Image imagineNoua = image.getScaledInstance(lblImage.getWidth(), lblImage.getHeight(), java.awt.Image.SCALE_SMOOTH);
+            lblImage.setIcon(new ImageIcon(imagineNoua));
+            imagePath=fileChooser.getSelectedFile().getAbsolutePath();
+        }
+    }//GEN-LAST:event_lblImageMousePressed
     
     private boolean isFormValid() {
         if (txtNumeSpectacol.getText().trim().length() < 3) {
@@ -247,6 +299,7 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
             txtNumeSpectacol.requestFocusInWindow();
             return true;
         }
+        
         return true;
     }
     
@@ -263,12 +316,14 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSalvare;
     private javax.swing.JComboBox<String> cmbTipSpectacol;
+    private javax.swing.JFileChooser fileChooser;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JLabel lblData;
     private javax.swing.JLabel lblDescriereSpectacol;
     private javax.swing.JLabel lblDurata;
+    private javax.swing.JLabel lblImage;
     private javax.swing.JLabel lblNumeSpectacol;
     private javax.swing.JLabel lblOra;
     private javax.swing.JLabel lblPret;

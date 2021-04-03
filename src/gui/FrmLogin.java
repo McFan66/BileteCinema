@@ -7,10 +7,7 @@ package gui;
 
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.UnsupportedLookAndFeelException;
 import models.Casier;
 import services.CasierService;
 import services.CasierServiceImpl;
@@ -22,22 +19,29 @@ import services.CasierServiceImpl;
 public class FrmLogin extends javax.swing.JDialog {
 
     private CasierService casierService = new CasierServiceImpl();
-    
+
     /**
      * Creates new form FrmLogin
      */
     public FrmLogin(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-       //       try {
+        //       try {
         for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
 //            if ("Windows".equals(info.getName())) {
 //                javax.swing.UIManager.setLookAndFeel(info.getClassName());
 //                break;
 //            }
-System.out.println(info.getClassName());
+            System.out.println(info.getClassName());
+            getRootPane().setDefaultButton(btnLogin);
+            
         }
-    }  
+    }
+    
+
+    FrmLogin() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -56,15 +60,9 @@ System.out.println(info.getClassName());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Autentificare Operator");
-        addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                formKeyPressed(evt);
-            }
-        });
 
         lblCodOperator.setText("Cod Operator:");
 
-        lblParola.setFont(new java.awt.Font("Lucida Console", 1, 13)); // NOI18N
         lblParola.setText("Parola:");
 
         btnLogin.setText("Login");
@@ -102,7 +100,7 @@ System.out.println(info.getClassName());
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblParola)
-                    .addComponent(txtParola, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtParola, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnLogin)
                 .addGap(18, 18, 18))
@@ -112,14 +110,16 @@ System.out.println(info.getClassName());
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        if (loginAction())return;
+        if (loginAction()) {
+            return;
+        }
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private boolean loginAction() throws HeadlessException {
         String codOperator = txtCodOperator.getText().trim();
         String parola = new String(txtParola.getPassword());
         Casier casierAutentificat;
-        if (isValidForm() && (casierAutentificat=casierService.login(codOperator, parola))!=null) {
+        if (isValidForm() && (casierAutentificat = casierService.login(codOperator, parola)) != null) {
             //JOptionPane.showMessageDialog(this, "esti autentificat");
             FrmMeniuPrincipal frmMeniuPrincipal = new FrmMeniuPrincipal();
             frmMeniuPrincipal.setLocationRelativeTo(this);
@@ -127,35 +127,31 @@ System.out.println(info.getClassName());
             frmMeniuPrincipal.setVisible(true);
             return true;
         }
-        JOptionPane.showMessageDialog(this, "Nume de utilizator sau parola incorecta");
+        if (txtCodOperator.getText().length()>2 && txtParola.getPassword().length>6){
+            JOptionPane.showMessageDialog(this, "Nume de utilizator sau parola incorecta");
+            return false;
+        }
+        
         return false;
     }
-
-    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-        // TODO add your handling code here
-        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
-            if (loginAction())return;
-        }
-    }//GEN-LAST:event_formKeyPressed
 
     /**
      * @param args the command line arguments
      */
-    
-    private boolean isValidForm(){
-        if (txtCodOperator.getText().length() < 2){
+    private boolean isValidForm() {
+        if (txtCodOperator.getText().length() < 2) {
             JOptionPane.showMessageDialog(this, "Codul operator trebuie sa aiba minim 2 caractere!");
             txtCodOperator.requestFocusInWindow();
             return false;
         }
-        if (txtParola.getPassword().length < 6){
+        if (txtParola.getPassword().length < 6) {
             JOptionPane.showMessageDialog(this, "Parola trebuie sa aiba minim 6 caractere!");
             txtParola.requestFocusInWindow();
             return false;
         }
         return true;
     }
-    
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

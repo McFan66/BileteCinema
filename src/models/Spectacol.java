@@ -26,6 +26,15 @@ public class Spectacol implements Serializable, ObserverData {
     private String descriere;
     private int pret;
     private int durata;
+    private String imagePath;
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
 
     public int getDurata() {
         return durata;

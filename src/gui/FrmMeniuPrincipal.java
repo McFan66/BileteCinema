@@ -11,7 +11,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultListModel;
@@ -21,9 +20,7 @@ import models.Spectacol;
 import observer.ObserverData;
 import repositories.BiletFileRepository;
 import repositories.BiletRepository;
-import services.BiletService;
 import services.BiletServiceImpl;
-import services.SpectacoleService;
 import services.SpectacoleServiceImpl;
 import utils.DateUtils;
 
@@ -40,7 +37,7 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
     private String[] columnNames = new String[]{"Numele Spectacolului", "Data si Ora", "Pretul", "Randul si locul"};
     private String[][] data;
     private DefaultListModel listModel = new DefaultListModel();
-    private SpectacoleService spectacoleService = new SpectacoleServiceImpl();
+    private SpectacoleServiceImpl spectacoleService = SpectacoleServiceImpl.getInstance();
     private List<Spectacol> listaSpectacole = new ArrayList<Spectacol>();
 
     /**
@@ -71,10 +68,12 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
         listaSpectacole = spectacoleService.getSpectacoleWithDurataAfterDate(c1.getTime());
         for (Spectacol s : listaSpectacole) {
             listModel.addElement(s);
-        }
 
+        }
+   
         initComponents();
         BiletServiceImpl.getInstance().addObserver(this);
+        SpectacoleServiceImpl.getInstance().addObserver(this);
         tblBilete.setModel(defaultTableModel);
         jList1.setModel(listModel);
         setTitle("Meniu principal");
@@ -89,7 +88,7 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        itemSpectacolRenderer2 = new renderer.ItemSpectacolRenderer();
+        spectacolPanel1 = new gui.SpectacolPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblBilete = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -105,9 +104,7 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
-        itemSpectacolRenderer2.setText("itemSpectacolRenderer2");
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Meniu Principal");
 
         tblBilete.setModel(new javax.swing.table.DefaultTableModel(
@@ -126,12 +123,13 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
             tblBilete.getColumnModel().getColumn(0).setPreferredWidth(120);
         }
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jList1.setCellRenderer(itemSpectacolRenderer2);
+        jScrollPane3.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        jScrollPane3.setPreferredSize(new java.awt.Dimension(820, 330));
+
+        jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jList1.setCellRenderer(spectacolPanel1);
+        jList1.setLayoutOrientation(javax.swing.JList.HORIZONTAL_WRAP);
+        jList1.setVisibleRowCount(1);
         jScrollPane3.setViewportView(jList1);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -173,13 +171,13 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnVanzare, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
-                    .addComponent(btnSala, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnRaport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE))
+                    .addComponent(btnVanzare, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
+                    .addComponent(btnSala, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnRaport, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
+                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -225,10 +223,10 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -236,11 +234,11 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -285,9 +283,8 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
     private javax.swing.JButton btnRaport;
     private javax.swing.JButton btnSala;
     private javax.swing.JButton btnVanzare;
-    private renderer.ItemSpectacolRenderer itemSpectacolRenderer2;
     private javax.swing.JButton jButton4;
-    private javax.swing.JList<String> jList1;
+    private javax.swing.JList<Spectacol> jList1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -296,6 +293,7 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private gui.SpectacolPanel spectacolPanel1;
     private javax.swing.JTable tblBilete;
     // End of variables declaration//GEN-END:variables
 
@@ -324,13 +322,13 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
             defaultTableModel = new DefaultTableModel(data, columnNames);
             tblBilete.setModel(defaultTableModel);
             setTitle("Meniu principal");
-        }else
-        if (observerData instanceof Spectacol){
+        } else if (observerData instanceof Spectacol) {
+            listModel.clear();
             Calendar c1 = Calendar.getInstance();
             defaultTableModel = new DefaultTableModel(data, columnNames);
             listaSpectacole = spectacoleService.getSpectacoleWithDurataAfterDate(c1.getTime());
             for (Spectacol s : listaSpectacole) {
-            listModel.addElement(s);
+                listModel.addElement(s);
             }
             jList1.setModel(listModel);
             setTitle("Meniu principal");

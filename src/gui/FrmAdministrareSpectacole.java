@@ -24,7 +24,7 @@ import utils.TableColumnAdjuster;
 public class FrmAdministrareSpectacole extends javax.swing.JDialog implements FrmAddSpectacol.OnSpectacolSaved {
 
     private ArrayList<Spectacol> listaSpectacole;
-    private SpectacoleService spectacoleService = new SpectacoleServiceImpl();
+    private SpectacoleService spectacoleService = SpectacoleServiceImpl.getInstance();
     private String[][] data;
     private DefaultTableModel defaultTableModel;
     private String[] columnNames = new String[]{"Tipul", "Numele spectacolului", "Data", "Ora", "Pretul"};
