@@ -27,18 +27,19 @@ public class FrmSplashScreen extends javax.swing.JFrame {
 
     public FrmSplashScreen() {
         initComponents();
-        this.createAndShowGui();
+        
+        JPanel.
         Thread th = new Thread(new Runnable() {
             @Override
             public void run() {
                 int i = 0;
-                progressBar.setMaximum(1000);
+                progressBar.setMaximum(10000);
                 while (i <= 10000) {
                     // progressBar.setString(String.format("%s", i));
                     progressBar.setValue(i);
                    
                     try {
-                        Thread.sleep(10);
+                        Thread.sleep(1);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(FrmSplashScreen.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -51,12 +52,14 @@ public class FrmSplashScreen extends javax.swing.JFrame {
         th.start();
     }
     
-    public  void createAndShowGui(){
-        Test test=new Test();
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.add(test);
-        this.pack();
-        this.setVisible(true);
+    public void createAndShowGui(){
+//        Test test=new Test();
+//        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        this.add(test);
+//        this.pack();
+//        this.setVisible(true);
+        this.setTitle("yolo");
+        
     }
    
     private static class Test extends JPanel{
@@ -78,29 +81,40 @@ public class FrmSplashScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        panel1 = new javax.swing.JPanel();
         progressBar = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
-        setPreferredSize(new java.awt.Dimension(700, 400));
 
         progressBar.setStringPainted(true);
+
+        javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
+        panel1.setLayout(panel1Layout);
+        panel1Layout.setHorizontalGroup(
+            panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
+                .addContainerGap(70, Short.MAX_VALUE)
+                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30))
+        );
+        panel1Layout.setVerticalGroup(
+            panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
+                .addContainerGap(319, Short.MAX_VALUE)
+                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(56, 56, 56))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(52, Short.MAX_VALUE))
+            .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(337, Short.MAX_VALUE)
-                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38))
+            .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -136,7 +150,8 @@ public class FrmSplashScreen extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrmSplashScreen().setVisible(true);
+                JFrame acaesta= new FrmSplashScreen();
+                acaesta.setVisible(true);
                
             }
         });
@@ -144,6 +159,7 @@ public class FrmSplashScreen extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel panel1;
     private javax.swing.JProgressBar progressBar;
     // End of variables declaration//GEN-END:variables
 }
