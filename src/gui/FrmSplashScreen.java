@@ -21,54 +21,27 @@ import sun.java2d.pipe.DrawImage;
  *
  * @author Stefan
  */
-public class FrmSplashScreen extends javax.swing.JFrame {
+public class FrmSplashScreen extends javax.swing.JFrame implements SplashScreenForm.OnBaraCompletata {
 
     private FrmLogin frmLogin = new FrmLogin(this, true);
 
     public FrmSplashScreen() {
+       
         initComponents();
-        this.createAndShowGui();
-        Thread th = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                int i = 0;
-                progressBar.setMaximum(1000);
-                while (i <= 10000) {
-                    // progressBar.setString(String.format("%s", i));
-                    progressBar.setValue(i);
-                   
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(FrmSplashScreen.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    i=i+1;
-
-                }
-            }
-        });
         
-        th.start();
+        frmSplashScreen11.setOnBaraCompletata(this);
+
     }
-    
-    public  void createAndShowGui(){
-        Test test=new Test();
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.add(test);
-        this.pack();
-        this.setVisible(true);
+
+    @Override
+    public void executeOnBaraCompletata() {
+        dispose();
+        frmLogin.setLocationRelativeTo(null);
+        frmLogin.setVisible(true);
+
     }
-   
-    private static class Test extends JPanel{
-        @Override
-        protected void paintComponent (Graphics gr){
-            super.paintComponent(gr);
-            this.setBackground(Color.red);
-            gr.drawLine(100, 100, 200, 200);
-        }
-    }
-    
-    
+
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -78,29 +51,20 @@ public class FrmSplashScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        progressBar = new javax.swing.JProgressBar();
+        frmSplashScreen11 = new gui.SplashScreenForm();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
-        setPreferredSize(new java.awt.Dimension(700, 400));
-
-        progressBar.setStringPainted(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(52, Short.MAX_VALUE))
+            .addComponent(frmSplashScreen11, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(337, Short.MAX_VALUE)
-                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38))
+            .addComponent(frmSplashScreen11, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
         );
 
         pack();
@@ -136,16 +100,17 @@ public class FrmSplashScreen extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrmSplashScreen().setVisible(true);
-               
+                FrmSplashScreen cc = new FrmSplashScreen();
+
+                cc.setVisible(true);
+                cc.setLocationRelativeTo(null);
+
             }
         });
     }
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JProgressBar progressBar;
+    private gui.SplashScreenForm frmSplashScreen11;
     // End of variables declaration//GEN-END:variables
 }
-
-
