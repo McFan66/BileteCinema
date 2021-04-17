@@ -5,18 +5,6 @@
  */
 package gui;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import sun.java2d.pipe.DrawImage;
-
 /**
  *
  * @author Stefan
