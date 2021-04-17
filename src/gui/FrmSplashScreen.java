@@ -5,6 +5,8 @@
  */
 package gui;
 
+import javax.swing.JFrame;
+
 /**
  *
  * @author Stefan
@@ -16,8 +18,11 @@ public class FrmSplashScreen extends javax.swing.JFrame implements SplashScreenF
     public FrmSplashScreen() {
        
         initComponents();
+        dispose();
+        setUndecorated(true);
+        setVisible(true);
         
-        frmSplashScreen11.setOnBaraCompletata(this);
+        splashScreenForm1.setOnBaraCompletata(this);
 
     }
 
@@ -39,20 +44,22 @@ public class FrmSplashScreen extends javax.swing.JFrame implements SplashScreenF
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        frmSplashScreen11 = new gui.SplashScreenForm();
+        splashScreenForm1 = new gui.SplashScreenForm();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
+        setPreferredSize(new java.awt.Dimension(700, 400));
+        setSize(new java.awt.Dimension(700, 400));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(frmSplashScreen11, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)
+            .addComponent(splashScreenForm1, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(frmSplashScreen11, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(splashScreenForm1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
         );
 
         pack();
@@ -99,6 +106,6 @@ public class FrmSplashScreen extends javax.swing.JFrame implements SplashScreenF
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private gui.SplashScreenForm frmSplashScreen11;
+    private gui.SplashScreenForm splashScreenForm1;
     // End of variables declaration//GEN-END:variables
 }
