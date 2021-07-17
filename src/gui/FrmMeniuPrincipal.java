@@ -13,6 +13,8 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 import models.Bilet;
@@ -22,6 +24,7 @@ import repositories.BiletFileRepository;
 import repositories.BiletRepository;
 import services.BiletServiceImpl;
 import services.SpectacoleServiceImpl;
+import threads.FanaRunnable;
 import utils.DateUtils;
 
 /**
@@ -39,6 +42,8 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
     private DefaultListModel listModel = new DefaultListModel();
     private SpectacoleServiceImpl spectacoleService = SpectacoleServiceImpl.getInstance();
     private List<Spectacol> listaSpectacole = new ArrayList<Spectacol>();
+    private FanaRunnable fanaRunnable;
+    private boolean pressed;
 
     /**
      * Creates new form FrmMeniuPrincipal
@@ -70,13 +75,30 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
             listModel.addElement(s);
 
         }
-   
+
         initComponents();
         BiletServiceImpl.getInstance().addObserver(this);
         SpectacoleServiceImpl.getInstance().addObserver(this);
         tblBilete.setModel(defaultTableModel);
         jList1.setModel(listModel);
         setTitle("Meniu principal");
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        fanaRunnable = new FanaRunnable() {
+            @Override
+            public void customRun() {
+                lblCeas.setText(sdf.format(System.currentTimeMillis()));
+                try {
+                    Thread.sleep(900);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(FrmMeniuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+        };//(lblCeas);
+        Thread th = new Thread(fanaRunnable);
+
+        th.start();
+
     }
 
     /**
@@ -98,6 +120,8 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
         btnSala = new javax.swing.JButton();
         btnRaport = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        lblCeas = new javax.swing.JLabel();
+        btnPause = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -149,6 +173,11 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
         });
 
         btnRaport.setText("Raport");
+        btnRaport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRaportActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Log out");
 
@@ -180,6 +209,15 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
                     .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
+
+        lblCeas.setText("00:00");
+
+        btnPause.setText("Pause");
+        btnPause.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPauseActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("Administrare");
         jMenu1.addActionListener(new java.awt.event.ActionListener() {
@@ -227,7 +265,12 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnPause)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblCeas, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -238,7 +281,11 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblCeas, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                    .addComponent(btnPause))
                 .addContainerGap())
         );
 
@@ -278,8 +325,29 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
         frmAdministrareCasieri.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void btnRaportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRaportActionPerformed
+        FrmRaport frmRaport = new FrmRaport(this, true);
+        frmRaport.setLocationRelativeTo(this);
+        frmRaport.setVisible(true);
+    }//GEN-LAST:event_btnRaportActionPerformed
+
+    private void btnPauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPauseActionPerformed
+        if (!pressed) {
+            fanaRunnable.setStop(true);
+            btnPause.setText("Resume");
+
+        } else {
+            fanaRunnable.setStop(false);
+            btnPause.setText("Pause");
+
+        }
+        pressed = !pressed;
+
+    }//GEN-LAST:event_btnPauseActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnPause;
     private javax.swing.JButton btnRaport;
     private javax.swing.JButton btnSala;
     private javax.swing.JButton btnVanzare;
@@ -293,6 +361,7 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel lblCeas;
     private gui.SpectacolPanel spectacolPanel1;
     private javax.swing.JTable tblBilete;
     // End of variables declaration//GEN-END:variables

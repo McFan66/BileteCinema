@@ -13,12 +13,12 @@ import java.util.Date;
  * @author Stefan
  */
 public class Vanzare {
-    private Casier casier;
+    private CasierB casier;
     private int id;
     private Date dataOra;
     private ArrayList<Bilet> bilete;
 
-    public Vanzare(Casier casier, int id, Date dataOra, ArrayList bilete){
+    public Vanzare(CasierB casier, int id, Date dataOra, ArrayList bilete){
         this.casier=casier;
         this.id=id;
         this.dataOra=dataOra;
@@ -32,7 +32,7 @@ public class Vanzare {
         return bilete;
     }
 
-    public Casier getCasier() {
+    public CasierB getCasier() {
         return casier;
     }
 
@@ -48,7 +48,7 @@ public class Vanzare {
         this.bilete = bilete;
     }
 
-    public void setCasier(Casier casier) {
+    public void setCasier(CasierB casier) {
         this.casier = casier;
     }
 

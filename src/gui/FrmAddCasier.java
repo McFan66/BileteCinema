@@ -5,8 +5,9 @@
  */
 package gui;
 
+import dvdrental.Casier;
 import javax.swing.JOptionPane;
-import models.Casier;
+import models.CasierB;
 import services.CasierService;
 import services.CasierServiceImpl;
 
@@ -32,8 +33,8 @@ public class FrmAddCasier extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.casierSelectat = casier;
-        txtNume.setText(casier.getNumePrenume().split(" ")[0]);
-        txtPrenume.setText(casier.getNumePrenume().split(" ")[1]);
+        txtNume.setText(casier.getNume());
+        txtPrenume.setText(casier.getPrenume());
         txtCodOperator.setText(casier.getCodOperator());
     }
 
@@ -134,9 +135,9 @@ public class FrmAddCasier extends javax.swing.JDialog {
         String parola = new String(txtParola.getPassword());
         if (isFormValid()) {
             if (casierSelectat == null) {
-                casierSelectat = new Casier(numeComplet, codOperator, parola);
+                casierSelectat = new Casier(nume, prenume, codOperator, parola);
             } else {
-                casierSelectat.setNumePrenume(numeComplet);
+               
                 casierSelectat.setCodOperator(codOperator);
                 if (!parola.isEmpty()) {
                     casierSelectat.setParola(parola);

@@ -291,12 +291,12 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
         }
         if (txtDescriere.getText().trim().length() < 1) {
             JOptionPane.showMessageDialog(this, "Trebuie sa adaugati o descriere!");
-            txtNumeSpectacol.requestFocusInWindow();
+            txtDescriere.requestFocusInWindow();
             return false;
         }
         if ((int) spnPret.getValue() == 0) {
             JOptionPane.showMessageDialog(this, "Trebuie sa selectati un pret!");
-            txtNumeSpectacol.requestFocusInWindow();
+            spnPret.requestFocusInWindow();
             return true;
         }
         

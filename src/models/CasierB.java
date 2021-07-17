@@ -11,7 +11,7 @@ import java.io.Serializable;
  *
  * @author Stefan
  */
-public class Casier implements Serializable {
+public class CasierB implements Serializable {
 
     private static final long serialVersionUID = -1299534847589271528L;
     
@@ -20,13 +20,13 @@ public class Casier implements Serializable {
     private String codOperator;
     private String parola;
 
-    public Casier(String numePrenume, String codOperator, String parola) {
+    public CasierB(String numePrenume, String codOperator, String parola) {
         this.numePrenume = numePrenume;
         this.codOperator = codOperator;
         this.parola = parola;
     }
 
-    public Casier(int id, String numePrenume, String codOperator, String parola) {
+    public CasierB(int id, String numePrenume, String codOperator, String parola) {
         this.id = id;
         this.numePrenume = numePrenume;
         this.codOperator = codOperator;
@@ -35,7 +35,7 @@ public class Casier implements Serializable {
     
     
 
-    public Casier() {
+    public CasierB() {
     }
 
     public String getCodOperator() {
@@ -81,7 +81,7 @@ public class Casier implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Casier other = (Casier) obj;
+        final CasierB other = (CasierB) obj;
         if (this.id != other.id) {
             return false;
         }

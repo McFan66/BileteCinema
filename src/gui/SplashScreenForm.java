@@ -81,7 +81,7 @@ public class SplashScreenForm extends javax.swing.JPanel {
         
         try {
             BufferedImage imagine = ImageIO.read(new File("src/resources/SplashScreenLogo.png"));
-            g.drawImage(imagine, 40, -5, 600, 395, null);
+            g.drawImage(imagine, 40, -5, 600, 370, null);
         } catch (IOException ex) {
             Logger.getLogger(SplashScreenForm.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -91,7 +91,7 @@ public class SplashScreenForm extends javax.swing.JPanel {
             Font test = Font.createFont(Font.TRUETYPE_FONT, test2);
             test = test.deriveFont(Font.PLAIN,36);
             g.setFont(test);
-            g.drawString("Cinema", 193, 180);
+            g.drawString("Cinema", 192, 180);
             g.drawString("Max", 392, 180);
             
             BufferedImage logo = ImageIO.read(new File("src/resources/logobiletalb.png"));

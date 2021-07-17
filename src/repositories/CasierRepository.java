@@ -5,8 +5,8 @@
  */
 package repositories;
 
+import dvdrental.Casier;
 import java.util.ArrayList;
-import models.Casier;
 
 /**
  *

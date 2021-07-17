@@ -56,9 +56,9 @@
                   <Component id="txtCodOperator" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="lblParola" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtParola" min="-2" pref="22" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="2" attributes="0">
+                  <Component id="lblParola" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtParola" alignment="2" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="btnLogin" min="-2" max="-2" attributes="0"/>

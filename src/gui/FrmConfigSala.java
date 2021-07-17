@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JRootPane;
-import models.Casier;
+import models.CasierB;
 import models.MatriceSerializabila;
 import models.Vanzare;
 import repositories.CasierFileRepository;

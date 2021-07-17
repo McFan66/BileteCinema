@@ -5,10 +5,11 @@
  */
 package gui;
 
+import dvdrental.Casier;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import models.Casier;
+import models.CasierB;
 import services.CasierService;
 import services.CasierServiceImpl;
 
@@ -34,7 +35,7 @@ public class FrmAdministrareCasieri extends javax.swing.JDialog implements FrmAd
 
         int x = 0;
         for (Casier c : listaCasieri) {
-            data[x][0] = c.getNumePrenume();
+            data[x][0] = c.getNumeComplet();
             data[x][1] = c.getCodOperator();
             x++;
         }
@@ -157,7 +158,7 @@ public class FrmAdministrareCasieri extends javax.swing.JDialog implements FrmAd
             return;
         }
         Casier cc = listaCasieri.get(index);
-        int raspuns = JOptionPane.showConfirmDialog(this, String.format("Sunteti sigur ca vreti sa stergeti casierul %s?", cc.getNumePrenume()), "Stergere Casier", JOptionPane.YES_NO_OPTION);
+        int raspuns = JOptionPane.showConfirmDialog(this, String.format("Sunteti sigur ca vreti sa stergeti casierul %s?", cc.getNumeComplet()), "Stergere Casier", JOptionPane.YES_NO_OPTION);
         if (raspuns == JOptionPane.YES_OPTION) {
             casierService.remove(cc);
             listaCasieri = casierService.getAll();
@@ -165,7 +166,7 @@ public class FrmAdministrareCasieri extends javax.swing.JDialog implements FrmAd
 
             int x = 0;
             for (Casier c : listaCasieri) {
-                data[x][0] = c.getNumePrenume();
+                data[x][0] = c.getNumeComplet();
                 data[x][1] = c.getCodOperator();
                 x++;
             }
@@ -236,7 +237,7 @@ public class FrmAdministrareCasieri extends javax.swing.JDialog implements FrmAd
 
         int x = 0;
         for (Casier c : listaCasieri) {
-            data[x][0] = c.getNumePrenume();
+            data[x][0] = c.getNumeComplet();
             data[x][1] = c.getCodOperator();
             x++;
         }

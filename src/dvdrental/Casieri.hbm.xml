@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 25, 2021 3:38:36 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class name="dvdrental.Casier" optimistic-lock="version" schema="FANA" table="CASIERI">
+    <id name="id" type="int">
+      <column name="ID"/>
+      <generator class="assigned"/>
+    </id>
+    <property name="nume" type="string">
+      <column length="100" name="NUME" not-null="true"/>
+    </property>
+    <property name="prenume" type="string">
+      <column length="100" name="PRENUME" not-null="true"/>
+    </property>
+    
+    <property name="codOperator" type="string">
+      <column length="20" name="COD_OPETATOR" not-null="true" unique="true"/>
+    </property>
+    <property name="parola" type="string">
+      <column length="20" name="PAROLA" not-null="true"/>
+    </property>
+  </class>
+</hibernate-mapping>
