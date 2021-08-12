@@ -1,24 +1,29 @@
-<?xml version="1.0"?>
-<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated Jun 25, 2021 3:38:36 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-    <class name="dvdrental.Bilete" table="BILETE" schema="FANA" optimistic-lock="version">
-        <id name="id" type="int">
-            <column name="ID" />
-            <generator class="assigned" />
-        </id>
-        <property name="idSpectacol" type="int">
+  <class name="dvdrental.Bilet" optimistic-lock="version" schema="FANA" table="BILETE">
+    <id name="id" type="int">
+      <column name="ID"/>
+      <generator class="assigned"/>
+    </id>
+    <property name="data" type="date">
+      <column length="10" name="DATA" not-null="true"/>
+    </property>
+    <property name="pret" type="int">
+      <column name="PRET" not-null="true"/>
+    </property>
+<!--    <property name="idVanzare" type="int">
+      <column name="ID_VANZARE" not-null="true"/>
+    </property>-->
+     <many-to-one name="spectacol" class="dvdrental.Spectacol" fetch="select" >
             <column name="ID_SPECTACOL" not-null="true" />
-        </property>
-        <property name="data" type="date">
-            <column name="DATA" length="10" not-null="true" />
-        </property>
-        <property name="pret" type="int">
-            <column name="PRET" not-null="true" />
-        </property>
-        <property name="idVanzare" type="int">
-            <column name="ID_VANZARE" not-null="true" />
-        </property>
-    </class>
+        </many-to-one>
+           <many-to-one name="vanzare" class="dvdrental.Vanzare" insert="false" update="false" fetch="select">
+            <column name="ID_VANZARE" not-null="true"  />
+        </many-to-one>
+        <property name="locReal" type="int">
+      <column name="LOC_REAL" not-null="true"/>
+    </property>
+  </class>
 </hibernate-mapping>
