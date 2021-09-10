@@ -5,18 +5,20 @@
  */
 package repositories;
 
+import dvdrental.Spectacol;
+import java.util.ArrayList;
 import java.util.List;
-import models.Spectacol;
+import models.SpectacolB;
 
 /**
  *
  * @author Stefan
  */
 public interface SpectacoleRepository {
-    public void adaugaSpectacol (Spectacol spectacol);
-    public void editareSpectacol (Spectacol spectacol);
+   // public void adaugaSpectacol (Spectacol spectacol);
+   // public void editareSpectacol (Spectacol spectacol);
     public void stergeSpectacol (Spectacol spectacol);
-    public List<Spectacol> getAll();
+    public ArrayList<Spectacol> getAll();
     public List<Spectacol> cautareSpectacol(String titlu);
     public boolean salveazaSpectacol(Spectacol spectacol);
 }

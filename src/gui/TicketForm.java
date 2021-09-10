@@ -5,6 +5,7 @@
  */
 package gui;
 
+import dvdrental.Bilet;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -31,7 +32,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-import models.Bilet;
+import models.BiletB;
 import repositories.SpectacoleFileRepository;
 
 /**
@@ -146,8 +147,8 @@ public class TicketForm extends javax.swing.JPanel {
         g.drawString(String.valueOf(bilet.getRand()), 132, getHeight()-60+20);
         g.drawString(String.valueOf(bilet.getLoc()), 123, getHeight()-60+38);
         g.drawString(String.valueOf(bilet.getSpectacol().getPret()) + " RON", 175, getHeight()-60+38);
-        g.drawString(sdfData.format(bilet.getSpectacol().getDataOra()), 240, getHeight()-60+20);
-        g.drawString(sdfOra.format(bilet.getSpectacol().getDataOra()), 255, getHeight()-60+38);
+        g.drawString(sdfData.format(bilet.getSpectacol().getData()), 240, getHeight()-60+20);
+        g.drawString(sdfOra.format(bilet.getSpectacol().getData()), 255, getHeight()-60+38);
 
         g.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
         g.drawString("BILET INTRARE", 117, 85);
@@ -156,11 +157,11 @@ public class TicketForm extends javax.swing.JPanel {
         Font tnm=new Font("Times New Roman", Font.PLAIN, 24);
         g.setFont(tnm);
         FontMetrics lungime = g.getFontMetrics(tnm);
-        Rectangle2D caseta = lungime.getStringBounds(bilet.getNumeSpectacol(), g);
+        Rectangle2D caseta = lungime.getStringBounds(bilet.getSpectacol().getTitlu(), g);
         
         int x = (int) (85+(getWidth()-62-85-15-caseta.getWidth())/2);
         System.out.println(getWidth());
-        g.drawString(bilet.getNumeSpectacol(), x, 110);
+        g.drawString(bilet.getSpectacol().getTitlu(), x, 110);
 
         Font font = new Font("Lucida Console", Font.BOLD, 25);
 
@@ -168,7 +169,7 @@ public class TicketForm extends javax.swing.JPanel {
         affineTransform.rotate(Math.toRadians(-90), 0, 0);
         Font rotatedFont = font.deriveFont(affineTransform);
         g.setFont(rotatedFont);
-        g.drawString(String.format("%010d", bilet.getNumarBilet()), getWidth()-10-23, getHeight()-20);
+        g.drawString(String.format("%010d", bilet.getId()), getWidth()-10-23, getHeight()-20);
         
         
 //        InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream("PottaOne-Regular.");
@@ -268,25 +269,25 @@ public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                createAndShowGUI();
+              //  createAndShowGUI();
             }
         });
         
         
     }
 
-    private static void createAndShowGUI() {
-        JFrame f = new JFrame();
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        SpectacoleFileRepository spectacoleFileRepository = new SpectacoleFileRepository();
-        Bilet bilet = new Bilet(237, spectacoleFileRepository.getAll().get(1), 5, 7);
-        f.getContentPane().add(new TicketForm(bilet));
-        f.setSize(400, 240);
-        f.setLocationRelativeTo(null);
-        f.setVisible(true);
-        f.setResizable(false);
-
-    }
+//    private static void createAndShowGUI() {
+//        JFrame f = new JFrame();
+//        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        SpectacoleFileRepository spectacoleFileRepository = new SpectacoleFileRepository();
+//        Bilet bilet = new Bilet(237, spectacoleFileRepository.getAll().get(1), 5, 7);
+//        f.getContentPane().add(new TicketForm(bilet));
+//        f.setSize(400, 240);
+//        f.setLocationRelativeTo(null);
+//        f.setVisible(true);
+//        f.setResizable(false);
+//
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

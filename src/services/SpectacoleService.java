@@ -5,10 +5,11 @@
  */
 package services;
 
+import dvdrental.Spectacol;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import models.Spectacol;
+import models.SpectacolB;
 
 /**
  *

@@ -5,8 +5,9 @@
  */
 package comparators;
 
+import dvdrental.Bilet;
 import java.util.Comparator;
-import models.Bilet;
+import models.BiletB;
 
 /**
  *
@@ -16,7 +17,7 @@ public class ComparatorBilet implements Comparator<Bilet> {
 
     @Override
     public int compare(Bilet b1, Bilet b2) {
-        return b2.getDataVanzare().compareTo(b1.getDataVanzare());
+        return b2.getData().compareTo(b1.getData());
     }
     
 }

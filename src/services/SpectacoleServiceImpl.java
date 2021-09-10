@@ -5,16 +5,18 @@
  */
 package services;
 
+import dvdrental.Spectacol;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Date;
-import models.Bilet;
-import models.Spectacol;
+import models.BiletB;
+import models.SpectacolB;
 import observer.FObserver;
 import observer.ObserverData;
 import observer.Subject;
 import repositories.SpectacoleFileRepository;
+import repositories.SpectacoleHibernateRepository;
 import repositories.SpectacoleRepository;
 import utils.IdUtils;
 
@@ -25,7 +27,7 @@ import utils.IdUtils;
 public class SpectacoleServiceImpl implements SpectacoleService, Subject{
 
     private int id=IdUtils.getValueForKey("object.spectacol");
-    private SpectacoleRepository spectacoleRepository = new SpectacoleFileRepository();
+    private SpectacoleRepository spectacoleRepository = new SpectacoleHibernateRepository();
     private List<FObserver> observeri = new ArrayList<>();
     
     private static SpectacoleServiceImpl singleInstance;
@@ -48,15 +50,8 @@ public class SpectacoleServiceImpl implements SpectacoleService, Subject{
 
     @Override
     public boolean salveazaSpectacol(Spectacol spectacol) {
-        if(spectacol.getId()==0){
-            spectacol.setId(++id);
-        }
-        if(spectacoleRepository.salveazaSpectacol(spectacol)){
-            IdUtils.addProperty("object.spectacol", id);
-            notifyObservers(spectacol);
-            return true;
-        }
-        return false;
+
+     return spectacoleRepository.salveazaSpectacol(spectacol);
     }
 
     @Override
@@ -76,7 +71,7 @@ public class SpectacoleServiceImpl implements SpectacoleService, Subject{
         listaSpectacole = spectacoleRepository.getAll();
         List<Spectacol> listaNoua = new ArrayList<Spectacol>();
         for (Spectacol s:listaSpectacole){
-            if (s.getDataOra().after(dataInceput) && s.getDataOra().before(dataFinal))
+            if (s.getData().after(dataInceput) && s.getData().before(dataFinal))
                 listaNoua.add(s);
         }
         return listaNoua;
@@ -84,9 +79,10 @@ public class SpectacoleServiceImpl implements SpectacoleService, Subject{
     
         public static void main(String[] args) {
         SpectacoleService  spectacoleService=new SpectacoleServiceImpl();
-            Spectacol s1 = new Spectacol("Film", "Idk man", new Date(), "film actiune", 50, 20);   
+          
+          //Spectacol s1 = new Spectacol("Film", "Idk man", new Date(), "film actiune", 50, 20);   
 //        s2.setId(2);
-        spectacoleService.remove(s1);
+        //spectacoleService.remove(s1);
        
     }
 
@@ -97,7 +93,7 @@ public class SpectacoleServiceImpl implements SpectacoleService, Subject{
         List<Spectacol> listaNoua = new ArrayList<Spectacol>();
         for (Spectacol s:listaSpectacole){
             Calendar c = Calendar.getInstance();
-            c.setTime(s.getDataOra());
+            c.setTime(s.getData());
             c.add(Calendar.DAY_OF_MONTH, s.getDurata());
             Date dataCalendar = c.getTime();
             if (dataCalendar.after(data))

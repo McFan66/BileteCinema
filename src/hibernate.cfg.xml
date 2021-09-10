@@ -47,6 +47,7 @@ Contributor(s):
     <property name="hibernate.connection.username">fana</property>
     <property name="hibernate.connection.password">fana</property>
     <property name="hibernate.show_sql">true</property>
+    <property name="check_nullabilityl">false</property>
     <property name="hibernate.query.factory_class">org.hibernate.hql.internal.classic.ClassicQueryTranslatorFactory</property>
     <property name="hibernate.current_session_context_class">thread</property>
     <mapping resource="dvdrental/Casieri.hbm.xml"/>

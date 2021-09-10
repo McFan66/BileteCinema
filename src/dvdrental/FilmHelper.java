@@ -6,7 +6,7 @@
 package dvdrental;
 
 import java.util.List;
-import models.Spectacol;
+import models.SpectacolB;
 import org.hibernate.Query;
 import utils.HibernateUtil;
 import org.hibernate.Session;
@@ -23,7 +23,7 @@ public class FilmHelper {
         this.session = HibernateUtil.getSessionFactory().getCurrentSession();
     }
 
-    public boolean saveSpectacol(Spectacol spectacol) {
+    public boolean saveSpectacol(SpectacolB spectacol) {
         org.hibernate.Transaction tx = session.beginTransaction();
         int id = (int) session.save(spectacol);
         spectacol.setId(id);
@@ -36,11 +36,11 @@ public class FilmHelper {
     }
 
     public List getNumeSpectacole(int startID, int endID) {
-        List<Spectacol> listaSpectacole = null;
+        List<SpectacolB> listaSpectacole = null;
         try {
             org.hibernate.Transaction tx = session.beginTransaction();
             Query q = session.createQuery("from Spectacole as spectacole where spectacole.id between '" + startID + "' and '" + endID + "'");
-            listaSpectacole = (List<Spectacol>) q.list();
+            listaSpectacole = (List<SpectacolB>) q.list();
         } catch (Exception e) {
             e.printStackTrace();
         }

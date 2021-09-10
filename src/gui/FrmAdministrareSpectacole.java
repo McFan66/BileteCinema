@@ -5,6 +5,7 @@
  */
 package gui;
 
+import dvdrental.Spectacol;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.Calendar;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import models.Spectacol;
+import models.SpectacolB;
 import services.SpectacoleService;
 import services.SpectacoleServiceImpl;
 import utils.TableColumnAdjuster;
@@ -43,8 +44,8 @@ public class FrmAdministrareSpectacole extends javax.swing.JDialog implements Fr
         for (Spectacol s : listaSpectacole) {
             data[x][0] = s.getTipul();
             data[x][1] = s.getTitlu();
-            data[x][2] = formatter.format(s.getDataOra());
-            data[x][3] = formatter1.format(s.getDataOra());
+            data[x][2] = formatter.format(s.getData());
+            data[x][3] = formatter1.format(s.getData());
             data[x][4] = String.valueOf(s.getPret());
             x++;
         }
@@ -201,8 +202,8 @@ public class FrmAdministrareSpectacole extends javax.swing.JDialog implements Fr
             for (Spectacol s : listaSpectacole) {
                 data[x][0] = s.getTipul();
                 data[x][1] = s.getTitlu();
-                data[x][2] = formatter.format(s.getDataOra());
-                data[x][3] = formatter1.format(s.getDataOra());
+                data[x][2] = formatter.format(s.getData());
+                data[x][3] = formatter1.format(s.getData());
                 data[x][4] = String.valueOf(s.getPret());
                 x++;
             }
@@ -276,8 +277,8 @@ public class FrmAdministrareSpectacole extends javax.swing.JDialog implements Fr
         for (Spectacol s : listaSpectacole) {
             data[x][0] = s.getTipul();
             data[x][1] = s.getTitlu();
-            data[x][2] = formatter.format(s.getDataOra());
-            data[x][3] = formatter1.format(s.getDataOra());
+            data[x][2] = formatter.format(s.getData());
+            data[x][3] = formatter1.format(s.getData());
             data[x][4] = String.valueOf(s.getPret());
             x++;
         }

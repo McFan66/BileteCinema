@@ -5,10 +5,13 @@
  */
 package repositories;
 
+import dvdrental.Bilet;
+import dvdrental.Spectacol;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import models.Bilet;
-import models.Spectacol;
+import models.BiletB;
+import models.SpectacolB;
 
 /**
  *
@@ -16,11 +19,9 @@ import models.Spectacol;
  */
 public interface BiletRepository {
     public boolean adaugaBilet (Bilet bilet);
-    public void editareBilet (Bilet bilet);
     public void stergereBilet (Bilet bilet);
-    public List<Bilet> getAll ();
+    public ArrayList<Bilet> getAll ();
     public List<Bilet> cautareBiletDupaSpectacol (Spectacol spectacol);
     public List<Bilet> cautareBiletDupaLoc (int rand, int loc);
     public List<Bilet> cautareBiletDupaData (Date dataStart, Date dataSfarsit);
-
 }

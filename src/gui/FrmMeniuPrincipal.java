@@ -6,6 +6,8 @@
 package gui;
 
 import comparators.ComparatorBilet;
+import dvdrental.Bilet;
+import dvdrental.Spectacol;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,10 +19,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
-import models.Bilet;
-import models.Spectacol;
+import models.BiletB;
+import models.SpectacolB;
 import observer.ObserverData;
 import repositories.BiletFileRepository;
+import repositories.BiletHibernateRepository;
 import repositories.BiletRepository;
 import services.BiletServiceImpl;
 import services.SpectacoleServiceImpl;
@@ -35,7 +38,7 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
 
     private List<Bilet> listaBilete = new ArrayList<Bilet>();
     private BiletServiceImpl biletService = BiletServiceImpl.getInstance();
-    private BiletRepository biletRepository = new BiletFileRepository();
+    private BiletRepository biletRepository = new BiletHibernateRepository();
     private DefaultTableModel defaultTableModel;
     private String[] columnNames = new String[]{"Numele Spectacolului", "Data si Ora", "Pretul", "Randul si locul"};
     private String[][] data;
@@ -62,8 +65,9 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
         int x = 0;
         DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         for (Bilet b : listaBilete) {
-            data[x][0] = b.getNumeSpectacol();
-            data[x][1] = formatter.format(b.getDataVanzare());
+            
+            data[x][0] = b.getSpectacol().getTitlu();
+            data[x][1] = formatter.format(b.getData());
             data[x][2] = String.valueOf(b.getSpectacol().getPret());
             data[x][3] = String.format("Rand: %d Loc: %d", b.getRand() + 1, b.getLoc());
             x++;
@@ -352,7 +356,7 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
     private javax.swing.JButton btnSala;
     private javax.swing.JButton btnVanzare;
     private javax.swing.JButton jButton4;
-    private javax.swing.JList<Spectacol> jList1;
+    private javax.swing.JList<dvdrental.Spectacol> jList1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -368,8 +372,8 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
 
     @Override
     public void update(ObserverData observerData) {
-        if (observerData instanceof Bilet) {
-            Bilet bilet = (Bilet) observerData;
+        if (observerData instanceof BiletB) {
+            BiletB bilet = (BiletB) observerData;
             System.out.println("Meniul principal actualizam observerul" + bilet.getDetalii());
             Calendar c1 = Calendar.getInstance();
             Date dataInceput = new Date();
@@ -382,8 +386,8 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
             int x = 0;
             DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH.mm");
             for (Bilet b : listaBilete) {
-                data[x][0] = b.getNumeSpectacol();
-                data[x][1] = formatter.format(b.getDataVanzare());
+                data[x][0] = b.getSpectacol().getTitlu();
+                data[x][1] = formatter.format(b.getData());
                 data[x][2] = String.valueOf(b.getSpectacol().getPret());
                 data[x][3] = String.format("Rand: %d Loc: %d", b.getRand() + 1, b.getLoc());
                 x++;
@@ -391,7 +395,7 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
             defaultTableModel = new DefaultTableModel(data, columnNames);
             tblBilete.setModel(defaultTableModel);
             setTitle("Meniu principal");
-        } else if (observerData instanceof Spectacol) {
+        } else if (observerData instanceof SpectacolB) {
             listModel.clear();
             Calendar c1 = Calendar.getInstance();
             defaultTableModel = new DefaultTableModel(data, columnNames);

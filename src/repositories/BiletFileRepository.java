@@ -5,6 +5,8 @@
  */
 package repositories;
 
+import dvdrental.Bilet;
+import dvdrental.Spectacol;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -17,15 +19,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import models.Bilet;
-import models.Spectacol;
+import models.BiletB;
+import models.SpectacolB;
 import utils.DateUtils;
 
 /**
  *
  * @author Stefan
  */
-public class BiletFileRepository implements BiletRepository {
+public class BiletFileRepository  {
 
     private ArrayList<Bilet> listaBilete;
     private File fisier;
@@ -47,7 +49,6 @@ public class BiletFileRepository implements BiletRepository {
         }
     }
     
-    @Override
     public boolean adaugaBilet(Bilet bilet) {
         int index = listaBilete.indexOf(bilet);
         if (index == -1){
@@ -59,29 +60,18 @@ public class BiletFileRepository implements BiletRepository {
         return true;
     }
 
-    @Override
-    public void editareBilet(Bilet bilet) {
-        int index = listaBilete.indexOf(bilet);
-        if (index !=-1){
-            listaBilete.set(index, bilet);
-            save();
-        }
-    }
 
-    @Override
     public void stergereBilet(Bilet bilet) {
         listaBilete.remove(bilet);
         save();
     }
 
-    @Override
-    public List<Bilet> getAll() {
+    public ArrayList<Bilet> getAll() {
         return listaBilete;
     }
-
-    @Override
+/*
     public List<Bilet> cautareBiletDupaSpectacol(Spectacol spectacol) {
-        List<Bilet> rezultate = new ArrayList<>();
+        List<BiletB> rezultate = new ArrayList<>();
         for (Bilet b:listaBilete){
             if (b.getNumeSpectacol().contains(spectacol.getTitlu())){
                 rezultate.add(b);
@@ -92,8 +82,8 @@ public class BiletFileRepository implements BiletRepository {
 
     @Override
     public List<Bilet> cautareBiletDupaLoc(int rand, int loc) {
-        List<Bilet> rezultate = new ArrayList<>();
-        for (Bilet b:listaBilete){
+        List<BiletB> rezultate = new ArrayList<>();
+        for (BiletB b:listaBilete){
             if (b.getRand()==rand && b.getLoc()==loc){
                 rezultate.add(b);
             }
@@ -102,18 +92,18 @@ public class BiletFileRepository implements BiletRepository {
     }
 
     @Override
-    public List<Bilet> cautareBiletDupaData(Date dataInceput, Date dataSfarsit) {
+    public List<BiletB> cautareBiletDupaData(Date dataInceput, Date dataSfarsit) {
         dataInceput=DateUtils.getDateWithSpecialHourMinuteSecond(dataInceput);
         dataSfarsit=DateUtils.getDateWithSpecialHourMinuteSecond(dataSfarsit, 23, 59, 59);
-        List<Bilet> rezultate = new ArrayList<>();
-        for (Bilet b:listaBilete){
+        List<BiletB> rezultate = new ArrayList<>();
+        for (BiletB b:listaBilete){
             if (b.getDataVanzare().after(dataInceput) && b.getDataVanzare().before(dataSfarsit)){
                 rezultate.add(b);
             }
         }
         return rezultate;
     }
-
+*/
     
     
     private void save(){

@@ -5,13 +5,14 @@
  */
 package gui;
 
+import dvdrental.Bilet;
 import java.util.Date;
 import java.util.List;
 import javafx.scene.control.Alert;
 import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import models.Bilet;
+import models.BiletB;
 import services.BiletService;
 import services.BiletServiceImpl;
 
@@ -50,13 +51,6 @@ public class FrmListaBilete extends javax.swing.JDialog {
     private void initComponents() {
 
         itemBiletListRenderer1 = new renderer.ItemBiletListRenderer();
-        itemBiletListRenderer2 = new renderer.ItemBiletListRenderer();
-        itemBiletListRenderer3 = new renderer.ItemBiletListRenderer();
-        itemBiletListRenderer4 = new renderer.ItemBiletListRenderer();
-        itemBiletListRenderer5 = new renderer.ItemBiletListRenderer();
-        itemBiletListRenderer6 = new renderer.ItemBiletListRenderer();
-        itemBiletListRenderer7 = new renderer.ItemBiletListRenderer();
-        itemBiletListRenderer8 = new renderer.ItemBiletListRenderer();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
         jButton1 = new javax.swing.JButton();
@@ -71,83 +65,6 @@ public class FrmListaBilete extends javax.swing.JDialog {
         itemBiletListRenderer1Layout.setVerticalGroup(
             itemBiletListRenderer1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout itemBiletListRenderer2Layout = new javax.swing.GroupLayout(itemBiletListRenderer2);
-        itemBiletListRenderer2.setLayout(itemBiletListRenderer2Layout);
-        itemBiletListRenderer2Layout.setHorizontalGroup(
-            itemBiletListRenderer2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        itemBiletListRenderer2Layout.setVerticalGroup(
-            itemBiletListRenderer2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 240, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout itemBiletListRenderer3Layout = new javax.swing.GroupLayout(itemBiletListRenderer3);
-        itemBiletListRenderer3.setLayout(itemBiletListRenderer3Layout);
-        itemBiletListRenderer3Layout.setHorizontalGroup(
-            itemBiletListRenderer3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        itemBiletListRenderer3Layout.setVerticalGroup(
-            itemBiletListRenderer3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 240, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout itemBiletListRenderer4Layout = new javax.swing.GroupLayout(itemBiletListRenderer4);
-        itemBiletListRenderer4.setLayout(itemBiletListRenderer4Layout);
-        itemBiletListRenderer4Layout.setHorizontalGroup(
-            itemBiletListRenderer4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        itemBiletListRenderer4Layout.setVerticalGroup(
-            itemBiletListRenderer4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 240, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout itemBiletListRenderer5Layout = new javax.swing.GroupLayout(itemBiletListRenderer5);
-        itemBiletListRenderer5.setLayout(itemBiletListRenderer5Layout);
-        itemBiletListRenderer5Layout.setHorizontalGroup(
-            itemBiletListRenderer5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        itemBiletListRenderer5Layout.setVerticalGroup(
-            itemBiletListRenderer5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 240, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout itemBiletListRenderer6Layout = new javax.swing.GroupLayout(itemBiletListRenderer6);
-        itemBiletListRenderer6.setLayout(itemBiletListRenderer6Layout);
-        itemBiletListRenderer6Layout.setHorizontalGroup(
-            itemBiletListRenderer6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        itemBiletListRenderer6Layout.setVerticalGroup(
-            itemBiletListRenderer6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 240, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout itemBiletListRenderer7Layout = new javax.swing.GroupLayout(itemBiletListRenderer7);
-        itemBiletListRenderer7.setLayout(itemBiletListRenderer7Layout);
-        itemBiletListRenderer7Layout.setHorizontalGroup(
-            itemBiletListRenderer7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        itemBiletListRenderer7Layout.setVerticalGroup(
-            itemBiletListRenderer7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 240, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout itemBiletListRenderer8Layout = new javax.swing.GroupLayout(itemBiletListRenderer8);
-        itemBiletListRenderer8.setLayout(itemBiletListRenderer8Layout);
-        itemBiletListRenderer8Layout.setHorizontalGroup(
-            itemBiletListRenderer8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        itemBiletListRenderer8Layout.setVerticalGroup(
-            itemBiletListRenderer8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 240, Short.MAX_VALUE)
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -194,7 +111,7 @@ public class FrmListaBilete extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         for (Bilet b:listaBilete){
-            b.setDataVanzare(new Date());
+            b.setData(new Date());
             biletService.salveazaBilet(b);
             
         }
@@ -215,16 +132,9 @@ public class FrmListaBilete extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private renderer.ItemBiletListRenderer itemBiletListRenderer1;
-    private renderer.ItemBiletListRenderer itemBiletListRenderer2;
-    private renderer.ItemBiletListRenderer itemBiletListRenderer3;
-    private renderer.ItemBiletListRenderer itemBiletListRenderer4;
-    private renderer.ItemBiletListRenderer itemBiletListRenderer5;
-    private renderer.ItemBiletListRenderer itemBiletListRenderer6;
-    private renderer.ItemBiletListRenderer itemBiletListRenderer7;
-    private renderer.ItemBiletListRenderer itemBiletListRenderer8;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JList<Bilet> jList1;
+    private javax.swing.JList<dvdrental.Bilet> jList1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

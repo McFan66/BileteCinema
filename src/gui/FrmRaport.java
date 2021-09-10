@@ -5,6 +5,7 @@
  */
 package gui;
 
+import dvdrental.Bilet;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -24,7 +25,7 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
-import models.Bilet;
+import models.BiletB;
 import services.BiletServiceImpl;
 import threads.FanaRunnable;
 import utils.HtmlUtils;
@@ -225,7 +226,7 @@ public class FrmRaport extends javax.swing.JDialog {
         List<String> listaRanduri = new ArrayList<String>();
         listaRanduri.add(HtmlUtils.createColumn("Numar bilet", true) + HtmlUtils.createColumn("Nume spectacol", true) + HtmlUtils.createColumn("Data vanzarii", true) + HtmlUtils.createColumn("Pret", true));
         for (Bilet b : listaBilete) {
-            listaRanduri.add(HtmlUtils.createColumn(String.valueOf(b.getNumarBilet())) + HtmlUtils.createColumn(b.getNumeSpectacol()) + HtmlUtils.createColumn(formatter.format(b.getDataVanzare())) + HtmlUtils.createColumn(String.valueOf(b.getSpectacol().getPret())));
+            listaRanduri.add(HtmlUtils.createColumn(String.valueOf(b.getId()) + HtmlUtils.createColumn(String.valueOf(b.getSpectacol().getId())) + HtmlUtils.createColumn(formatter.format(b.getData())) + HtmlUtils.createColumn(String.valueOf(b.getSpectacol().getPret()))));
         }
 
         String tabel = new String();

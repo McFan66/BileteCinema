@@ -5,11 +5,12 @@
  */
 package renderer;
 
+import dvdrental.Bilet;
 import java.awt.Component;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
-import models.Bilet;
+import models.BiletB;
 
 /**
  *

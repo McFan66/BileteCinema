@@ -5,6 +5,7 @@
  */
 package renderer;
 
+import dvdrental.Spectacol;
 import java.awt.Component;
 import java.awt.Image;
 import java.text.DateFormat;
@@ -14,7 +15,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
-import models.Spectacol;
+import models.SpectacolB;
 
 /**
  *
@@ -124,11 +125,11 @@ public class ItemSpectacolListRenderer extends JPanel implements ListCellRendere
             lblPret.setText(String.format("Pret: %s RON", String.valueOf(spectacol.getPret())));
             DateFormat formatterData = new SimpleDateFormat("dd.MM.yyyy");
             DateFormat formatterOra = new SimpleDateFormat("HH:mm");
-            lblOra.setText(String.format("Ora: %s", formatterOra.format(spectacol.getDataOra())));
+            lblOra.setText(String.format("Ora: %s", formatterOra.format(spectacol.getData())));
             Calendar c = Calendar.getInstance();
-            c.setTime(spectacol.getDataOra());
+            c.setTime(spectacol.getData());
             c.add(Calendar.DAY_OF_MONTH, spectacol.getDurata());
-            lblData.setText(String.format("Data: %s-%s", formatterData.format(spectacol.getDataOra()), formatterData.format(c.getTime())));
+            lblData.setText(String.format("Data: %s-%s", formatterData.format(spectacol.getData()), formatterData.format(c.getTime())));
 
             ImageIcon icon = new ImageIcon(spectacol.getImagePath());
             Image image = icon.getImage();

@@ -6,7 +6,7 @@
  */
 package observer;
 
-import models.Bilet;
+import models.BiletB;
 
 /**
  *

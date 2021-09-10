@@ -5,6 +5,7 @@
  */
 package renderer;
 
+import dvdrental.Bilet;
 import gui.TicketForm;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -34,7 +35,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
-import models.Bilet;
+import models.BiletB;
 
 /**
  *
@@ -148,8 +149,8 @@ public class ItemBiletListRenderer extends JPanel implements ListCellRenderer<Bi
         g.drawString(String.valueOf(bilet.getRand()+1), 132, getHeight() - 60 + 20);
         g.drawString(String.valueOf(bilet.getLoc()), 123, getHeight() - 60 + 38);
         g.drawString(String.valueOf(bilet.getSpectacol().getPret()) + " RON", 175, getHeight() - 60 + 38);
-        g.drawString(sdfData.format(bilet.getSpectacol().getDataOra()), 240, getHeight() - 60 + 20);
-        g.drawString(sdfOra.format(bilet.getSpectacol().getDataOra()), 255, getHeight() - 60 + 38);
+        g.drawString(sdfData.format(bilet.getSpectacol().getData()), 240, getHeight() - 60 + 20);
+        g.drawString(sdfOra.format(bilet.getSpectacol().getData()), 255, getHeight() - 60 + 38);
 
         g.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
         g.drawString("BILET INTRARE", 117, 85);
@@ -157,11 +158,11 @@ public class ItemBiletListRenderer extends JPanel implements ListCellRenderer<Bi
         Font tnm = new Font("Times New Roman", Font.PLAIN, 24);
         g.setFont(tnm);
         FontMetrics lungime = g.getFontMetrics(tnm);
-        Rectangle2D caseta = lungime.getStringBounds(bilet.getNumeSpectacol(), g);
+        Rectangle2D caseta = lungime.getStringBounds(bilet.getSpectacol().getTitlu(), g);
 
         int x = (int) (85 + (getWidth() - 62 - 85 - 15 - caseta.getWidth()) / 2);
         System.out.println(getWidth());
-        g.drawString(bilet.getNumeSpectacol(), x, 110);
+        g.drawString(bilet.getSpectacol().getTitlu(), x, 110);
 
         Font font = new Font("Lucida Console", Font.BOLD, 30);
 
@@ -169,7 +170,7 @@ public class ItemBiletListRenderer extends JPanel implements ListCellRenderer<Bi
         affineTransform.rotate(Math.toRadians(-90), 0, 0);
         Font rotatedFont = font.deriveFont(affineTransform);
         g.setFont(rotatedFont);
-        g.drawString(String.format("%010d", bilet.getNumarBilet()), getWidth()-10-28, getHeight()-20);
+        g.drawString(String.format("%010d", bilet.getId()), getWidth()-10-28, getHeight()-20);
 
 //        InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream("PottaOne-Regular.");
 //        Font font = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(48f);

@@ -5,6 +5,7 @@
  */
 package models;
 
+import dvdrental.Spectacol;
 import java.io.Serializable;
 import java.util.Date;
 import observer.ObserverData;
@@ -13,7 +14,7 @@ import observer.ObserverData;
  *
  * @author Stefan
  */
-public class Bilet implements Serializable, ObserverData {
+public class BiletB implements Serializable, ObserverData {
 
     private int id;
     private int numarBilet;
@@ -48,17 +49,17 @@ public class Bilet implements Serializable, ObserverData {
         this.dataVanzare = dataVanzare;
     }
 
-    public Bilet(int numarBilet, Spectacol spectacol, int loc, int rand) {
+    public BiletB(int numarBilet, Spectacol spectacol, int loc, int rand) {
         this.numarBilet = numarBilet;
         this.spectacol = spectacol;
         this.loc = loc;
         this.rand = rand;
     }
 
-    public Bilet() {
+    public BiletB() {
     }
 
-    public Bilet(int id) {
+    public BiletB(int id) {
         this.id = id;
     }
 
@@ -113,7 +114,7 @@ public class Bilet implements Serializable, ObserverData {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Bilet other = (Bilet) obj;
+        final BiletB other = (BiletB) obj;
         if (this.id != other.id) {
             return false;
         }

@@ -6,16 +6,16 @@
  */
 package services;
 
+import dvdrental.Bilet;
+import dvdrental.Spectacol;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import models.Bilet;
-import models.Spectacol;
 import observer.FObserver;
 import observer.ObserverData;
 import observer.Subject;
-import repositories.BiletFileRepository;
+import repositories.BiletHibernateRepository;
 import repositories.BiletRepository;
 import utils.DateUtils;
 import utils.IdUtils;
@@ -28,7 +28,7 @@ public class BiletServiceImpl implements BiletService, Subject {
 
     private List<FObserver> observers = new ArrayList<>();
     private int id = IdUtils.getValueForKey("object.bilet");
-    private BiletRepository biletRepository = new BiletFileRepository();
+    private BiletRepository biletRepository = new BiletHibernateRepository();
 
     private static BiletServiceImpl singleInstance;
 
@@ -55,7 +55,7 @@ public class BiletServiceImpl implements BiletService, Subject {
         }
         if (biletRepository.adaugaBilet(bilet)) {
             IdUtils.addProperty("object.bilet", id);
-            notifyObservers(bilet);
+            notifyObservers((ObserverData) bilet);
             return true;
         }
         return false;
@@ -72,7 +72,7 @@ public class BiletServiceImpl implements BiletService, Subject {
         listaBilete = biletRepository.getAll();
         List<Bilet> listaNoua = new ArrayList<Bilet>();
         for (Bilet b : listaBilete) {
-            if (dataInceput.before(b.getDataVanzare()) && dataFinal.after(b.getDataVanzare())) {
+            if (dataInceput.before(b.getData()) && dataFinal.after(b.getData())) {
                 listaNoua.add(b);
             }
         }
@@ -85,7 +85,8 @@ public class BiletServiceImpl implements BiletService, Subject {
         listaBilete = biletRepository.getAll();
         List<Bilet> listaNoua = new ArrayList<Bilet>();
         for (Bilet b : listaBilete) {
-            if (dataInceput.before(b.getDataVanzare()) && dataFinal.after(b.getDataVanzare()) && spectacol == b.getSpectacol()) {
+            
+            if (dataInceput.before(b.getData()) && dataFinal.after(b.getData()) && spectacol.getId() == b.getSpectacol().getId()) {
                 listaNoua.add(b);
             }
         }
@@ -103,9 +104,9 @@ public class BiletServiceImpl implements BiletService, Subject {
         c2.setTime(DateUtils.resetYearMonthDayMinuteSecond(oraFinal));
         for (Bilet b : listaBilete) {
             Calendar c = Calendar.getInstance();
-            c.setTime(DateUtils.resetYearMonthDayMinuteSecond(b.getDataVanzare()));
-            c.setTime(b.getDataVanzare());
-            if (spectacol == b.getSpectacol() && DateUtils.testTwoDatesEqual(data, b.getDataVanzare()) && c1.getTime().before(c.getTime()) && c2.getTime().after(c.getTime())) {
+            c.setTime(DateUtils.resetYearMonthDayMinuteSecond(b.getData()));
+            c.setTime(b.getData());
+            if (spectacol.getId() == b.getSpectacol().getId()&& DateUtils.testTwoDatesEqual(data, b.getData()) && c1.getTime().before(c.getTime()) && c2.getTime().after(c.getTime())) {
                 listaNoua.add(b);
             }
         }
@@ -129,7 +130,7 @@ public class BiletServiceImpl implements BiletService, Subject {
         listaBilete=biletRepository.getAll();
         List<Bilet> listaFinala = new ArrayList<Bilet>();
         for (Bilet b:listaBilete){
-            if (spectacol.equals(b.getSpectacol()) && dataOra.compareTo(b.getDataOra())==0)
+            if (spectacol.getId() == b.getSpectacol().getId() && dataOra.compareTo(b.getData())==0)
                 listaFinala.add(b);
         }
         return listaFinala;

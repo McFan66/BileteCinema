@@ -15,7 +15,7 @@ import observer.ObserverData;
  *
  * @author Stefan
  */
-public class Spectacol implements Serializable, ObserverData {
+public class SpectacolB implements Serializable, ObserverData {
 
     private static final long serialVersionUID = 7321852490118346537L;
 
@@ -52,7 +52,7 @@ public class Spectacol implements Serializable, ObserverData {
         this.pret = pret;
     }
 
-    public Spectacol(String tipul, String titlu, Date dataOra, String descriere, int pret, int durata) {
+    public SpectacolB(String tipul, String titlu, Date dataOra, String descriere, int pret, int durata) {
         this.tipul = tipul;
         this.titlu = titlu;
         this.dataOra = dataOra;
@@ -61,10 +61,10 @@ public class Spectacol implements Serializable, ObserverData {
         this.durata = durata;
     }
 
-    public Spectacol() {
+    public SpectacolB() {
     }
     
-    public Spectacol(int id){
+    public SpectacolB(int id){
         this.id = id;
     }
 
@@ -119,16 +119,16 @@ public class Spectacol implements Serializable, ObserverData {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Spectacol other = (Spectacol) obj;
+        final SpectacolB other = (SpectacolB) obj;
         if (this.id != other.id) {
             return false;
         }
         return true;
     }
     public static void main(String[] args) {
-        Spectacol s1=new Spectacol();
+        SpectacolB s1=new SpectacolB();
         s1.setId(1);
-        Spectacol s2=new Spectacol();
+        SpectacolB s2=new SpectacolB();
         s2.setId(1);
         System.out.println(s1.equals(s2));
     }

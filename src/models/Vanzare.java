@@ -16,7 +16,7 @@ public class Vanzare {
     private CasierB casier;
     private int id;
     private Date dataOra;
-    private ArrayList<Bilet> bilete;
+    private ArrayList<BiletB> bilete;
 
     public Vanzare(CasierB casier, int id, Date dataOra, ArrayList bilete){
         this.casier=casier;
@@ -28,7 +28,7 @@ public class Vanzare {
     public Vanzare(){
         
     }
-    public ArrayList<Bilet> getBilete() {
+    public ArrayList<BiletB> getBilete() {
         return bilete;
     }
 
@@ -44,7 +44,7 @@ public class Vanzare {
         return id;
     }
 
-    public void setBilete(ArrayList<Bilet> bilete) {
+    public void setBilete(ArrayList<BiletB> bilete) {
         this.bilete = bilete;
     }
 

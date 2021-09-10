@@ -5,6 +5,7 @@
  */
 package gui;
 
+import dvdrental.Spectacol;
 import java.awt.Image;
 import java.io.File;
 import java.util.Calendar;
@@ -15,7 +16,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import models.Spectacol;
+import models.SpectacolB;
 import services.SpectacoleService;
 import services.SpectacoleServiceImpl;
 
@@ -58,8 +59,8 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
         txtNumeSpectacol.setText(spectacolSelectat.getTitlu());
         txtDescriere.setText(spectacolSelectat.getDescriere());
         cmbTipSpectacol.setSelectedItem(spectacolSelectat.getTipul());
-        jDateChooser1.setDate(spectacolSelectat.getDataOra());
-        jSpinner1.setValue(spectacolSelectat.getDataOra());
+        jDateChooser1.setDate(spectacolSelectat.getData());
+        jSpinner1.setValue(spectacolSelectat.getData());
         spnPret.setValue(spectacolSelectat.getPret());
         spnDurata.setValue(spectacolSelectat.getDurata());
         ImageIcon icon=new ImageIcon(spectacolSelectat.getImagePath());
@@ -258,7 +259,7 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
                 spectacolSelectat.setDescriere(descriereSpectacol);
                 spectacolSelectat.setTipul(tipSpectacol);
                 spectacolSelectat.setTitlu(numeSpectacol);
-                spectacolSelectat.setDataOra(dataSiOra);
+                spectacolSelectat.setData(dataSiOra);
                 spectacolSelectat.setPret(pret);
                 spectacolSelectat.setDurata(durata);
                 spectacolSelectat.setImagePath(imagePath);

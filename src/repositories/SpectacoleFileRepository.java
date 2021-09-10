@@ -5,6 +5,7 @@
  */
 package repositories;
 
+import dvdrental.Spectacol;
 import java.awt.BorderLayout;
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import models.Spectacol;
+import models.SpectacolB;
 
 /**
  *
@@ -47,23 +48,6 @@ public class SpectacoleFileRepository implements SpectacoleRepository {
         }
     }
     
-    @Override
-    public void adaugaSpectacol(Spectacol spectacol) {
-        listaSpectacole.add(spectacol);
-        save();
-    }
-
-    @Override
-    public void editareSpectacol(Spectacol spectacol) {
-         
-//        index = -1;
-//        for (int i=0;i<listaSpectacole.size();i++){
-//            if (listaSpectacole.get(i).getId()==spectacol.getId()){
-//                index = i;
-//                break;
-//            }
-//        }
-    }
 
     @Override
     public void stergeSpectacol(Spectacol spectacol) {
@@ -72,7 +56,7 @@ public class SpectacoleFileRepository implements SpectacoleRepository {
     }
 
     @Override
-    public List<Spectacol> getAll() {
+    public ArrayList<Spectacol> getAll() {
         return listaSpectacole;
     }
 

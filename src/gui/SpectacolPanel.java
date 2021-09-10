@@ -5,6 +5,7 @@
  */
 package gui;
 
+import dvdrental.Spectacol;
 import java.awt.Component;
 import java.awt.Image;
 import java.text.DateFormat;
@@ -13,7 +14,7 @@ import java.util.Calendar;
 import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
-import models.Spectacol;
+import models.SpectacolB;
 
 /**
  *
@@ -125,11 +126,11 @@ public class SpectacolPanel extends javax.swing.JPanel implements ListCellRender
             lblPret.setText(String.format("Pret: %s RON", String.valueOf(spectacol.getPret())));
             DateFormat formatterData = new SimpleDateFormat("dd.MM.yyyy");
             DateFormat formatterOra = new SimpleDateFormat("HH:mm");
-            lblOra.setText(String.format("Ora: %s", formatterOra.format(spectacol.getDataOra())));
+            lblOra.setText(String.format("Ora: %s", formatterOra.format(spectacol.getData())));
             Calendar c = Calendar.getInstance();
-            c.setTime(spectacol.getDataOra());
+            c.setTime(spectacol.getData());
             c.add(Calendar.DAY_OF_MONTH, spectacol.getDurata());
-            lblData.setText(String.format("Data: %s-%s", formatterData.format(spectacol.getDataOra()), formatterData.format(c.getTime())));
+            lblData.setText(String.format("Data: %s-%s", formatterData.format(spectacol.getData()), formatterData.format(c.getTime())));
             System.out.println(spectacol.getImagePath());
             if (spectacol.getImagePath() != null) {
                 ImageIcon icon = new ImageIcon(spectacol.getImagePath());

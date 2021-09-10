@@ -1,24 +1,38 @@
-<?xml version="1.0"?>
-<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated Jun 25, 2021 3:38:36 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-    <class name="dvdrental.Spectacole" table="SPECTACOLE" schema="FANA" optimistic-lock="version">
-        <id name="id" type="int">
-            <column name="ID" />
-            <generator class="assigned" />
-        </id>
-        <property name="nume" type="string">
-            <column name="NUME" length="100" not-null="true" />
-        </property>
-        <property name="data" type="date">
-            <column name="DATA" length="10" not-null="true" />
-        </property>
-        <property name="durata" type="int">
-            <column name="DURATA" not-null="true" />
-        </property>
-        <property name="pret" type="int">
-            <column name="PRET" not-null="true" />
-        </property>
-    </class>
+  <class name="dvdrental.Spectacol" optimistic-lock="version" schema="FANA" table="SPECTACOLE">
+    <id name="id" type="int">
+      <column name="ID"/>
+      <generator class="identity"/>
+    </id>
+    <property name="tipul" type="string">
+      <column length="100" name="TIPUL" not-null="true"/>
+      </property>
+    <property name="titlu" type="string">
+      <column length="100" name="TITLU" not-null="true"/>
+    </property>
+    <property name="data" type="date">
+      <column length="10" name="DATA" not-null="true"/>
+    </property>
+    <property name="descriere" type="string">
+      <column length="500" name="DESCRIERE" not-null="true"/>
+      </property>
+    <property name="durata" type="int">
+      <column name="DURATA" not-null="true"/>
+    </property>
+    <property name="pret" type="int">
+      <column name="PRET" not-null="true"/>
+    </property>
+    <property name="imagePath" type="string">
+      <column name="IMAGEPATH" not-null="true"/>
+    </property>
+    <set name="bilete" table="bilete" inverse="true" lazy="true" fetch="select">
+        <key>
+                <column name="ID_SPECTACOL" not-null="true" />
+            </key>
+            <one-to-many class="dvdrental.Bilet" />
+            </set>
+  </class>
 </hibernate-mapping>

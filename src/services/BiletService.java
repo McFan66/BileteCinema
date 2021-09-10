@@ -5,11 +5,13 @@
  */
 package services;
 
+import dvdrental.Bilet;
+import dvdrental.Spectacol;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import models.Bilet;
-import models.Spectacol;
+import models.BiletB;
+import models.SpectacolB;
 
 /**
  *
