@@ -492,8 +492,9 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
 
     @Override
     public void saveBilete() {
-        System.out.println("ayae");
+        
         generareSala();
+        System.out.println("am generat sala");
         listModel.clear();
         listaBilete.removeAll(listaBilete);
         lblTotal.setText("Total:0 RON");

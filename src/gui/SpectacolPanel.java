@@ -5,12 +5,16 @@
  */
 package gui;
 
+import dvdrental.OraSpectacol;
 import dvdrental.Spectacol;
 import java.awt.Component;
 import java.awt.Image;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
@@ -28,6 +32,8 @@ public class SpectacolPanel extends javax.swing.JPanel implements ListCellRender
         initComponents();
     }
 
+    private DefaultComboBoxModel<OraSpectacol> comboBoxModel = new DefaultComboBoxModel<>();
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -41,7 +47,7 @@ public class SpectacolPanel extends javax.swing.JPanel implements ListCellRender
         lblTip = new javax.swing.JLabel();
         lblData = new javax.swing.JLabel();
         lblImagine = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmbOreSpectacol = new javax.swing.JComboBox<>();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -68,10 +74,9 @@ public class SpectacolPanel extends javax.swing.JPanel implements ListCellRender
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        cmbOreSpectacol.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                cmbOreSpectacolActionPerformed(evt);
             }
         });
 
@@ -89,7 +94,7 @@ public class SpectacolPanel extends javax.swing.JPanel implements ListCellRender
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblData, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cmbOreSpectacol, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -104,7 +109,7 @@ public class SpectacolPanel extends javax.swing.JPanel implements ListCellRender
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblData, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cmbOreSpectacol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblImagine, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -114,9 +119,9 @@ public class SpectacolPanel extends javax.swing.JPanel implements ListCellRender
 
     }//GEN-LAST:event_lblImagineMousePressed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void cmbOreSpectacolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbOreSpectacolActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_cmbOreSpectacolActionPerformed
     public void setSpectacol(Spectacol spectacol) {
         if (spectacol != null) {
             lblNume.setText(spectacol.getTitlu());
@@ -141,6 +146,13 @@ public class SpectacolPanel extends javax.swing.JPanel implements ListCellRender
                 Image imagineNoua = image.getScaledInstance(100, 140, java.awt.Image.SCALE_SMOOTH);
                 lblImagine.setIcon(new ImageIcon(imagineNoua));
             }
+            List<OraSpectacol> listaOraSpectacol = new ArrayList<OraSpectacol>();
+            listaOraSpectacol = (List<OraSpectacol>) spectacol.getOre();
+            
+            for (OraSpectacol oraSpectacol:listaOraSpectacol){
+               comboBoxModel.addElement(oraSpectacol);
+            }
+            cmbOreSpectacol.setModel(comboBoxModel);
         }
         validate();
         updateUI();
@@ -156,7 +168,7 @@ public class SpectacolPanel extends javax.swing.JPanel implements ListCellRender
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<OraSpectacol> cmbOreSpectacol;
     private javax.swing.JLabel lblData;
     private javax.swing.JLabel lblImagine;
     private javax.swing.JLabel lblNume;
