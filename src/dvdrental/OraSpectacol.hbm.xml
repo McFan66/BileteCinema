@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class name="dvdrental.OraSpectacol" optimistic-lock="version" schema="FANA" table="ORE_SPECTACOLE">
+  <id name="id" type="int">
+      <column name="ID"/>
+      <generator class="identity"/>
+    </id>
+    <property name="ora" type="string">
+      <column length="100" name="ORA" not-null="true"/>
+    </property>
+    <property name="pret" type="int">
+      <column length="100" name="PRET" not-null="true"/>
+    </property>
+        <property name="idSpectacol" type="int">
+      <column length="100" name="ID_SPECTACOL" not-null="true"/>
+    </property>
+    <many-to-one name="spectacol" class="dvdrental.Spectacol" insert="false" update="false" fetch="select">
+            <column name="ID_SPECTACOL" not-null="true"  />
+        </many-to-one>
+    <set name="bilete" table="bilete" inverse="true" lazy="false" fetch="select">
+        <key>
+                <column name="ID_ORE_SPECTACOLE" not-null="true" />
+            </key>
+            <one-to-many class="dvdrental.Bilet" />
+            </set>
+  </class>
+</hibernate-mapping>

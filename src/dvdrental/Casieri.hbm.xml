@@ -5,7 +5,7 @@
   <class name="dvdrental.Casier" optimistic-lock="version" schema="FANA" table="CASIERI">
     <id name="id" type="int">
       <column name="ID"/>
-      <generator class="assigned"/>
+      <generator class="identity"/>
     </id>
     <property name="nume" type="string">
       <column length="100" name="NUME" not-null="true"/>

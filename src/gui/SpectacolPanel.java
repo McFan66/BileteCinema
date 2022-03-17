@@ -14,7 +14,6 @@ import java.util.Calendar;
 import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
-import models.SpectacolB;
 
 /**
  *
@@ -41,9 +40,8 @@ public class SpectacolPanel extends javax.swing.JPanel implements ListCellRender
         lblNume = new javax.swing.JLabel();
         lblTip = new javax.swing.JLabel();
         lblData = new javax.swing.JLabel();
-        lblPret = new javax.swing.JLabel();
         lblImagine = new javax.swing.JLabel();
-        lblOra = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -62,10 +60,6 @@ public class SpectacolPanel extends javax.swing.JPanel implements ListCellRender
         lblData.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblData.setText("Data: Data Spectacol");
 
-        lblPret.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        lblPret.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblPret.setText("Pret: 000 RON");
-
         lblImagine.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/no-image-icon.png"))); // NOI18N
         lblImagine.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblImagine.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -74,8 +68,12 @@ public class SpectacolPanel extends javax.swing.JPanel implements ListCellRender
             }
         });
 
-        lblOra.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblOra.setText("Ora:");
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -87,31 +85,27 @@ public class SpectacolPanel extends javax.swing.JPanel implements ListCellRender
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblNume, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblTip, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
-                    .addComponent(lblPret, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lblData, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblOra, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addComponent(lblTip, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblData, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblImagine, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblNume, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblTip, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblOra, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblPret, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblData, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblImagine, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -119,14 +113,18 @@ public class SpectacolPanel extends javax.swing.JPanel implements ListCellRender
     private void lblImagineMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImagineMousePressed
 
     }//GEN-LAST:event_lblImagineMousePressed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
     public void setSpectacol(Spectacol spectacol) {
         if (spectacol != null) {
             lblNume.setText(spectacol.getTitlu());
             lblTip.setText(String.format("Tipul: %s", spectacol.getTipul()));
-            lblPret.setText(String.format("Pret: %s RON", String.valueOf(spectacol.getPret())));
+//           lblPret.setText(String.format("Pret: %s RON", String.valueOf(spectacol.getPret())));
             DateFormat formatterData = new SimpleDateFormat("dd.MM.yyyy");
             DateFormat formatterOra = new SimpleDateFormat("HH:mm");
-            lblOra.setText(String.format("Ora: %s", formatterOra.format(spectacol.getData())));
+        //    lblOra.setText(String.format("Ora: %s", formatterOra.format(spectacol.getData())));
             Calendar c = Calendar.getInstance();
             c.setTime(spectacol.getData());
             c.add(Calendar.DAY_OF_MONTH, spectacol.getDurata());
@@ -158,11 +156,10 @@ public class SpectacolPanel extends javax.swing.JPanel implements ListCellRender
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel lblData;
     private javax.swing.JLabel lblImagine;
     private javax.swing.JLabel lblNume;
-    private javax.swing.JLabel lblOra;
-    private javax.swing.JLabel lblPret;
     private javax.swing.JLabel lblTip;
     // End of variables declaration//GEN-END:variables
 }

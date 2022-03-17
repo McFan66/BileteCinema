@@ -5,9 +5,11 @@
  */
 package gui;
 
+import controllers.CasierController;
 import dvdrental.Casier;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import models.CasierB;
 import services.CasierService;
@@ -24,6 +26,7 @@ public class FrmAdministrareCasieri extends javax.swing.JDialog implements FrmAd
     private DefaultTableModel defaultTableModel;
     private String[] columnNames = new String[]{"Nume Complet", "Cod Operator"};
     private String[][] data;
+    private CasierController casierController;
 
     /**
      * Creates new form FrmAdministrareCasieri
@@ -46,6 +49,9 @@ public class FrmAdministrareCasieri extends javax.swing.JDialog implements FrmAd
         setTitle("Administrare Casieri");
     }
 
+    public JTable getTblCasieri() {
+        return tblCasieri;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -131,14 +137,18 @@ public class FrmAdministrareCasieri extends javax.swing.JDialog implements FrmAd
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAdaugaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdaugaActionPerformed
-        FrmAddCasier addCasier = new FrmAddCasier(FrmAdministrareCasieri.this, true);
-        addCasier.setOnCasierSaved(this);
-        addCasier.setLocationRelativeTo(this);
-        addCasier.setVisible(true);
+//        FrmAddCasier addCasier = new FrmAddCasier(FrmAdministrareCasieri.this, true);
+//        addCasier.setOnCasierSaved(this);
+//        addCasier.setLocationRelativeTo(this);
+//        addCasier.setVisible(true);
+        CasierController casierController = new CasierController();
+        casierController.actionCreate(this);
     }//GEN-LAST:event_btnAdaugaActionPerformed
 
     private void btnEditeazaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditeazaActionPerformed
-        int index = tblCasieri.convertRowIndexToModel(tblCasieri.getSelectedRow());
+        CasierController casierController = new CasierController();
+        casierController.actionEdit(this);
+        /*int index = tblCasieri.convertRowIndexToModel(tblCasieri.getSelectedRow());
         if (index == -1) {
             JOptionPane.showMessageDialog(this, "Va rugam selectati un casier.");
             return;
@@ -148,11 +158,13 @@ public class FrmAdministrareCasieri extends javax.swing.JDialog implements FrmAd
         addCasier.setOnCasierSaved(this);
         addCasier.setLocationRelativeTo(this);
         addCasier.setTitle("Editeaza Casier");
-        addCasier.setVisible(true);
+        addCasier.setVisible(true);*/
     }//GEN-LAST:event_btnEditeazaActionPerformed
 
     private void btnStergeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStergeActionPerformed
-        int index = tblCasieri.convertRowIndexToModel(tblCasieri.getSelectedRow());
+        casierController = new CasierController();
+        casierController.actionRemove();
+        /*  int index = tblCasieri.convertRowIndexToModel(tblCasieri.getSelectedRow());
         if (index == -1) {
             JOptionPane.showMessageDialog(this, "Va rugam selectati un casier.");
             return;
@@ -171,7 +183,7 @@ public class FrmAdministrareCasieri extends javax.swing.JDialog implements FrmAd
                 x++;
             }
             defaultTableModel.setDataVector(data, columnNames);
-        }
+        }*/
     }//GEN-LAST:event_btnStergeActionPerformed
 
     /**
@@ -243,4 +255,9 @@ public class FrmAdministrareCasieri extends javax.swing.JDialog implements FrmAd
         }
         defaultTableModel.setDataVector(data, columnNames);
     }
+
+    public void setCasierController(CasierController casierController) {
+        this.casierController = casierController;
+    }
+    
 }

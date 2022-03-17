@@ -7,8 +7,6 @@ package services;
 
 import dvdrental.Casier;
 import java.util.ArrayList;
-import models.CasierB;
-import repositories.CasierFileRepository;
 import repositories.CasierHibernateRepository;
 import repositories.CasierRepository;
 import utils.IdUtils;
@@ -18,13 +16,8 @@ import utils.IdUtils;
  * @author Stefan
  */
 public class CasierServiceImpl implements CasierService {
-    private int id=IdUtils.getValueForKey("object.casier");
-    private CasierRepository casierRepository = new CasierHibernateRepository();
+    private final CasierRepository casierRepository = new CasierHibernateRepository();
     
-    @Override
-    public int getLastID() {
-        return id;
-    }
 
     @Override
     public Casier login(String codOperator, String parola) {
@@ -33,14 +26,6 @@ public class CasierServiceImpl implements CasierService {
 
     @Override
     public boolean salveazaCasier(Casier casier) {
-//        if (casier.getId()==0){
-//            casier.setId(++id);
-//        }
-//        if (casierRepository.salveazaCasier(casier)){
-//            IdUtils.addProperty("object.casier", id);
-//            return true;
-//        }
-//        return false;
         return casierRepository.salveazaCasier(casier);
     }
 

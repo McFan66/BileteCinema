@@ -12,8 +12,8 @@ import java.util.Set;
 public class Vanzare  implements java.io.Serializable {
 
 
-     private int id;
-     private int idCasier;
+     private Integer id;
+     private Integer idCasier;
      private Date data;
      private int suma;
   private Set<Bilet> bilete
@@ -21,25 +21,30 @@ public class Vanzare  implements java.io.Serializable {
     public Vanzare() {
     }
 
-    public  Vanzare(int id, int idCasier, Date data, int suma) {
+    public  Vanzare(Integer id,  Integer idCasier, Date data, int suma) {
        this.id = id;
        this.idCasier = idCasier;
        this.data = data;
        this.suma = suma;
     }
+    
+    public Vanzare(Date data, int suma){
+        this.data = data;
+        this.suma = suma;
+    }
    
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
     
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
-    public int getIdCasier() {
+    public Integer getIdCasier() {
         return this.idCasier;
     }
     
-    public void setIdCasier(int idCasier) {
+    public void setIdCasier(Integer idCasier) {
         this.idCasier = idCasier;
     }
     public Date getData() {

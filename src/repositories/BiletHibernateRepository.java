@@ -10,8 +10,10 @@ import dvdrental.Spectacol;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projections;
 import utils.HibernateUtil;
 
 /**
@@ -29,16 +31,23 @@ public class BiletHibernateRepository implements BiletRepository {
     @Override
     public boolean adaugaBilet(Bilet bilet) {
 
-        session.getTransaction().begin();
-        if (bilet.getId() > 0) {
+        if (!session.isOpen()) {
+            session = HibernateUtil.getSessionFactory().getCurrentSession();
+        }
+        org.hibernate.Transaction tx = session.beginTransaction();
+        if (bilet.getId() != null && bilet.getId() > 0) {
             session.saveOrUpdate(bilet);
+            tx.commit();
+            return true;
         }
         int id = (int) session.save(bilet);
         bilet.setId(id);
-
-
-        session.getTransaction().commit();
-        return true;
+        if (id > 0) {
+            tx.commit();
+        } else {
+            tx.rollback();
+        }
+        return id > 0;
     }
 
     @Override
@@ -88,6 +97,15 @@ public class BiletHibernateRepository implements BiletRepository {
         Query q = session.createQuery("from Bilete where data between :dataStart and :dataSfarsit").setDate("dataStart", dataStart).setDate("dataSfarsit", dataSfarsit);
         List<Bilet> listaBilete = q.list();
         return listaBilete;
+    }
+
+    @Override
+    public int selectMaxNumarBilet() {
+        Criteria criteria = session
+                .createCriteria(Bilet.class)
+                .setProjection(Projections.max("numarBilet"));
+        Integer maxNumarBilet = (Integer) criteria.uniqueResult();
+        return maxNumarBilet;
     }
 
 }

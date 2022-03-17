@@ -15,7 +15,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
-import models.SpectacolB;
 
 /**
  *
@@ -122,7 +121,7 @@ public class ItemSpectacolListRenderer extends JPanel implements ListCellRendere
          if (spectacol != null) {
             lblNume.setText(spectacol.getTitlu());
             lblTip.setText(String.format("Tipul: %s", spectacol.getTipul()));
-            lblPret.setText(String.format("Pret: %s RON", String.valueOf(spectacol.getPret())));
+          //  lblPret.setText(String.format("Pret: %s RON", String.valueOf(spectacol.getPret())));
             DateFormat formatterData = new SimpleDateFormat("dd.MM.yyyy");
             DateFormat formatterOra = new SimpleDateFormat("HH:mm");
             lblOra.setText(String.format("Ora: %s", formatterOra.format(spectacol.getData())));

@@ -22,17 +22,20 @@
     <property name="durata" type="int">
       <column name="DURATA" not-null="true"/>
     </property>
-    <property name="pret" type="int">
-      <column name="PRET" not-null="true"/>
-    </property>
     <property name="imagePath" type="string">
       <column name="IMAGEPATH" not-null="true"/>
     </property>
-    <set name="bilete" table="bilete" inverse="true" lazy="true" fetch="select">
+    <set name="bilete" table="bilete" inverse="true" lazy="false" fetch="select">
         <key>
                 <column name="ID_SPECTACOL" not-null="true" />
             </key>
             <one-to-many class="dvdrental.Bilet" />
+            </set>
+    <set name="ore" table="ore_spectacole" inverse="true" lazy="false" fetch="select">
+        <key>
+                <column name="ID_SPECTACOL" not-null="true" />
+            </key>
+            <one-to-many class="dvdrental.OraSpectacol" />
             </set>
   </class>
 </hibernate-mapping>

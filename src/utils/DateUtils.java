@@ -5,6 +5,7 @@
  */
 package utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -13,6 +14,11 @@ import java.util.Date;
  * @author Stefan
  */
 public class DateUtils {
+
+    public static String formatDateAsStringByCustomFormat(Date date, String format) {
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(date);
+    }
 
     public static Date getDateWithSpecialHourMinuteSecond(Date date, int hour, int minute, int second) {
         Calendar cal = Calendar.getInstance();
@@ -43,7 +49,7 @@ public class DateUtils {
         cal.set(Calendar.SECOND, second);
         return cal.getTime();
     }
-    
+
     public static boolean testTwoDatesEqual(Date date1, Date date2) {
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
@@ -57,10 +63,10 @@ public class DateUtils {
         cal2.set(Calendar.MINUTE, 0);
         cal2.set(Calendar.SECOND, 0);
         cal2.set(Calendar.MILLISECOND, 0);
-        return cal1.getTime().compareTo(cal2.getTime())==0;
+        return cal1.getTime().compareTo(cal2.getTime()) == 0;
     }
-    
-    public static Date resetYearMonthDayMinuteSecond(Date date1){
+
+    public static Date resetYearMonthDayMinuteSecond(Date date1) {
         Calendar c = Calendar.getInstance();
         c.setTime(date1);
         c.set(Calendar.YEAR, 0);

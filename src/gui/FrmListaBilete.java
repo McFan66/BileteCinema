@@ -6,41 +6,62 @@
 package gui;
 
 import dvdrental.Bilet;
+import dvdrental.Casier;
+import dvdrental.OraSpectacol;
+import dvdrental.Vanzare;
 import java.util.Date;
 import java.util.List;
 import javafx.scene.control.Alert;
 import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import models.AppSingleTone;
 import models.BiletB;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import repositories.BiletHibernateRepository;
+import repositories.BiletRepository;
 import services.BiletService;
 import services.BiletServiceImpl;
+import services.VanzariService;
+import services.VanzariServiceImpl;
+import utils.HibernateUtil;
 
 /**
  *
  * @author Stefan
  */
 public class FrmListaBilete extends javax.swing.JDialog {
-
-    private List<Bilet> listaBilete;
-    private DefaultListModel<Bilet> modelListaBilete=new DefaultListModel<>();
-    private BiletService biletService = BiletServiceImpl.getInstance();
-    private OnBileteVandute onBileteVandute;
     
-    public FrmListaBilete(JDialog parent, boolean modal, List<Bilet> listaBilete) {
+    private List<Bilet> listaBilete;
+    private OraSpectacol oraSpectacol;
+    private DefaultListModel<Bilet> modelListaBilete = new DefaultListModel<>();
+    private BiletService biletService = BiletServiceImpl.getInstance();
+    private VanzariService vanzariService = new VanzariServiceImpl();
+    private OnBileteVandute onBileteVandute;
+    private BiletRepository biletRepository = new BiletHibernateRepository();
+    
+    public FrmListaBilete(JDialog parent, boolean modal, List<Bilet> listaBilete, OraSpectacol oraSpectacol) {
         super(parent, modal);
-        this.listaBilete=listaBilete;
-      
+        this.listaBilete = listaBilete;
+        this.oraSpectacol = oraSpectacol;
+        
+        int numarMaxBilet = biletRepository.selectMaxNumarBilet();
+        
+        for (Bilet b:listaBilete){
+            b.setNumarBilet(numarMaxBilet+1);
+            numarMaxBilet++;
+        }
         
         initComponents();
-        for (int i=0;i<listaBilete.size();i++){
+        for (int i = 0; i < listaBilete.size(); i++) {
             modelListaBilete.addElement(listaBilete.get(i));
-       }
+        }
         System.out.println(modelListaBilete.size());
         jList1.setModel(modelListaBilete);
         
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -50,26 +71,26 @@ public class FrmListaBilete extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        itemBiletListRenderer1 = new renderer.ItemBiletListRenderer();
+        itemBiletListRenderer2 = new renderer.ItemBiletListRenderer();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
-        javax.swing.GroupLayout itemBiletListRenderer1Layout = new javax.swing.GroupLayout(itemBiletListRenderer1);
-        itemBiletListRenderer1.setLayout(itemBiletListRenderer1Layout);
-        itemBiletListRenderer1Layout.setHorizontalGroup(
-            itemBiletListRenderer1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout itemBiletListRenderer2Layout = new javax.swing.GroupLayout(itemBiletListRenderer2);
+        itemBiletListRenderer2.setLayout(itemBiletListRenderer2Layout);
+        itemBiletListRenderer2Layout.setHorizontalGroup(
+            itemBiletListRenderer2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        itemBiletListRenderer1Layout.setVerticalGroup(
-            itemBiletListRenderer1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        itemBiletListRenderer2Layout.setVerticalGroup(
+            itemBiletListRenderer2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jList1.setCellRenderer(itemBiletListRenderer1);
+        jList1.setCellRenderer(itemBiletListRenderer2);
         jList1.setLayoutOrientation(javax.swing.JList.HORIZONTAL_WRAP);
         jList1.setVisibleRowCount(1);
         jScrollPane1.setViewportView(jList1);
@@ -110,28 +131,51 @@ public class FrmListaBilete extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        for (Bilet b:listaBilete){
-            b.setData(new Date());
-            biletService.salveazaBilet(b);
-            
+        Session session = null;
+        Transaction tx = null;
+        
+        try {
+            int pret = listaBilete.size() * listaBilete.get(0).getPret();
+            Vanzare v = new Vanzare(new Date(), pret);
+            Casier casierAutentificat = AppSingleTone.getAppSingleToneInstance().getCasierAutentificat();
+            v.setIdCasier(casierAutentificat.getId());
+            session = HibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
+            int id = (int) session.save(v);
+            v.setId(id);
+            for (Bilet b : listaBilete) {
+                b.setVanzare(v);
+                b.setIdVanzare(id);
+                b.setData(new Date());
+                b.setIdOraSpectacol(oraSpectacol.getId());
+                
+                System.out.println("randul si locul " + b.getRand() + b.getLoc());
+                session.save(b);
+            }
+            tx.commit();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            tx.rollback();
         }
+        
         this.setVisible(false);
         JOptionPane.showMessageDialog(this, "Biletele au fost vandute cu succes", "Confirmare vanzare", JOptionPane.INFORMATION_MESSAGE);
         onBileteVandute.saveBilete();
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
     public interface OnBileteVandute {
-        void saveBilete ();
+        
+        void saveBilete();
     }
     
-    public void setOnBileteVandute(OnBileteVandute onBileteVandute){
-        this.onBileteVandute=onBileteVandute;
+    public void setOnBileteVandute(OnBileteVandute onBileteVandute) {
+        this.onBileteVandute = onBileteVandute;
     }
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private renderer.ItemBiletListRenderer itemBiletListRenderer1;
+    private renderer.ItemBiletListRenderer itemBiletListRenderer2;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JList<dvdrental.Bilet> jList1;

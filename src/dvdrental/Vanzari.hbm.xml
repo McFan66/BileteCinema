@@ -3,10 +3,10 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated Aug 12, 2021 5:58:15 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-    <class name="dvdrental.Vanzare" table="VANZARI" schema="FANA">
+    <class name="dvdrental.Vanzare" table="VANZARI" schema="FANA" optimistic-lock="version">
         <id name="id" type="int">
             <column name="ID" />
-            <generator class="assigned"/>
+            <generator class="identity"/>
         </id>
         <property name="idCasier" type="int">
             <column name="ID_CASIER" not-null="true" />

@@ -5,32 +5,56 @@
  */
 package gui;
 
+import dvdrental.Bilet;
+import dvdrental.OraSpectacol;
 import dvdrental.Spectacol;
 import java.awt.Image;
 import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import models.SpectacolB;
+import javax.swing.table.DefaultTableModel;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import services.BiletService;
+import services.BiletServiceImpl;
+import services.OraSpectacolService;
+import services.OraSpectacolServiceImpl;
 import services.SpectacoleService;
 import services.SpectacoleServiceImpl;
+import utils.DateUtils;
+import utils.HibernateUtil;
 
 /**
  *
  * @author Stefan
  */
-public class FrmAddSpectacol extends javax.swing.JDialog {
-    
+public class FrmAddSpectacol extends javax.swing.JDialog implements FrmAdaugaOre.OnOraSiPretSaved {
+
     private SpectacoleService spectacoleService = SpectacoleServiceImpl.getInstance();
     private Spectacol spectacolSelectat;
     private OnSpectacolSaved onSpectacolSaved;
-    private FileNameExtensionFilter filter=new FileNameExtensionFilter("gege", "jpg", "jpeg", "png");
+    private FileNameExtensionFilter filter = new FileNameExtensionFilter("gege", "jpg", "jpeg", "png");
     private String imagePath;
+    private List<OraSpectacol> oraSpectacole = new ArrayList<>();
+    private DefaultTableModel defaultTableModel;
+    private OraSpectacolService oraSpectacolService = new OraSpectacolServiceImpl();
+    private BiletService biletService = BiletServiceImpl.getInstance();
 
     /**
      * Creates new form FrmAddSpectacol
@@ -38,40 +62,60 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
     public FrmAddSpectacol(javax.swing.JDialog parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        JSpinner.DateEditor de = new JSpinner.DateEditor(jSpinner1, "HH:mm");
-        de.getTextField().setEditable(false);
-        jSpinner1.setEditor(de);
+
+        dateOreTableModels2.setDate(oraSpectacole);
+//        JSpinner.DateEditor de = new JSpinner.DateEditor(jSpinner1, "HH:mm");
+//        de.getTextField().setEditable(false);
+//        jSpinner1.setEditor(de);
+        //  = new DefaultTableModel(dateTabel, columnNames);
+        Calendar ctest = Calendar.getInstance();
+        jDateChooser1.setMinSelectableDate(ctest.getTime());
         setTitle("Adauga spectacol");
-        File currentDir=new File(".");
-        File pictures=new File(currentDir, "pictures");
-        if(!pictures.exists()){
+        File currentDir = new File(".");
+        File pictures = new File(currentDir, "pictures");
+        if (!pictures.exists()) {
             pictures.mkdir();
         }
-        imagePath=pictures.getAbsolutePath().substring(0,pictures.getAbsolutePath().length()-10)+"pictures"+(char)(92)+"noImageSelected.png";
-        
+        // imagePath = pictures.getAbsolutePath().substring(0, pictures.getAbsolutePath().length() - 10) + "pictures" + (char) (92) + "noImageSelected.png";
+
         System.out.println(imagePath);
     }
+
+    public JTextField getTxtNumeSpectacol() {
+        return txtNumeSpectacol;
+    }
     
+    
+
     public FrmAddSpectacol(JDialog parent, boolean modal, Spectacol spectacol) {
+
         super(parent, modal);
         initComponents();
+
+        dateOreTableModels2.setDate(oraSpectacole);
         this.spectacolSelectat = spectacol;
         txtNumeSpectacol.setText(spectacolSelectat.getTitlu());
         txtDescriere.setText(spectacolSelectat.getDescriere());
         cmbTipSpectacol.setSelectedItem(spectacolSelectat.getTipul());
         jDateChooser1.setDate(spectacolSelectat.getData());
-        jSpinner1.setValue(spectacolSelectat.getData());
-        spnPret.setValue(spectacolSelectat.getPret());
+        Calendar ctest = Calendar.getInstance();
+
+//        jSpinner1.setValue(spectacolSelectat.getData());
+//        spnPret.setValue(spectacolSelectat.getPret());
         spnDurata.setValue(spectacolSelectat.getDurata());
-        ImageIcon icon=new ImageIcon(spectacolSelectat.getImagePath());
+        ImageIcon icon = new ImageIcon(spectacolSelectat.getImagePath());
         Image image = icon.getImage();
         Image imagineNoua = image.getScaledInstance(lblImage.getWidth(), lblImage.getHeight(), java.awt.Image.SCALE_SMOOTH);
         lblImage.setIcon(new ImageIcon(imagineNoua));
-        JSpinner.DateEditor de = new JSpinner.DateEditor(jSpinner1, "HH:mm");
-        de.getTextField().setEditable(false);
-        jSpinner1.setEditor(de);
+//        JSpinner.DateEditor de = new JSpinner.DateEditor(jSpinner1, "HH:mm");
+//        de.getTextField().setEditable(false);
+//        jSpinner1.setEditor(de);
         setTitle("Editeaza spectacol");
-        
+        //List<OraSpectacol> listaOraSpectacol = (List<OraSpectacol>) spectacolSelectat.getOre();
+
+        List<OraSpectacol> listaOraSpectacole = new ArrayList<>(spectacolSelectat.getOre());
+        dateOreTableModels2.setDate(listaOraSpectacole);
+        tblOraPret.setModel(dateOreTableModels2);
     }
 
     /**
@@ -84,23 +128,25 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
     private void initComponents() {
 
         fileChooser = new javax.swing.JFileChooser();
+        dateOreTableModels2 = new tablemodels.DateOreTableModels();
         lblNumeSpectacol = new javax.swing.JLabel();
         txtNumeSpectacol = new javax.swing.JTextField();
         lblTipulSpectacol = new javax.swing.JLabel();
         lblData = new javax.swing.JLabel();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
-        lblPret = new javax.swing.JLabel();
-        lblOra = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
         btnSalvare = new javax.swing.JButton();
         cmbTipSpectacol = new javax.swing.JComboBox<>();
-        spnPret = new javax.swing.JSpinner();
         lblDescriereSpectacol = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtDescriere = new javax.swing.JTextArea();
         spnDurata = new javax.swing.JSpinner();
         lblDurata = new javax.swing.JLabel();
         lblImage = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblOraPret = new javax.swing.JTable();
+        btnAdauga = new javax.swing.JButton();
+        btnEditeaza = new javax.swing.JButton();
+        btnSterge = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -112,12 +158,6 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
 
         jDateChooser1.setDateFormatString("dd.MM.yyyy");
 
-        lblPret.setText("Pret:");
-
-        lblOra.setText("Ora:");
-
-        jSpinner1.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.MINUTE));
-
         btnSalvare.setText("Salveaza");
         btnSalvare.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -126,8 +166,6 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
         });
 
         cmbTipSpectacol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Film", "Scena de teatru", "Spectacol" }));
-
-        spnPret.setModel(new javax.swing.SpinnerNumberModel());
 
         lblDescriereSpectacol.setText("Descriere Spectacol:");
 
@@ -146,54 +184,78 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
             }
         });
 
+        tblOraPret.setModel(dateOreTableModels2);
+        jScrollPane2.setViewportView(tblOraPret);
+
+        btnAdauga.setText("Adauga");
+        btnAdauga.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdaugaActionPerformed(evt);
+            }
+        });
+
+        btnEditeaza.setText("Editeaza");
+        btnEditeaza.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditeazaActionPerformed(evt);
+            }
+        });
+
+        btnSterge.setText("Sterge");
+        btnSterge.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStergeActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblNumeSpectacol, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblDescriereSpectacol, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblTipulSpectacol, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblData, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblPret, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
-                                    .addComponent(spnPret))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
-                                        .addComponent(lblOra))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(lblDurata)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jSpinner1)
-                                    .addComponent(spnDurata)))
-                            .addComponent(cmbTipSpectacol, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtNumeSpectacol)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnSalvare, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnAdauga, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnEditeaza, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSterge, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblNumeSpectacol, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblDescriereSpectacol, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblTipulSpectacol, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblData, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+                        .addGap(20, 20, 20)
+                        .addComponent(lblDurata)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(spnDurata))
+                    .addComponent(cmbTipSpectacol, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtNumeSpectacol)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(13, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSalvare, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(lblNumeSpectacol)
@@ -203,7 +265,7 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
                             .addComponent(lblDescriereSpectacol)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(lblTipulSpectacol)
                     .addComponent(cmbTipSpectacol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -211,17 +273,18 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(lblData)
                     .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblOra)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(spnDurata, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblDurata)
-                    .addComponent(spnPret, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblPret))
-                .addGap(8, 8, 8)
+                    .addComponent(lblDurata))
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAdauga)
+                    .addComponent(btnEditeaza)
+                    .addComponent(btnSterge))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSalvare)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -232,40 +295,103 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
         String tipSpectacol = (String) cmbTipSpectacol.getSelectedItem();
         String descriereSpectacol = txtDescriere.getText();
         Date data = jDateChooser1.getDate();
-        Date ora = (Date) jSpinner1.getValue();
+//        Date ora = (Date) jSpinner1.getValue();
         int durata = (int) spnDurata.getValue();
         Calendar c = Calendar.getInstance();
         Calendar c1 = Calendar.getInstance();
-        c1.setTime(ora);
+//        c1.setTime(ora);
         c.setTime(data);
         c.set(Calendar.HOUR_OF_DAY, c1.get(Calendar.HOUR_OF_DAY));
         c.set(Calendar.MINUTE, c1.get(Calendar.MINUTE));
         Date dataSiOra = c.getTime();
-        int pret = (int) spnPret.getValue();
+//        int pret = (int) spnPret.getValue();
         if (isFormValid()) {
             if (spectacolSelectat == null) {
-                spectacolSelectat = new Spectacol(tipSpectacol, numeSpectacol, dataSiOra, descriereSpectacol, pret, durata);
-                File src = new File(imagePath); 
-                File currentDir=new File(".");
-                File pictures=new File(currentDir, "pictures");
-                if(!pictures.exists()){
+                spectacolSelectat = new Spectacol(tipSpectacol, numeSpectacol, dataSiOra, descriereSpectacol, durata);
+                if (imagePath == null) {
+                    try {
+                        File resourcesFolder = new File(getClass().getResource("/resources").toURI());
+                        imagePath = resourcesFolder.getCanonicalPath() + File.separator + "no-image-icon.png";
+                        System.out.println(imagePath + "salut");
+                    } catch (URISyntaxException ex) {
+                        Logger.getLogger(FrmAddSpectacol.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(FrmAddSpectacol.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                }
+                File src = new File(imagePath);
+                File currentDir = new File(".");
+                File pictures = new File(currentDir, "pictures");
+                if (!pictures.exists()) {
                     pictures.mkdir();
                 }
-                String ext=imagePath.substring(imagePath.lastIndexOf("."));
-                File dst = new File(pictures,String.format("%s%s", String.valueOf(((int)(Math.random()*10000))),ext)); 
-                src.renameTo(dst); 
+                String ext = imagePath.substring(imagePath.lastIndexOf("."));
+                File dst = new File(pictures, String.format("%s%s", String.valueOf(((int) (Math.random() * 10000))), ext));
+                src.renameTo(dst);
                 spectacolSelectat.setImagePath(dst.getPath());
+                Session session = null;
+                Transaction tx = null;
+
+                try {
+                    session = HibernateUtil.getSessionFactory().openSession();
+                    tx = session.beginTransaction();
+                    int idS = (int) session.save(spectacolSelectat);
+                    spectacolSelectat.setId(idS);
+                    System.out.println("idul spectacolului este " + idS);
+//                for (int i=0;i<tblOraPret.getRowCount();i++){
+//                    OraSpectacol oraSpectacol= new OraSpectacol();                  
+//                    oraSpectacol.setOra(tblOraPret.getValueAt(i, 0).toString());
+//                    oraSpectacol.setPret((int) tblOraPret.getValueAt(i, 1));
+//                    oraSpectacol.setIdSpectacol(idS);
+//                    session.save(oraSpectacol);
+//                }
+                    for (OraSpectacol oraSpectacol : dateOreTableModels2.getDate()) {
+                        oraSpectacol.setSpectacol(spectacolSelectat);
+                        System.out.println(oraSpectacol);
+                        session.save(oraSpectacol);
+                    }
+
+                    tx.commit();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    tx.rollback();
+                }
             } else {
+                imagePath = spectacolSelectat.getImagePath();
                 spectacolSelectat.setDescriere(descriereSpectacol);
                 spectacolSelectat.setTipul(tipSpectacol);
                 spectacolSelectat.setTitlu(numeSpectacol);
                 spectacolSelectat.setData(dataSiOra);
-                spectacolSelectat.setPret(pret);
+//                spectacolSelectat.setPret(pret);
                 spectacolSelectat.setDurata(durata);
                 spectacolSelectat.setImagePath(imagePath);
+                Session session = null;
+                Transaction tx = null;
+
+                try {
+                    session = HibernateUtil.getSessionFactory().openSession();
+                    tx = session.beginTransaction();
+                    session.saveOrUpdate(spectacolSelectat);
+                    // int idS = (int) session.save(spectacolSelectat);
+                    // spectacolSelectat.setId(idS);
+                    //  System.out.println("idul spectacolului este " + idS);
+//                for (int i=0;i<tblOraPret.getRowCount();i++){
+//                    OraSpectacol oraSpectacol= new OraSpectacol();                  
+//                    oraSpectacol.setOra(tblOraPret.getValueAt(i, 0).toString());
+//                    oraSpectacol.setPret((int) tblOraPret.getValueAt(i, 1));
+//                    oraSpectacol.setIdSpectacol(idS);
+//                    session.save(oraSpectacol);
+//                }
+
+                    tx.commit();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    tx.rollback();
+                }
             }
             onSpectacolSaved.saveSpectacol(spectacolSelectat);
-            spectacoleService.salveazaSpectacol(spectacolSelectat);
+
             JOptionPane.showMessageDialog(this, "Spectacolul a fost salvat cu succes!");
             dispose();
         }
@@ -274,16 +400,45 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
 
     private void lblImageMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMousePressed
         fileChooser.setFileFilter(filter);
-        int returnVal = fileChooser.showOpenDialog(spnPret);
-        if (returnVal == JFileChooser.APPROVE_OPTION){
-            ImageIcon icon=new ImageIcon(fileChooser.getSelectedFile().getAbsolutePath());
+        int returnVal = fileChooser.showOpenDialog(btnAdauga);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            ImageIcon icon = new ImageIcon(fileChooser.getSelectedFile().getAbsolutePath());
             Image image = icon.getImage();
             Image imagineNoua = image.getScaledInstance(lblImage.getWidth(), lblImage.getHeight(), java.awt.Image.SCALE_SMOOTH);
             lblImage.setIcon(new ImageIcon(imagineNoua));
-            imagePath=fileChooser.getSelectedFile().getAbsolutePath();
+            imagePath = fileChooser.getSelectedFile().getAbsolutePath();
         }
     }//GEN-LAST:event_lblImageMousePressed
-    
+
+    private void btnAdaugaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdaugaActionPerformed
+        FrmAdaugaOre frmAdaugaOre = new FrmAdaugaOre(this, true);
+        frmAdaugaOre.setOnOraSiPretSaved(this);
+        frmAdaugaOre.setLocationRelativeTo(this);
+        frmAdaugaOre.setVisible(true);
+
+    }//GEN-LAST:event_btnAdaugaActionPerformed
+
+    private void btnStergeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStergeActionPerformed
+        oraSpectacole.remove(tblOraPret.getSelectedRow());
+        dateOreTableModels2.fireTableDataChanged();
+    }//GEN-LAST:event_btnStergeActionPerformed
+
+    private void btnEditeazaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditeazaActionPerformed
+        String dataSelectata = oraSpectacole.get(tblOraPret.getSelectedRow()).getOra();
+        int pretSelectat = oraSpectacole.get(tblOraPret.getSelectedRow()).getPret();
+        oraSpectacole.remove(tblOraPret.getSelectedRow());
+
+        try {
+            FrmAdaugaOre frmAdaugaOre = new FrmAdaugaOre(this, true, dataSelectata, pretSelectat);
+            frmAdaugaOre.setOnOraSiPretSaved(this);
+            frmAdaugaOre.setLocationRelativeTo(this);
+            frmAdaugaOre.setVisible(true);
+            dateOreTableModels2.fireTableDataChanged();
+        } catch (ParseException ex) {
+            Logger.getLogger(FrmAddSpectacol.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnEditeazaActionPerformed
+
     private boolean isFormValid() {
         if (txtNumeSpectacol.getText().trim().length() < 3) {
             JOptionPane.showMessageDialog(this, "Numele spectacolului trebuie sa contina minim 3 caractere!");
@@ -295,42 +450,54 @@ public class FrmAddSpectacol extends javax.swing.JDialog {
             txtDescriere.requestFocusInWindow();
             return false;
         }
-        if ((int) spnPret.getValue() == 0) {
-            JOptionPane.showMessageDialog(this, "Trebuie sa selectati un pret!");
-            spnPret.requestFocusInWindow();
-            return true;
-        }
-        
+//        if ((int) spnPret.getValue() == 0) {
+//            JOptionPane.showMessageDialog(this, "Trebuie sa selectati un pret!");
+//            spnPret.requestFocusInWindow();
+//            return true;
+//        }
+
         return true;
     }
-    
+
+    @Override
+    public void saveOraSiPret(Date ora, int pret) {
+        OraSpectacol oraSpectacol = new OraSpectacol();
+        oraSpectacol.setOra(DateUtils.formatDateAsStringByCustomFormat(ora, "HH:mm"));
+        oraSpectacol.setPret(pret);
+        oraSpectacole.add(oraSpectacol);
+        dateOreTableModels2.fireTableDataChanged();
+
+    }
+
     public interface OnSpectacolSaved {
-        
+
         void saveSpectacol(Spectacol s);
     }
-    
+
     public void setOnSpectacolSaved(OnSpectacolSaved onSpectacolSaved) {
         this.onSpectacolSaved = onSpectacolSaved;
     }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdauga;
+    private javax.swing.JButton btnEditeaza;
     private javax.swing.JButton btnSalvare;
+    private javax.swing.JButton btnSterge;
     private javax.swing.JComboBox<String> cmbTipSpectacol;
+    private tablemodels.DateOreTableModels dateOreTableModels2;
     private javax.swing.JFileChooser fileChooser;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblData;
     private javax.swing.JLabel lblDescriereSpectacol;
     private javax.swing.JLabel lblDurata;
     private javax.swing.JLabel lblImage;
     private javax.swing.JLabel lblNumeSpectacol;
-    private javax.swing.JLabel lblOra;
-    private javax.swing.JLabel lblPret;
     private javax.swing.JLabel lblTipulSpectacol;
     private javax.swing.JSpinner spnDurata;
-    private javax.swing.JSpinner spnPret;
+    private javax.swing.JTable tblOraPret;
     private javax.swing.JTextArea txtDescriere;
     private javax.swing.JTextField txtNumeSpectacol;
     // End of variables declaration//GEN-END:variables

@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 import javax.swing.JRootPane;
 import models.CasierB;
 import models.MatriceSerializabila;
-import models.Vanzare;
+import models.VanzareB;
 import repositories.CasierFileRepository;
 
 /**

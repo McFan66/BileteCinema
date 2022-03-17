@@ -8,26 +8,48 @@ package gui;
 import dvdrental.Bilet;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import models.BiletB;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
+import org.hibernate.Session;
+import org.hibernate.internal.SessionImpl;
 import services.BiletServiceImpl;
 import threads.FanaRunnable;
+import utils.HibernateUtil;
 import utils.HtmlUtils;
 
 /**
@@ -38,14 +60,14 @@ public class FrmRaport extends javax.swing.JDialog {
 
     private BiletServiceImpl biletService = BiletServiceImpl.getInstance();
     private FanaRunnable fanaRunnable;
-    private FrmLoadingRaport frmLoadingRaport=new FrmLoadingRaport(this, true);
+    private FrmLoadingRaport frmLoadingRaport = new FrmLoadingRaport(this, true);
 
     public FrmRaport(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         Calendar c = Calendar.getInstance();
         //dateChooserDataSfarsit.setMaxSelectableDate(c.getTime());
-       // dateChooserDataInceput.setMaxSelectableDate(c.getTime());
+        // dateChooserDataInceput.setMaxSelectableDate(c.getTime());
         dateChooserDataSfarsit.setDate(c.getTime());
         c.add(Calendar.DAY_OF_MONTH, -30);
         dateChooserDataInceput.setDate(c.getTime());
@@ -70,7 +92,7 @@ public class FrmRaport extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        cmbTip.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Raport vanzari in perioada" }));
+        cmbTip.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Raport spectacole in perioada", "Raport vanzari casieri in perioada", "Raport incasari in perioada" }));
 
         lblTipRaport.setText("Tipul raportului:");
 
@@ -136,35 +158,112 @@ public class FrmRaport extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGenereazaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenereazaActionPerformed
-        final Date dataInceput = dateChooserDataInceput.getDate();
-        final Date dataSfarsit = dateChooserDataSfarsit.getDate();
-        StringBuilder sb = new StringBuilder();
-        try {
-            Scanner s = new Scanner(new File("src/resources/template1.html"));
-            while (s.hasNextLine()) {
-                sb.append(s.nextLine()).append("\n");
-            }
-            s.close();
-            if (dataInceput == null || dataSfarsit == null) {
-                JOptionPane.showMessageDialog(this, "Trebuie sa selectati datele pentru raport!");
-            } else {
+//        final Date dataInceput = dateChooserDataInceput.getDate();
+//        final Date dataSfarsit = dateChooserDataSfarsit.getDate();
+//        StringBuilder sb = new StringBuilder();
+//        try {
+//            Scanner s = new Scanner(new File("src/resources/template1.html"));
+//            while (s.hasNextLine()) {
+//                sb.append(s.nextLine()).append("\n");
+//            }
+//            s.close();
+//            if (dataInceput == null || dataSfarsit == null) {
+//                JOptionPane.showMessageDialog(this, "Trebuie sa selectati datele pentru raport!");
+//            } else {
+//
+////                frmLoadingRaport = new FrmLoadingRaport(FrmRaport.this, true);
+////                frmLoadingRaport.setLocationRelativeTo(this);
+////                frmLoadingRaport.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+//                //frmLoadingRaport.setModal(false);
+//                //doWork(dataInceput, dataSfarsit, sb);//
+//                doWork(dataInceput, dataSfarsit, sb);
+//            }
+//        } catch (FileNotFoundException ex) {
+//            Logger.getLogger(FrmRaport.class.getName()).log(Level.SEVERE, null, ex);
+//
+//        }
 
-//                frmLoadingRaport = new FrmLoadingRaport(FrmRaport.this, true);
-//                frmLoadingRaport.setLocationRelativeTo(this);
-//                frmLoadingRaport.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-
-                //frmLoadingRaport.setModal(false);
-                //doWork(dataInceput, dataSfarsit, sb);//
-                doWork(dataInceput, dataSfarsit, sb);
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(FrmRaport.class.getName()).log(Level.SEVERE, null, ex);
-
-        }
-
-
+     //   try {
+            frmLoadingRaport = new FrmLoadingRaport(FrmRaport.this, true);
+            frmLoadingRaport.setLocationRelativeTo(this);
+            frmLoadingRaport.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+            doWorkBun();
+            
+//            Session session = HibernateUtil.getSessionFactory().openSession();
+//            if (!session.isOpen()) {
+//                session = HibernateUtil.getSessionFactory().getCurrentSession();
+//            }
+//            SessionImpl sessionConn = (SessionImpl) session;
+//            Connection connection = sessionConn.connection();
+//            Map<String, Object> parameters = new HashMap<String, Object>();
+//            parameters.put("dataInceput", new java.sql.Date(dateChooserDataInceput.getDate().getTime()));
+//            parameters.put("dataSfarsit", new java.sql.Date(dateChooserDataSfarsit.getDate().getTime()));
+//            File reportFolder = new File(getClass().getResource("/rapoarte").toURI());
+//            File imageFolder=new File(getClass().getResource("/resources").toURI());
+//            Path path = FileSystems.getDefault().getPath("").toAbsolutePath();
+//
+//
+//          //  System.out.println(reportFolder.getCanonicalPath());
+//            parameters.put("SUBREPORT_DIR", reportFolder.getCanonicalPath() + File.separator);
+//            parameters.put("logo_sus", imageFolder.getCanonicalPath() + File.separator+"logocinema.png");
+//            parameters.put("IMAGES_DIR", path.toString());
+//            
+//
+//            // String path =getClass().getResourceAsStream("/jrxml/employeesList.jrxml");
+//            //InputStream input = new FileInputStream(getClass().getResourceAsStream("/jrxml/employeesList.jrxml"));
+//            //InputStream myFile = new FileInputStream("C:\\Users\\Stefan\\JaspersoftWorkspace\\MyReports\\RaportBun1.jrxml");
+//            InputStream myFile = getClass().getResourceAsStream("/rapoarte/RaportBun1.jrxml");
+//            JasperDesign jasperDesign = JRXmlLoader.load(myFile);
+//            // First, compile jrxml file.
+//            JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+//            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);//.fillReport(jasperReport, parameters,new JRBeanCollectionDataSource(ie.test.BeanFactory.getCalcs()));
+//            JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
+//            JDialog raport = new JDialog(this);
+//            raport.setContentPane(jasperViewer.getContentPane());
+//            raport.setSize(jasperViewer.getSize());
+//            raport.setVisible(true);
+//
+//        } catch (JRException ex) {
+//            Logger.getLogger(FrmRaport.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (IOException ex) {
+//            Logger.getLogger(FrmRaport.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (URISyntaxException ex) {
+//            Logger.getLogger(FrmRaport.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }//GEN-LAST:event_btnGenereazaActionPerformed
 
+    private void doWorkBun() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+                    @Override
+                    protected String doInBackground() throws URISyntaxException, IOException, JRException {
+                        //Thread.sleep(5000);
+                        genereazaRaport();
+                        frmLoadingRaport.dispose();
+                        return null;
+                    }
+
+                    @Override
+                    protected void done() {
+                        frmLoadingRaport.dispose();
+                    }
+                };
+                worker.execute();
+                frmLoadingRaport.setLocationRelativeTo(FrmRaport.this);
+                frmLoadingRaport.setVisible(true);
+                System.out.println(frmLoadingRaport.getWidth()+ " " + frmLoadingRaport.getHeight() + " salut");
+                try {
+                    worker.get();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+
+    }
+    
     private void doWork(Date dataInceput, Date dataSfarsit, StringBuilder sb) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -214,7 +313,55 @@ public class FrmRaport extends javax.swing.JDialog {
 //        mySwingWorker.execute();
 //        wait.makeWait("Test", evt);
 //    }
+    
+    private void genereazaRaport() throws URISyntaxException, IOException, JRException{
+        Session session = HibernateUtil.getSessionFactory().openSession();
+            if (!session.isOpen()) {
+                session = HibernateUtil.getSessionFactory().getCurrentSession();
+            }
+            SessionImpl sessionConn = (SessionImpl) session;
+            File tt = new File(".");
+            System.out.println(tt.getAbsolutePath());
+            Connection connection = sessionConn.connection();
+            Map<String, Object> parameters = new HashMap<String, Object>();
+            parameters.put("dataInceput", new java.sql.Date(dateChooserDataInceput.getDate().getTime()));
+            parameters.put("dataSfarsit", new java.sql.Date(dateChooserDataSfarsit.getDate().getTime()));
+            File reportFolder = new File(getClass().getResource("/rapoarte").toURI());
+            File imageFolder=new File(getClass().getResource("/resources").toURI());
+            System.out.println(imageFolder);
+            Path path = FileSystems.getDefault().getPath("").toAbsolutePath();
 
+
+
+            parameters.put("SUBREPORT_DIR", reportFolder.getCanonicalPath() + File.separator);
+            parameters.put("logo_sus", imageFolder.getCanonicalPath() + File.separator+"logocinema.png");
+            parameters.put("IMAGES_DIR", path.toString());
+            
+            InputStream myFile = new InputStream() {
+            @Override
+            public int read() throws IOException {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        };
+            
+            if (cmbTip.getSelectedIndex()==0) {
+                myFile = getClass().getResourceAsStream("/rapoarte/RaportBun1.jrxml");
+            }else if (cmbTip.getSelectedIndex()==1){
+                myFile = getClass().getResourceAsStream("/rapoarte/RaportVanzariCasieri.jrxml");
+            }else 
+                myFile = getClass().getResourceAsStream("/rapoarte/RaportIncasari.jrxml");
+            JasperDesign jasperDesign = JRXmlLoader.load(myFile);
+            // First, compile jrxml file.
+            JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);//.fillReport(jasperReport, parameters,new JRBeanCollectionDataSource(ie.test.BeanFactory.getCalcs()));
+            JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
+            JDialog raport = new JDialog(this);
+            raport.setContentPane(jasperViewer.getContentPane());
+            raport.setSize(jasperViewer.getSize());
+            raport.setVisible(true);
+    }
+    
+    
     private void generateReport(Date dataInceput, Date dataSfarsit, StringBuilder sb) throws IOException {
 
         List<Bilet> listaBilete = biletService.getBileteByData(dataInceput, dataSfarsit);
@@ -226,7 +373,7 @@ public class FrmRaport extends javax.swing.JDialog {
         List<String> listaRanduri = new ArrayList<String>();
         listaRanduri.add(HtmlUtils.createColumn("Numar bilet", true) + HtmlUtils.createColumn("Nume spectacol", true) + HtmlUtils.createColumn("Data vanzarii", true) + HtmlUtils.createColumn("Pret", true));
         for (Bilet b : listaBilete) {
-            listaRanduri.add(HtmlUtils.createColumn(String.valueOf(b.getId()) + HtmlUtils.createColumn(String.valueOf(b.getSpectacol().getId())) + HtmlUtils.createColumn(formatter.format(b.getData())) + HtmlUtils.createColumn(String.valueOf(b.getSpectacol().getPret()))));
+//            listaRanduri.add(HtmlUtils.createColumn(String.valueOf(b.getId()) + HtmlUtils.createColumn(String.valueOf(b.getSpectacol().getId())) + HtmlUtils.createColumn(formatter.format(b.getData())) + HtmlUtils.createColumn(String.valueOf(b.getSpectacol().getPret()))));
         }
 
         String tabel = new String();

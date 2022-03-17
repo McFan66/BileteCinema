@@ -5,8 +5,11 @@
  */
 package gui;
 
+import controllers.CasierController;
 import dvdrental.Casier;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import models.CasierB;
 import services.CasierService;
 import services.CasierServiceImpl;
@@ -20,6 +23,7 @@ public class FrmAddCasier extends javax.swing.JDialog {
     private CasierService casierService = new CasierServiceImpl();
     private Casier casierSelectat;
     private OnCasierSaved onCasierSaved;
+    private CasierController casierController;
 
     /**
      * Creates new form FrmAddCasier
@@ -36,6 +40,22 @@ public class FrmAddCasier extends javax.swing.JDialog {
         txtNume.setText(casier.getNume());
         txtPrenume.setText(casier.getPrenume());
         txtCodOperator.setText(casier.getCodOperator());
+    }
+
+    public JTextField getTxtNume() {
+        return txtNume;
+    }
+
+    public JTextField getTxtPrenume() {
+        return txtPrenume;
+    }
+
+    public JPasswordField getTxtParola() {
+        return txtParola;
+    }
+
+    public JTextField getTxtCodOperator() {
+        return txtCodOperator;
     }
 
     /**
@@ -128,26 +148,27 @@ public class FrmAddCasier extends javax.swing.JDialog {
 
     private void btnSalveazaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalveazaActionPerformed
         // TODO add your handling code here:
-        String nume = txtNume.getText();
-        String prenume = txtPrenume.getText();
-        String numeComplet = String.format("%s %s", nume, prenume);
-        String codOperator = txtCodOperator.getText();
-        String parola = new String(txtParola.getPassword());
-        if (isFormValid()) {
-            if (casierSelectat == null) {
-                casierSelectat = new Casier(nume, prenume, codOperator, parola);
-            } else {
-               
-                casierSelectat.setCodOperator(codOperator);
-                if (!parola.isEmpty()) {
-                    casierSelectat.setParola(parola);
-                }
-            }
-            casierService.salveazaCasier(casierSelectat);
-            onCasierSaved.saveCasier(casierSelectat);
-            dispose();
-
-        }
+//        String nume = txtNume.getText();
+//        String prenume = txtPrenume.getText();
+//        String numeComplet = String.format("%s %s", nume, prenume);
+//        String codOperator = txtCodOperator.getText();
+//        String parola = new String(txtParola.getPassword());
+//        if (isFormValid()) {
+//            if (casierSelectat == null) {
+//                casierSelectat = new Casier(nume, prenume, codOperator, parola);
+//            } else {
+//               
+//                casierSelectat.setCodOperator(codOperator);
+//                if (!parola.isEmpty()) {
+//                    casierSelectat.setParola(parola);
+//                }
+//            }
+//            casierService.salveazaCasier(casierSelectat);
+//            onCasierSaved.saveCasier(casierSelectat);
+//            dispose();
+//
+//        }
+        casierController.saveCasier();
     }//GEN-LAST:event_btnSalveazaActionPerformed
 
     private boolean isFormValid() {
@@ -218,16 +239,20 @@ public class FrmAddCasier extends javax.swing.JDialog {
             }
         });
     }
-    
-    public interface OnCasierSaved{
+
+    public interface OnCasierSaved {
+
         void saveCasier(Casier c);
     }
 
     public void setOnCasierSaved(OnCasierSaved onCasierSaved) {
         this.onCasierSaved = onCasierSaved;
     }
-    
-    
+
+    public void setCasierController(CasierController casierController) {
+        this.casierController = casierController;
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSalveaza;

@@ -42,6 +42,7 @@ public class SplashScreenUndeterminateForm extends javax.swing.JPanel {
         progressBar.setIndeterminate(true);
         progressBar.setUI(new FancyProgressBar());
         progressBar.setBackground(new Color(255, 255, 255));
+        progressBar.setSize(50, 10);
         
 
     }
@@ -51,7 +52,7 @@ public class SplashScreenUndeterminateForm extends javax.swing.JPanel {
         super.paintComponent(gr);
         Graphics2D g = (Graphics2D) gr;
         g.setColor(new Color(255, 255, 255));
-        g.fillRect(0, 0, 400, 285);
+        g.fillRect(0, -20, 200, 185);
 
         try {
             BufferedImage imagine = ImageIO.read(new File("src/resources/SplashScreenLogo.png"));
@@ -69,7 +70,7 @@ public class SplashScreenUndeterminateForm extends javax.swing.JPanel {
             g.drawString("Max", 120, 60);
 
             BufferedImage logo = ImageIO.read(new File("src/resources/logobiletalb.png"));
-            g.drawImage(logo, 92, 39, 25, 31, this);
+            g.drawImage(logo, 95, 39, 25, 31, this);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(SplashScreenForm.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FontFormatException ex) {
@@ -95,14 +96,14 @@ public class SplashScreenUndeterminateForm extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(39, 39, 39)
-                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(135, Short.MAX_VALUE))
+                .addGap(22, 22, 22)
+                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(119, Short.MAX_VALUE)
+                .addContainerGap(112, Short.MAX_VALUE)
                 .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -120,28 +121,29 @@ public class SplashScreenUndeterminateForm extends javax.swing.JPanel {
             g2d.setStroke(new BasicStroke(iStrokWidth));
             g2d.setColor(new Color(0, 0, 0));
 
-            int width = progressBar.getWidth();
-            int height = progressBar.getHeight();
+            int width = 100;//SplashScreenUndeterminateForm.this.getWidth()/6*4;
+            int height = progressBar.getHeight()/2;
 
             Rectangle2D outline = new Rectangle2D.Double(iStrokWidth / 2, iStrokWidth / 2, width - iStrokWidth, height - iStrokWidth);
+            
 
             g2d.draw(outline);
 
             int iInnerHeight = height - (iStrokWidth * 4);
             int iInnerWidth = width - (iStrokWidth * 4);
 
-            double dProgress = progressBar.getPercentComplete();
-            if (dProgress < 0) {
-                dProgress = 0;
-            } else if (dProgress > 1) {
-                dProgress = 1;
-            }
-
-            iInnerWidth = (int) Math.round(iInnerWidth * dProgress);
+//            double dProgress = progressBar.getPercentComplete();
+//            if (dProgress < 0) {
+//                dProgress = 0;
+//            } else if (dProgress > 1) {
+//                dProgress = 1;
+//            }
+//
+//            iInnerWidth = (int) Math.round(iInnerWidth * dProgress);
 
             g2d.setPaint(new Color(0, 0, 0));
 
-            Rectangle2D rect = new Rectangle2D.Double(iStrokWidth * 2, iStrokWidth * 2, iInnerWidth, iInnerHeight);
+            Rectangle2D rect = new Rectangle2D.Double(iStrokWidth * 2, iStrokWidth * 2, 1, iInnerHeight);
 
             g2d.fill(rect);
             g2d.dispose();

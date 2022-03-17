@@ -5,15 +5,14 @@
  */
 package gui;
 
+import dvdrental.Bilet;
 import dvdrental.Spectacol;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.List;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import models.SpectacolB;
 import services.SpectacoleService;
 import services.SpectacoleServiceImpl;
 import utils.TableColumnAdjuster;
@@ -28,7 +27,7 @@ public class FrmAdministrareSpectacole extends javax.swing.JDialog implements Fr
     private SpectacoleService spectacoleService = SpectacoleServiceImpl.getInstance();
     private String[][] data;
     private DefaultTableModel defaultTableModel;
-    private String[] columnNames = new String[]{"Tipul", "Numele spectacolului", "Data", "Ora", "Pretul"};
+    private String[] columnNames = new String[]{"Tipul", "Numele spectacolului", "Data"};
     private final TableColumnAdjuster tca;
 
     /**
@@ -37,7 +36,7 @@ public class FrmAdministrareSpectacole extends javax.swing.JDialog implements Fr
     public FrmAdministrareSpectacole(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         listaSpectacole = (ArrayList<Spectacol>) spectacoleService.getAll();
-        data = new String[listaSpectacole.size()][5];
+        data = new String[listaSpectacole.size()][3];
         int x = 0;
         DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         DateFormat formatter1 = new SimpleDateFormat("HH.mm");
@@ -45,17 +44,17 @@ public class FrmAdministrareSpectacole extends javax.swing.JDialog implements Fr
             data[x][0] = s.getTipul();
             data[x][1] = s.getTitlu();
             data[x][2] = formatter.format(s.getData());
-            data[x][3] = formatter1.format(s.getData());
-            data[x][4] = String.valueOf(s.getPret());
+            //data[x][3] = formatter1.format(s.getData());
+//            data[x][4] = String.valueOf(s.getPret());
             x++;
         }
 
         defaultTableModel = new DefaultTableModel(data, columnNames);
         initComponents();
         tblSpectacole.setModel(defaultTableModel);
-        tblSpectacole.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        //tblSpectacole.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tca = new TableColumnAdjuster(tblSpectacole);
-        refreshTableColumns();
+        // refreshTableColumns();
 
         setTitle("Administrare Spectacole");
     }
@@ -87,17 +86,17 @@ public class FrmAdministrareSpectacole extends javax.swing.JDialog implements Fr
 
         tblSpectacole.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Tipul", "Numele spectacolului", "Data", "Ora", "Pretul"
+                "Tipul", "Numele spectacolului", "Data"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false
+                true, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -139,12 +138,11 @@ public class FrmAdministrareSpectacole extends javax.swing.JDialog implements Fr
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnAdauga)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnEditeaza)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnSterge)))
+                        .addComponent(btnAdauga, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnEditeaza, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(13, 13, 13)
+                        .addComponent(btnSterge, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -177,11 +175,17 @@ public class FrmAdministrareSpectacole extends javax.swing.JDialog implements Fr
             return;
         }
         Spectacol s = listaSpectacole.get(index);
-        FrmAddSpectacol addSpectacol = new FrmAddSpectacol(FrmAdministrareSpectacole.this, true, s);
-        addSpectacol.setOnSpectacolSaved(this);
-        addSpectacol.setLocationRelativeTo(this);
-        addSpectacol.setTitle("Editeaza Spectacol");
-        addSpectacol.setVisible(true);
+        List<Bilet> listaBilete = new ArrayList<Bilet>(s.getBilete());
+        if (listaBilete.isEmpty()) {
+            FrmAddSpectacol addSpectacol = new FrmAddSpectacol(FrmAdministrareSpectacole.this, true, s);
+            addSpectacol.setOnSpectacolSaved(this);
+            addSpectacol.setLocationRelativeTo(this);
+            addSpectacol.setTitle("Editeaza Spectacol");
+            addSpectacol.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Spectacolul nu mai poate fi editat deoarece are deja bilete vandute!");
+            return;
+        }
     }//GEN-LAST:event_btnEditeazaActionPerformed
 
     private void btnStergeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStergeActionPerformed
@@ -203,8 +207,8 @@ public class FrmAdministrareSpectacole extends javax.swing.JDialog implements Fr
                 data[x][0] = s.getTipul();
                 data[x][1] = s.getTitlu();
                 data[x][2] = formatter.format(s.getData());
-                data[x][3] = formatter1.format(s.getData());
-                data[x][4] = String.valueOf(s.getPret());
+                //data[x][3] = formatter1.format(s.getData());
+                // data[x][4] = String.valueOf(s.getPret());
                 x++;
             }
             defaultTableModel.setDataVector(data, columnNames);
@@ -279,7 +283,7 @@ public class FrmAdministrareSpectacole extends javax.swing.JDialog implements Fr
             data[x][1] = s.getTitlu();
             data[x][2] = formatter.format(s.getData());
             data[x][3] = formatter1.format(s.getData());
-            data[x][4] = String.valueOf(s.getPret());
+//            data[x][4] = String.valueOf(s.getPret());
             x++;
         }
         defaultTableModel.setDataVector(data, columnNames);

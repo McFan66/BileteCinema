@@ -24,4 +24,5 @@ public interface BiletRepository {
     public List<Bilet> cautareBiletDupaSpectacol (Spectacol spectacol);
     public List<Bilet> cautareBiletDupaLoc (int rand, int loc);
     public List<Bilet> cautareBiletDupaData (Date dataStart, Date dataSfarsit);
+    public int selectMaxNumarBilet ();
 }

@@ -32,7 +32,8 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-import models.BiletB;
+import repositories.BiletHibernateRepository;
+import repositories.BiletRepository;
 import repositories.SpectacoleFileRepository;
 
 /**
@@ -144,11 +145,13 @@ public class TicketForm extends javax.swing.JPanel {
         g.drawString("RAND", 90, getHeight()-60+20);
         g.drawString("LOC", 90, getHeight()-60+38);
         g.drawString("PRET", 180, getHeight()-60+20);
-        g.drawString(String.valueOf(bilet.getRand()), 132, getHeight()-60+20);
+        g.drawString(String.valueOf(bilet.getRand()+1), 132, getHeight()-60+20);
         g.drawString(String.valueOf(bilet.getLoc()), 123, getHeight()-60+38);
-        g.drawString(String.valueOf(bilet.getSpectacol().getPret()) + " RON", 175, getHeight()-60+38);
+      //  g.drawString(String.valueOf(bilet.getSpectacol().getPret()) + " RON", 175, getHeight()-60+38);
+        g.drawString(String.valueOf(bilet.getOraSpectacol().getPret() + " RON"), 175, getHeight()-60+38);
+      
         g.drawString(sdfData.format(bilet.getSpectacol().getData()), 240, getHeight()-60+20);
-        g.drawString(sdfOra.format(bilet.getSpectacol().getData()), 255, getHeight()-60+38);
+        g.drawString(bilet.getOraSpectacol().getOra(), 255, getHeight()-60+38);
 
         g.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
         g.drawString("BILET INTRARE", 117, 85);
@@ -169,7 +172,7 @@ public class TicketForm extends javax.swing.JPanel {
         affineTransform.rotate(Math.toRadians(-90), 0, 0);
         Font rotatedFont = font.deriveFont(affineTransform);
         g.setFont(rotatedFont);
-        g.drawString(String.format("%010d", bilet.getId()), getWidth()-10-23, getHeight()-20);
+        g.drawString(String.format("%010d", bilet.getNumarBilet()), getWidth()-10-23, getHeight()-20);
         
         
 //        InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream("PottaOne-Regular.");
@@ -269,25 +272,27 @@ public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-              //  createAndShowGUI();
+                createAndShowGUI();
             }
         });
         
         
     }
 
-//    private static void createAndShowGUI() {
-//        JFrame f = new JFrame();
-//        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        SpectacoleFileRepository spectacoleFileRepository = new SpectacoleFileRepository();
-//        Bilet bilet = new Bilet(237, spectacoleFileRepository.getAll().get(1), 5, 7);
-//        f.getContentPane().add(new TicketForm(bilet));
-//        f.setSize(400, 240);
-//        f.setLocationRelativeTo(null);
-//        f.setVisible(true);
-//        f.setResizable(false);
-//
-//    }
+    private static void createAndShowGUI() {
+        JFrame f = new JFrame();
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        SpectacoleFileRepository spectacoleFileRepository = new SpectacoleFileRepository();
+        BiletRepository biletRepository = new BiletHibernateRepository();
+        Bilet bilet = biletRepository.getAll().get(20);
+        
+        f.getContentPane().add(new TicketForm(bilet));
+        f.setSize(400, 240);
+        f.setLocationRelativeTo(null);
+        f.setVisible(true);
+        f.setResizable(false);
+
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

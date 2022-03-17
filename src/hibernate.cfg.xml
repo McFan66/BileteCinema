@@ -50,9 +50,12 @@ Contributor(s):
     <property name="check_nullabilityl">false</property>
     <property name="hibernate.query.factory_class">org.hibernate.hql.internal.classic.ClassicQueryTranslatorFactory</property>
     <property name="hibernate.current_session_context_class">thread</property>
+    <!--<property name="hibernate.enable_lazy_load_no_trans" value="true" />-->
+
     <mapping resource="dvdrental/Casieri.hbm.xml"/>
     <mapping resource="dvdrental/Bilete.hbm.xml"/>
     <mapping resource="dvdrental/Vanzari.hbm.xml"/>
     <mapping resource="dvdrental/Spectacole.hbm.xml"/>
+    <mapping resource="dvdrental/OraSpectacol.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>

@@ -7,10 +7,11 @@ package repositories;
 
 import dvdrental.Casier;
 import dvdrental.Spectacol;
+import dvdrental.Vanzare;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import models.Vanzare;
+import models.VanzareB;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import utils.HibernateUtil;
@@ -29,7 +30,23 @@ public class VanzariHibernateRepository implements VanzariRepository{
     
     @Override
     public boolean adaugaVanzare(Vanzare vanzare) {
-        return false;
+        if (!session.isOpen()) {
+            session = HibernateUtil.getSessionFactory().getCurrentSession();
+        }
+        org.hibernate.Transaction tx = session.beginTransaction();
+        if (vanzare.getId() > 0) {
+            session.saveOrUpdate(vanzare);
+            tx.commit();
+            return true;
+        }
+        int id = (int) session.save(vanzare);
+        vanzare.setId(id);
+        if (id > 0) {
+            tx.commit();
+        } else {
+            tx.rollback();
+        }
+        return id > 0;
     }
 
     @Override

@@ -7,6 +7,7 @@
 package services;
 
 import dvdrental.Bilet;
+import dvdrental.OraSpectacol;
 import dvdrental.Spectacol;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,9 +51,9 @@ public class BiletServiceImpl implements BiletService, Subject {
 
     @Override
     public boolean salveazaBilet(Bilet bilet) {
-        if (bilet.getId() == 0) {
-            bilet.setId(++id);
-        }
+//        if (bilet.getId() == 0) {
+//            bilet.setId(++id);
+//        }
         if (biletRepository.adaugaBilet(bilet)) {
             IdUtils.addProperty("object.bilet", id);
             notifyObservers((ObserverData) bilet);
@@ -111,6 +112,20 @@ public class BiletServiceImpl implements BiletService, Subject {
             }
         }
         return listaNoua;
+        
+//        List<Bilet> listaBilete = new ArrayList<Bilet>();
+//        listaBilete = biletRepository.getAll();
+//        List<Bilet> listaNoua = new ArrayList<Bilet>();
+//        Calendar c1 = Calendar.getInstance();
+//        Calendar c2 = Calendar.getInstance();
+//        c1.setTime(DateUtils.resetYearMonthDayMinuteSecond(oraInceput));
+//        c2.setTime(DateUtils.resetYearMonthDayMinuteSecond(oraFinal));
+//        
+//        for (Bilet b:listaBilete){
+//            if (spectacol.getId() == b.getSpectacol().getId() && )
+//        }
+//        
+//        return listaNoua;
     }
 
     @Override
@@ -143,5 +158,38 @@ public class BiletServiceImpl implements BiletService, Subject {
         }
     }
 
+//    @Override
+//    public List<Bilet> getBileteBySpectacolDataAndOraSpectacol(Spectacol spectacol, Date data, OraSpectacol oraSpectacol) {
+//        System.out.println(oraSpectacol);
+//        List<Bilet> listaBilete  = biletRepository.getAll();
+//        List<Bilet> listaFinala = new ArrayList<Bilet>();
+//        for (Bilet b:listaBilete){
+//             System.out.println("For bilet : \n"+oraSpectacol+"\n"+b.getOraSpectacol()+"\n"oraSpectacol.equals(b.getOraSpectacol()));
+//             System.out.println("------------------------------------------------------------------------------------------------");
+//            if (oraSpectacol.equals(b.getOraSpectacol())){
+//                System.out.println("For bilet : "+b.getOraSpectacol());
+//                listaFinala.add(b);
+//            }
+//        }
+//        System.out.println("Bilete vandute la ora aceia "+listaFinala.size());
+//        return listaFinala;
+//    }
+
+    @Override
+    public List<Bilet> getBiletThisDay() {
+        List<Bilet> listaBilete = biletRepository.getAll();
+        List<Bilet> listaNoua = new ArrayList<Bilet>();
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        for (Bilet b:listaBilete){
+            if (b.getData().compareTo(c.getTime())==0)
+                listaNoua.add(b);
+        }
+        
+        return listaNoua;
+    }
 }
 

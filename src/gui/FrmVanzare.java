@@ -7,6 +7,8 @@ package gui;
 
 import ccomponents.CustomLabel;
 import dvdrental.Bilet;
+import dvdrental.DefaultComboLabel;
+import dvdrental.OraSpectacol;
 import dvdrental.Spectacol;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -25,10 +27,7 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
-import models.BiletB;
 import models.MatriceSerializabila;
-import models.SpectacolB;
-import repositories.SpectacoleFileRepository;
 import repositories.SpectacoleHibernateRepository;
 import repositories.SpectacoleRepository;
 import services.BiletServiceImpl;
@@ -42,9 +41,10 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
     private SpectacoleRepository spectacoleFileRepository = new SpectacoleHibernateRepository();
     private List<Spectacol> listaSpectacole;
     private DefaultComboBoxModel<Spectacol> comboBoxModel = new DefaultComboBoxModel<>();
+    private DefaultComboBoxModel<OraSpectacol> comboBoxModel1 = new DefaultComboBoxModel<>();
     private Spectacol spectacolSelectat;
     private Date dataSelectata;
-    private String oraSelectata;
+    private OraSpectacol oraSelectata;
     private File fisierConfigurareSala = new File("configSala.ser");
     private MatriceSerializabila matriceSerializabila;
     private String Stergema;
@@ -76,11 +76,12 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
             Calendar c = Calendar.getInstance();
             c.setTime(s.getData());
             c.add(Calendar.DAY_OF_MONTH, s.getDurata());
-            if (c.getTime().after(azi)){
+            if (c.getTime().after(azi)) {
                 comboBoxModel.addElement(s);
             }
         }
         cmbSpectacole.setModel(comboBoxModel);
+        cmbOre.setModel(comboBoxModel1);
         chooserDataFilme.getDateEditor().addPropertyChangeListener("date", new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
@@ -105,11 +106,12 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        itemSpectacolRenderer1 = new renderer.ItemSpectacolRenderer();
         itemBiletRenderer1 = new renderer.ItemBiletRenderer();
+        customRenderer2 = new renderer.CustomRenderer();
+        customRenderer1 = new renderer.CustomRenderer();
         cmbSpectacole = new javax.swing.JComboBox<dvdrental.Spectacol>();
         chooserDataFilme = new com.toedter.calendar.JDateChooser();
-        cmbOre = new javax.swing.JComboBox<>();
+        cmbOre = new javax.swing.JComboBox();
         panelAfisare = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
@@ -117,13 +119,16 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
         btnAnuleaza = new javax.swing.JButton();
         lblTotal = new javax.swing.JLabel();
 
-        itemSpectacolRenderer1.setText("itemSpectacolRenderer1");
-
         itemBiletRenderer1.setText("itemBiletRenderer1");
+
+        customRenderer2.setText("customRenderer2");
+
+        customRenderer1.setText("customRenderer1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Vanzare");
 
+        cmbSpectacole.setRenderer(customRenderer2);
         cmbSpectacole.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cmbSpectacoleItemStateChanged(evt);
@@ -132,7 +137,7 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
 
         chooserDataFilme.setDateFormatString("dd.MM.yyyy");
 
-        cmbOre.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--Selectati Ora--" }));
+        cmbOre.setRenderer(customRenderer1);
         cmbOre.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cmbOreItemStateChanged(evt);
@@ -182,12 +187,11 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
                     .addComponent(cmbSpectacole, 0, 368, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(chooserDataFilme, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbOre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(cmbOre, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(124, 124, 124)
                         .addComponent(lblTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -236,12 +240,21 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
             }
             this.spectacolSelectat = (Spectacol) comboBoxModel.getSelectedItem();
             DateFormat formatter = new SimpleDateFormat("HH:mm");
-            cmbOre.addItem(formatter.format(spectacolSelectat.getData()));
+            //fcmbOre.addItem(formatter.format(spectacolSelectat.getData()));
+            cmbOre.removeAllItems();
+            //cmbOre.addItem("--Selectati Ora--");
+            cmbOre.addItem(new DefaultComboLabel("--Selectati Ora--"));
+            List<OraSpectacol> listaOraSpectacole = new ArrayList<>(spectacolSelectat.getOre());
+            for (OraSpectacol oraSpectacol : listaOraSpectacole) {
+                cmbOre.addItem(oraSpectacol);
+            }
+
             Calendar c = Calendar.getInstance();
-            if (spectacolSelectat.getData().before(azi))
+            if (spectacolSelectat.getData().before(azi)) {
                 chooserDataFilme.setMinSelectableDate(azi);
-            else
+            } else {
                 chooserDataFilme.setMinSelectableDate(spectacolSelectat.getData());
+            }
             c.setTime(spectacolSelectat.getData());
             c.add(Calendar.DAY_OF_MONTH, spectacolSelectat.getDurata());
             chooserDataFilme.setMaxSelectableDate(c.getTime());
@@ -252,9 +265,8 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
         // TODO add your handling code here:
 
         if (evt.getStateChange() == ItemEvent.SELECTED) {
-            System.out.println(cmbOre.getSelectedItem());
-            this.oraSelectata = (String) cmbOre.getSelectedItem();
-            if ((String) cmbOre.getSelectedItem() != "--Selectati Ora--") {
+          if (cmbOre.getSelectedIndex() > 0) {
+                this.oraSelectata = (OraSpectacol) cmbOre.getSelectedItem();
                 generareSala();
             } else {
                 panelAfisare.removeAll();
@@ -265,14 +277,14 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
     }//GEN-LAST:event_cmbOreItemStateChanged
 
     private void btnVindeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVindeActionPerformed
-        FrmListaBilete frmListaBilete = new FrmListaBilete(this, true, listaBilete);
+        FrmListaBilete frmListaBilete = new FrmListaBilete(this, true, listaBilete, (OraSpectacol) cmbOre.getSelectedItem());
         frmListaBilete.setOnBileteVandute(this);
         System.out.println(listaBilete.size() + " atatea bilete");
         frmListaBilete.setVisible(true);
     }//GEN-LAST:event_btnVindeActionPerformed
 
     private void generareSala() {
-        if (spectacolSelectat != null && dataSelectata != null && oraSelectata != null) {
+        if (cmbOre.getSelectedIndex() > 0 && spectacolSelectat != null && dataSelectata != null && oraSelectata != null) {
             if (fisierConfigurareSala.exists()) {
                 panelAfisare.removeAll();
                 init();
@@ -295,17 +307,20 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
                                             numar++;
                                         }
                                     }
-                                    final Bilet b = new Bilet(spectacolSelectat, coloana-numar, linie);
+                                    final Bilet b = new Bilet(spectacolSelectat, coloana - numar, linie);
                                     b.setLocReal(coloana);
 //                                    System.out.println(b.getLocReal()+" "+b.getRand());
                                     Calendar c = Calendar.getInstance();
                                     c.setTime(dataSelectata);
-                                    String[] oraMinut = cmbOre.getSelectedItem().toString().split(":");
+                                    String[] oraMinut = ((OraSpectacol)cmbOre.getSelectedItem()).getOra().split(":");
                                     c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(oraMinut[0]));
                                     c.set(Calendar.MINUTE, Integer.parseInt(oraMinut[1]));
                                     c.set(Calendar.SECOND, 0);
                                     c.set(Calendar.MILLISECOND, 0);
+
                                     b.setData(c.getTime());
+                                    b.setPret(oraSelectata.getPret());
+                                    b.setOraSpectacol(oraSelectata);
                                     //  if (matrice[linie][coloana].getBackground() != Color.red) {
                                     //System.out.println(String.format("linie %d coloana %d availble=%s righClick=%s", linie, coloana, matrice[linie][coloana].isAvailable(), matrice[linie][coloana].isRightClickPressed()));
                                     if (matrice[linie][coloana].isAvailable() && !matrice[linie][coloana].isRightClickPressed()) {
@@ -313,23 +328,23 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
                                         total = 0;
                                         listaBilete.add(b);
                                         for (Bilet bilet : listaBilete) {
-                                            total = total + spectacolSelectat.getPret();
+//                                            total = total + spectacolSelectat.getPret();
                                             listModel.addElement(bilet);
                                         }
                                     } else if (matrice[linie][coloana].isRightClickPressed()) {
                                         listModel.clear();//golire model lista
-           
+
                                         total = 0;
 
                                         for (int i = 0; i < listaBilete.size(); i++) {
                                             // System.out.println(listaBilete.get(i).getLoc() + " " + listaBilete.get(i).getRand());
                                             // System.out.println(linie + " " + coloana);
-                                            if (listaBilete.get(i).getRand() == linie && listaBilete.get(i).getLocReal()== coloana) {
+                                            if (listaBilete.get(i).getRand() == linie && listaBilete.get(i).getLocReal() == coloana) {
                                                 listaBilete.remove(i);
                                             }
                                         }
                                         for (Bilet bilet : listaBilete) {
-                                            total = total + spectacolSelectat.getPret();
+//                                            total = total + spectacolSelectat.getPret();
                                             listModel.addElement(bilet);
                                         }
                                         //listaBilete.remove(b);
@@ -361,7 +376,6 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
                             }
 
                         }
-                       
 
 //                    if (j == 0) {
 //                        matrice[i][j].setText("R" + String.valueOf(i + 1));
@@ -372,21 +386,32 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
                         panelAfisare.add(matrice[i][j]);
                     }
                 }
-                 Calendar cal = Calendar.getInstance();
-                        cal.setTime(dataSelectata);
-                        String[] oraMinut = cmbOre.getSelectedItem().toString().split(":");
-                        cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(oraMinut[0]));
-                        cal.set(Calendar.MINUTE, Integer.parseInt(oraMinut[1]));
-                        cal.set(Calendar.SECOND, 0);
-                        cal.set(Calendar.MILLISECOND, 0);
-                        List<Bilet> listaBileteCumparate = new ArrayList<Bilet>();
-                        listaBileteCumparate = biletServiceImpl.getBileteBySpectacolDataAndOra((Spectacol) cmbSpectacole.getSelectedItem(),cal.getTime());
-                        System.out.println(listaBileteCumparate);
-                        for (Bilet b : listaBileteCumparate) {
-                            matrice[b.getRand()][b.getLocReal()].setBackground(Color.blue);
-                            matrice[b.getRand()][b.getLocReal()].setVanzare(false);
-                            matrice[b.getRand()][b.getLocReal()].setAvailable(false);
-                        }
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(dataSelectata);
+                String[] oraMinut = ((OraSpectacol)cmbOre.getSelectedItem()).getOra().split(":");
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+                List<Bilet> listaBileteCumparate = new ArrayList<Bilet>();
+                
+                for (Bilet b:((OraSpectacol)cmbOre.getSelectedItem()).getListaBilete()){
+                  //  System.out.println(b.getSpectacol().getData() + " ---- " + cal.getTime());
+                    if (b.getSpectacol().getData().compareTo(cal.getTime())==0){
+                        //System.out.println("salut");
+                        listaBileteCumparate.add(b);
+                    }
+                }
+                
+                //listaBileteCumparate = biletServiceImpl.getBileteBySpectacolDataAndOra((Spectacol) cmbSpectacole.getSelectedItem(), cal.getTime());
+                //listaBileteCumparate =// biletServiceImpl.getBileteBySpectacolDataAndOraSpectacol((Spectacol) cmbSpectacole.getSelectedItem(), cal.getTime(), (OraSpectacol) cmbOre.getSelectedItem());
+                //System.out.println(listaBileteCumparate);
+                for (Bilet b : listaBileteCumparate) {
+                    matrice[b.getRand()][b.getLocReal()].setBackground(Color.blue);
+                    matrice[b.getRand()][b.getLocReal()].setVanzare(false);
+                    matrice[b.getRand()][b.getLocReal()].setAvailable(false);
+                    //System.out.println("SIUUUUUUUUUUUUUUUUUUUU");
+                }
                 panelAfisare.revalidate();
                 panelAfisare.repaint();
             }
@@ -448,17 +473,17 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
             //Logger.getLogger(SpectacoleFileRepository.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnuleaza;
     private javax.swing.JButton btnVinde;
     private com.toedter.calendar.JDateChooser chooserDataFilme;
-    private javax.swing.JComboBox<String> cmbOre;
+    private javax.swing.JComboBox cmbOre;
     private javax.swing.JComboBox<dvdrental.Spectacol> cmbSpectacole;
+    private renderer.CustomRenderer customRenderer1;
+    private renderer.CustomRenderer customRenderer2;
     private renderer.ItemBiletRenderer itemBiletRenderer1;
-    private renderer.ItemSpectacolRenderer itemSpectacolRenderer1;
     private javax.swing.JList<dvdrental.Bilet> jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblTotal;
@@ -467,12 +492,12 @@ public class FrmVanzare extends javax.swing.JDialog implements FrmListaBilete.On
 
     @Override
     public void saveBilete() {
+        System.out.println("ayae");
         generareSala();
         listModel.clear();
         listaBilete.removeAll(listaBilete);
         lblTotal.setText("Total:0 RON");
-        total=0;
-        
-        
+        total = 0;
+
     }
 }

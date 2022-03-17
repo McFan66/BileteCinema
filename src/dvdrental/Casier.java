@@ -75,6 +75,11 @@ public class Casier  implements java.io.Serializable {
         return String.format("%s %s", nume, prenume);
     }
 
+    @Override
+    public String toString() {
+        return "Casier{" + "id=" + id + ", nume=" + nume + ", prenume=" + prenume + ", codOperator=" + codOperator + ", parola=" + parola + '}';
+    }
+
 
 }
 

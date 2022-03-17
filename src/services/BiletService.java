@@ -6,6 +6,7 @@
 package services;
 
 import dvdrental.Bilet;
+import dvdrental.OraSpectacol;
 import dvdrental.Spectacol;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,5 +27,7 @@ public interface BiletService {
     public List<Bilet> getBileteBySpectacolAndData(Spectacol spectacol, Date dataInceput, Date dataFinal);
     public List<Bilet> getBileteBySpectaolDataAndOra(Spectacol spectacol, Date data, Date oraInceput, Date oraFinal);
     public List<Bilet> getBileteBySpectacolDataAndOra(Spectacol spectacol, Date dataOra);
+    //public List<Bilet> getBileteBySpectacolDataAndOraSpectacol(Spectacol spectacol, Date data, OraSpectacol oraSpectacol);
+    public List<Bilet> getBiletThisDay();
     
 }

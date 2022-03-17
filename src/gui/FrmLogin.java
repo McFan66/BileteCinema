@@ -9,6 +9,7 @@ import dvdrental.Casier;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
+import models.AppSingleTone;
 import models.CasierB;
 import services.CasierService;
 import services.CasierServiceImpl;
@@ -132,6 +133,8 @@ public class FrmLogin extends javax.swing.JDialog {
         Casier casierAutentificat;
         if (isValidForm() && (casierAutentificat = casierService.login(codOperator, parola)) != null) {
             //JOptionPane.showMessageDialog(this, "esti autentificat");
+            
+            AppSingleTone.getAppSingleToneInstance().setCasierAutentificat(casierAutentificat);
             FrmMeniuPrincipal frmMeniuPrincipal = new FrmMeniuPrincipal();
             frmMeniuPrincipal.setLocationRelativeTo(this);
             dispose();

@@ -6,6 +6,7 @@
 package gui;
 
 import comparators.ComparatorBilet;
+import controllers.CasierController;
 import dvdrental.Bilet;
 import dvdrental.Spectacol;
 import java.text.DateFormat;
@@ -47,6 +48,8 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
     private List<Spectacol> listaSpectacole = new ArrayList<Spectacol>();
     private FanaRunnable fanaRunnable;
     private boolean pressed;
+    private CasierController casierController;
+    
 
     /**
      * Creates new form FrmMeniuPrincipal
@@ -68,7 +71,7 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
             
             data[x][0] = b.getSpectacol().getTitlu();
             data[x][1] = formatter.format(b.getData());
-            data[x][2] = String.valueOf(b.getSpectacol().getPret());
+//            data[x][2] = String.valueOf(b.getSpectacol().getPret());
             data[x][3] = String.format("Rand: %d Loc: %d", b.getRand() + 1, b.getLoc());
             x++;
         }
@@ -102,6 +105,11 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
         Thread th = new Thread(fanaRunnable);
 
         th.start();
+        
+        List<Bilet> listaBileteVanduteAzi = new ArrayList<Bilet>();
+        listaBileteVanduteAzi = biletService.getBiletThisDay();
+        biletMeniuTableModels1.setDate(listaBileteVanduteAzi);
+        tblBilete.setModel(biletMeniuTableModels1);
 
     }
 
@@ -114,6 +122,7 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        biletMeniuTableModels1 = new tablemodels.BiletMeniuTableModels();
         spectacolPanel1 = new gui.SpectacolPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblBilete = new javax.swing.JTable();
@@ -135,17 +144,7 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Meniu Principal");
 
-        tblBilete.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Numele Spectacolului", "Data si Ora", "Pretul", "Randul si Locul"
-            }
-        ));
+        tblBilete.setModel(biletMeniuTableModels1);
         jScrollPane2.setViewportView(tblBilete);
         if (tblBilete.getColumnModel().getColumnCount() > 0) {
             tblBilete.getColumnModel().getColumn(0).setPreferredWidth(120);
@@ -282,8 +281,8 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -324,9 +323,11 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
     }//GEN-LAST:event_jMenu1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        FrmAdministrareCasieri frmAdministrareCasieri = new FrmAdministrareCasieri(this, true);
+        CasierController casierController = new CasierController();
+        casierController.actionIndex(this);
+        /*   FrmAdministrareCasieri frmAdministrareCasieri = new FrmAdministrareCasieri(this, true);
         frmAdministrareCasieri.setLocationRelativeTo(this);
-        frmAdministrareCasieri.setVisible(true);
+        frmAdministrareCasieri.setVisible(true); */
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void btnRaportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRaportActionPerformed
@@ -351,6 +352,7 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private tablemodels.BiletMeniuTableModels biletMeniuTableModels1;
     private javax.swing.JButton btnPause;
     private javax.swing.JButton btnRaport;
     private javax.swing.JButton btnSala;
@@ -388,7 +390,7 @@ public class FrmMeniuPrincipal extends javax.swing.JFrame implements observer.FO
             for (Bilet b : listaBilete) {
                 data[x][0] = b.getSpectacol().getTitlu();
                 data[x][1] = formatter.format(b.getData());
-                data[x][2] = String.valueOf(b.getSpectacol().getPret());
+//                data[x][2] = String.valueOf(b.getSpectacol().getPret());
                 data[x][3] = String.format("Rand: %d Loc: %d", b.getRand() + 1, b.getLoc());
                 x++;
             }

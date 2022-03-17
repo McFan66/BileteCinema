@@ -7,10 +7,10 @@ package repositories;
 
 import dvdrental.Casier;
 import dvdrental.Spectacol;
+import dvdrental.Vanzare;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import models.Vanzare;
 
 /**
  *

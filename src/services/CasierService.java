@@ -7,7 +7,6 @@ package services;
 
 import dvdrental.Casier;
 import java.util.ArrayList;
-import models.CasierB;
 
 /**
  *
@@ -15,7 +14,6 @@ import models.CasierB;
  */
 public interface CasierService {
     
-    public int getLastID();
     public Casier login(String codOperator, String parola);
     public boolean salveazaCasier(Casier casier);
     public ArrayList<Casier> getAll();

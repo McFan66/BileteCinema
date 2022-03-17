@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.18.1.final using JasperReports Library version 6.18.1-9d75d1969e774d4f179fb3be8401e98a0e6d1611  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RaportBun" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="06a5c5f2-3552-4672-b766-8ab014a79dbb">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sala Spectacole Adapter"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="dataInceput" class="java.sql.Date"/>
+	<parameter name="dataSfarsit" class="java.sql.Date"/>
+	<queryString>
+		<![CDATA[select s.*, {fn TIMESTAMPADD(SQL_TSI_DAY, s.durata, data)} as datasfarsit from spectacole s
+where data >=  $P{dataInceput} and data <=  $P{dataSfarsit}]]>
+	</queryString>
+	<field name="ID" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="SPECTACOLE"/>
+	</field>
+	<field name="TITLU" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="TITLU"/>
+		<property name="com.jaspersoft.studio.field.label" value="TITLU"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="SPECTACOLE"/>
+	</field>
+	<field name="DURATA" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="DURATA"/>
+		<property name="com.jaspersoft.studio.field.label" value="DURATA"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="SPECTACOLE"/>
+	</field>
+	<field name="TIPUL" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="TIPUL"/>
+		<property name="com.jaspersoft.studio.field.label" value="TIPUL"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="SPECTACOLE"/>
+	</field>
+	<field name="DESCRIERE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="DESCRIERE"/>
+		<property name="com.jaspersoft.studio.field.label" value="DESCRIERE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="SPECTACOLE"/>
+	</field>
+	<field name="IMAGEPATH" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="IMAGEPATH"/>
+		<property name="com.jaspersoft.studio.field.label" value="IMAGEPATH"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="SPECTACOLE"/>
+	</field>
+	<field name="DATA" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="DATA"/>
+		<property name="com.jaspersoft.studio.field.label" value="DATA"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="SPECTACOLE"/>
+	</field>
+	<field name="DATASFARSIT" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="DATASFARSIT"/>
+		<property name="com.jaspersoft.studio.field.label" value="DATASFARSIT"/>
+	</field>
+	<variable name="REPORT_PAGE" class="java.lang.Integer" resetType="None" incrementType="Page">
+		<variableExpression><![CDATA[$V{PAGE_NUMBER}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="140" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="43" width="550" height="47" uuid="71fd93db-c53b-46de-93dd-3cff8d209287"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="30"/>
+				</textElement>
+				<text><![CDATA[Raport spectacole]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="90" width="80" height="30" uuid="a9f34309-3bd4-4cd8-b50d-7639888aa24c"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="15"/>
+				</textElement>
+				<text><![CDATA[In perioada:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="80" y="90" width="300" height="30" uuid="5aa4de8c-05e9-4b40-b172-dd254ecfebe1"/>
+				<textElement verticalAlignment="Middle">
+					<font size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{dataInceput} + " - " + $P{dataSfarsit}]]></textFieldExpression>
+				<patternExpression><![CDATA["dd.MM.yyyy"]]></patternExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="140" splitType="Stretch">
+			<rectangle>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="550" height="130" isPrintWhenDetailOverflows="true" uuid="217b0d11-22e4-4452-b662-8ae398d688ae"/>
+			</rectangle>
+			<textField>
+				<reportElement x="20" y="0" width="30" height="20" uuid="d4ed2b01-884a-47ee-871e-a6979bf2fc26"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ID}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="20" height="20" uuid="b7f66a1f-3c50-4079-aeb9-2057febc1f45"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ID]]></text>
+			</staticText>
+			<textField textAdjust="ScaleFont">
+				<reportElement x="110" y="20" width="119" height="20" uuid="cb09fc59-a81a-4d8d-b52c-43ecbecfb72e"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TITLU}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="20" width="105" height="20" uuid="05ac4ba1-6166-4e4b-ad0a-49cf5ff9d65d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nume Spectacol]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="66" height="20" uuid="f0d16a5c-a295-409f-9dba-dbe15ba66a4f"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descriere]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="320" y="0" width="70" height="20" uuid="47548b23-3a10-4dbc-8a13-35bca2c344c3"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DATA}]]></textFieldExpression>
+				<patternExpression><![CDATA["dd.MM.yyyy"]]></patternExpression>
+			</textField>
+			<staticText>
+				<reportElement x="240" y="0" width="80" height="20" uuid="12cb9d87-e00a-431f-944c-ee240978a89f"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Difuzat de la]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="320" y="20" width="70" height="20" uuid="75676cb0-d31c-4d99-a04e-3134aa4f4fbb"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DATASFARSIT}]]></textFieldExpression>
+				<patternExpression><![CDATA["dd.MM.yyyy"]]></patternExpression>
+			</textField>
+			<staticText>
+				<reportElement x="270" y="20" width="50" height="20" uuid="8987b988-6e31-4d37-86d1-07d44369cac8"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[pana la]]></text>
+			</staticText>
+			<frame>
+				<reportElement stretchType="RelativeToTallestObject" x="70" y="40" width="320" height="89" uuid="2b5698e9-7e6f-455b-be6c-bd85fa038a83"/>
+				<textField textAdjust="StretchHeight">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="158" height="89" isPrintWhenDetailOverflows="true" uuid="8151784b-bac7-41d3-aee1-23ec00d362d6"/>
+					<textElement verticalAlignment="Top">
+						<font size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DESCRIERE}]]></textFieldExpression>
+				</textField>
+				<subreport>
+					<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="170" y="0" width="150" height="59" isPrintWhenDetailOverflows="true" uuid="42c6d6be-f656-45b6-98d6-348842391b05"/>
+					<subreportParameter name="spectacol">
+						<subreportParameterExpression><![CDATA[$F{ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA["OrePretSpectacol.jasper"]]></subreportExpression>
+				</subreport>
+				<subreport>
+					<reportElement positionType="Float" x="170" y="59" width="150" height="25" uuid="9214daf4-689c-4bec-92a8-6f5d209809d9"/>
+					<subreportParameter name="spectacol">
+						<subreportParameterExpression><![CDATA[$F{ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA["NumerBileteSpectacol.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField evaluationTime="Auto">
+				<reportElement x="520" y="0" width="30" height="20" uuid="027e23f3-9192-47e4-8cd0-bda3f1510171"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{REPORT_PAGE} + "/" + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="30" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</summary>
+</jasperReport>
